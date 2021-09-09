@@ -5,6 +5,7 @@ Module [Global]
 	Public Ret As Integer       ' 関数の戻り値（0以外はエラー)
 	Public Id As Short          ' ボードの番号　"SMC000"の場合は0
 	Public AxisNo As Short      ' 1 軸番号
+	Public device As String
 
 	Public PulseType As Short   ' 4 (2パルス方式 ：負論理)
 	'								0:共通パルス方式 OUT ：  負論理，DIR+：High，DIR-：Low
