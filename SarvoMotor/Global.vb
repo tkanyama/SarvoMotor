@@ -2,46 +2,165 @@ Option Strict Off
 Option Explicit On 
 Module [Global]
 
-	Public Ret As Integer
-	Public Id As Short
-	Public AxisNo As Short
+	Public Ret As Integer       ' 関数の戻り値（0以外はエラー)
+	Public Id As Short          ' ボードの番号　"SMC000"の場合は0
+	Public AxisNo As Short      ' 1 軸番号
 
-	Public PulseType As Short
-	Public DirTimer As Short
+	Public PulseType As Short   ' 4 (2パルス方式 ：負論理)
+	'								0:共通パルス方式 OUT ：  負論理，DIR+：High，DIR-：Low
+	'								1:共通パルス方式 OUT ：  正論理，DIR+：High，DIR-：Low
+	'								2:共通パルス方式 OUT ：  負論理，DIR+：Low，DIR-：High 
+	'								3:共通パルス方式 OUT ：  正論理，DIR+：Low，DIR-：High
+	'								4:2パルス方式 ：負論理 
+	'								5:2パルス方式 ：正論理
+	'								6:90度位相差モード OUT：進み信号. DIR：遅れ信号 
+	'								7:90度位相差モード OUT：遅れ信号. DIR：進み信号
 
-	Public EncType As Short
 
-	Public CtrlOut1 As Short
-	Public CtrlOut2 As Short
-	Public CtrlOut3 As Short
+	Public DirTimer As Short    ' 1 (ウエイト挿入ON)
+	'共通パルス方式設定時、DIR変化の変化によって方向が変化する際に200[μsec]のウェイト(遅延)をパルス出力前に挿入します。（共通パルス方式の場合のみ有効）
 
-	Public CtrlIn As Short
 
-	Public OrgLog As Short
+	Public EncType As Short     ' 0 (エンコーダの入力方式：A/B (90度位相差) 1逓倍)
+	'								0:A/B (90度位相差) 1逓倍
+	'								1:A/B (90度位相差) 2逓倍
+	'								2:A/B (90度位相差) 4逓倍
+	'								3:U/Dの2パルス入力
+	'								4:使用しない
 
-	Public CtrlInOutLog As Short
+	Public CtrlOut1 As Short    ' 0 (制御出力OUT1:汎用出力)
+	Public CtrlOut2 As Short    ' 1 (制御出力OUT2:アラームクリア信号)
+	Public CtrlOut3 As Short    ' 2 (制御出力OUT3:偏差カウンタクリア信号（ERC）)
+	'								0:汎用出力
+	'								1:アラームクリア信号
+	'								2:偏差カウンタクリア信号（ERC）
+	'								3:出力パルスカウンタカウント一致信号（CP1）
+	'								4:エンコーダカウンタカウント一致信号（CP2）
+	'								5:ホールドオフ信号
 
-	Public ErcMode As Short
+	Public CtrlIn As Short      ' 3 (00000011) (制御入力信号形式を設定)([ 0 | 0 | IN6/CLR | IN5/PCS | IN4/LTC | IN3/SD | IN2/INP | IN1/ALM ]
+	'								IN1/ALM=0
+	'									0: IN1(汎用入力)として使用
+	'									1: アラーム(ALM)信号入力として使用
 
-	Public ErcTime As Short
-	Public ErcOffTimer As Short
-	Public AlmTime As Short
+	'								IN2/INP=1
+	'									0: IN2(汎用入力)として使用
+	'									1: サーボドライバの位置決め完了(INP)信号入力として使用
 
-	Public LimitTurn As Short
-	Public OrgType As Short
-	Public EndDir As Short
-	Public ZCount As Short
+	'								IN3/SD=0
+	'									0: IN3(汎用入力)として使用
+	'									1: 減速(減速停止)(SD)信号入力として使用
 
-	Public SAccelType As Short
+	'								IN4/LTC=1
+	'									0: IN4(汎用入力)として使用
+	'									1:LTC信号入力として使用
+	'									　 出力パルス/エンコーダカウンタの値をラッチします。
 
-	Public FilterType As Short
+	'								IN5/PCS=1
+	'									0: IN5(汎用入力)として使用
+	'									1: PCS信号入力として使用
+	'									　　この信号入力で位置決め動作を開始します。(目標位置のオーバーライド2用)
 
-	Public SDMode As Short
+	'								IN6/CLR=0
+	'									0: IN6(汎用入力)として使用
+	'									1: CLR信号入力として使用
+	'									　　出力パルス/エンコーダカウンタの値をリセットします。
+	'									　　（SMC-2/4/8DL シリーズではIN6固定。CLR信号設定不可）
 
-	Public ClearCntLtc As Short
-	Public LtcMode As Short
-	Public ClearCntClr As Short
-	Public ClrMode As Short
+	Public OrgLog As Short      ' 0 (原点入力論理)
 
-	Public InitParam As Short
+	Public CtrlInOutLog As Short    ' &H83 (制御出力信号論理を設定) [ 0 | 0 | 0 | 0 | 0 | OUT3 | OUT2 | OUT1| LIM | IN7 | IN6 | IN5 | IN4 | IN3 | IN2 | IN1 ]　設定範囲：0～7FF(Hex)
+	'									LIM以外は負論理
+
+	Public ErcMode As Short         ' 0 (ERC信号自動出力の設定)[ 0 | 0 | 0 | 0 | 0 | 0 | bit1 | bit0 ]　設定範囲：0～3(Hex)
+	'									bit0
+	'									0: LIM、ALM信号入力による停止時にERC信号を出力しない
+	'									1: LIM、ALM信号入力による停止時にERC信号を自動出力
+	'									bit1
+	'									0: 原点復帰動作完了時にERC信号を出力しない
+	'									1: 原点復帰動作完了時にERC信号を自動出力
+
+	Public ErcTime As Short         ' 0 (偏差カウンタクリア信号幅)
+	'									0:12[μsec]
+	'									1:102[μsec]
+	'									2:408[μsec]
+	'									3:1.6[msec]
+	'									4:13[msec]
+	'									5:52[msec]
+	'									6:104[msec]
+	'									7:レベル出力
+
+	Public ErcOffTimer As Short     ' 0 (偏差カウンタクリア信号OFFタイマ時間)
+	'									0:0[μsec]
+	'									1: 12[μsec]
+	'									2:1.6[msec]
+	'									3:104[msec]
+
+	Public AlmTime As Short         ' 0 (アラームクリア信号幅)
+	'									0:12[μsec]
+	'									1:102[μsec]
+	'									2:408[μsec]
+	'									3:1.6[msec]
+	'									4:13[msec]
+	'									5:52[msec]
+	'									6:104[msec]
+
+	Public LimitTurn As Short       ' 1 (原点復帰動作中の+LIM/-LIMリミット反転の有無を設定)
+	'									0:LIM信号反転無効
+	'									1:LIM信号反転有効
+	'									2:LIM信号ON原点復帰開始可能
+	'									3:LIM信号入力原点復帰
+
+	Public OrgType As Short         ' 0 (Z相の使用有無を設定)
+	'									0:使用しない（ORGのみ）
+	'									1:使用する（ORG + Z相）
+
+	Public EndDir As Short          ' 0 (原点復帰時の原点突入方向 (原点復帰終了方向) を設定)
+	'									0:未指定
+	'									1:正方向 (CW)
+	'									2:負方向 (CCW)
+
+	Public ZCount As Short          ' 0 (原点復帰時のZ相の数を設定します。（設定範囲　1～16）)
+
+	Public SAccelType As Short      ' 0 (S字加減速の使用/未使用を設定)
+	'									0:使用しない
+	'									1:使用する
+
+	Public FilterType As Short      ' 0 (入力フィルタ特性を設定)
+	'									0:フィルタを挿入しない
+	'									1: 3.2[μsec]
+	'									2:25[μsec]
+	'									3:200[μsec]
+	'									4:1.6[msec]
+
+	Public SDMode As Short          ' 0 (SD信号入力時の動作)
+	'									0:減速停止します。減速中にSD信号がOFFになると目標速度に加速します。
+	'									1:減速します。減速後、または減速中にSD信号がOFFになると目標速度に加速します。
+	'									2:減速停止します。減速中にSD信号がOFFになっても加速しません。
+	'									3:減速します。減速後、または減速中にSD信号がOFFになっても開始速度を維持します。
+
+	Public ClearCntLtc As Short     ' 0 (LTC信号がOFF→ONへ変化した時にクリアするカウンタの種類を設定)
+	'									0:カウンタをクリアしない
+	'									1:出力パルスカウンタをクリア
+	'									2:エンコーダカウンタをクリア
+	'									3:出力パルスカウンタおよびエンコーダカウンタをクリア
+
+	Public LtcMode As Short         ' 0 (LTC信号入力時にラッチするカウンタの種類を設定)
+	'									0:ラッチ機能を使用しない
+	'									1:出力パルスカウンタをラッチ
+	'									2:エンコーダカウンタをラッチ
+	'									3:出力パルスカウンタおよびエンコーダカウンタをラッチ
+
+	Public ClearCntClr As Short     ' 0 (CLR信号がOFF→ONへ変化した時にクリアするカウンタの種類を設定)
+	'									0:カウンタをクリアしない
+	'									1:出力パルスカウンタをクリア
+	'									2:エンコーダカウンタをクリア
+	'									3:出力パルスカウンタおよびエンコーダカウンタをクリア
+
+	Public ClrMode As Short         ' 0 固定 (予約)
+
+	Public InitParam As Short       ' SmcWSetInitParam関数実行の有無を格納する変数
+	'									0:未実行
+	'									1:実行済
+
 End Module
