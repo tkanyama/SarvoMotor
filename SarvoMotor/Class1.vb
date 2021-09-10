@@ -9,7 +9,7 @@
     Private kind1 As Integer
     Sub New()
         MyBase.New()
-        MyBase.Size = New Size(32, 18)
+        MyBase.Size = New Size(48, 20)
         MyBase.TextAlign = 2
         kind1 = 1
         'Call LabelOff()

@@ -44,13 +44,8 @@ Public Class Status
     Friend WithEvents Label21 As System.Windows.Forms.Label
     Friend WithEvents Label22 As System.Windows.Forms.Label
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
-    Friend WithEvents lblALM As System.Windows.Forms.Label
-    Friend WithEvents lblPLIM As System.Windows.Forms.Label
-	Friend WithEvents lblMLIM As System.Windows.Forms.Label
-	Friend WithEvents lblORG As System.Windows.Forms.Label
-	Friend WithEvents lblSD As System.Windows.Forms.Label
-	Friend WithEvents btnComEncPulse As System.Windows.Forms.Button
-	Friend WithEvents btnComOutPulse As System.Windows.Forms.Button
+    Friend WithEvents btnComEncPulse As System.Windows.Forms.Button
+    Friend WithEvents btnComOutPulse As System.Windows.Forms.Button
 	Friend WithEvents lblStopSts As System.Windows.Forms.Label
 	Friend WithEvents lblMoveSts As System.Windows.Forms.Label
 	Friend WithEvents lblPulseSts As System.Windows.Forms.Label
@@ -64,11 +59,6 @@ Public Class Status
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.lblALM = New System.Windows.Forms.Label()
-        Me.lblPLIM = New System.Windows.Forms.Label()
-        Me.lblMLIM = New System.Windows.Forms.Label()
-        Me.lblORG = New System.Windows.Forms.Label()
-        Me.lblSD = New System.Windows.Forms.Label()
         Me.Label22 = New System.Windows.Forms.Label()
         Me.Label21 = New System.Windows.Forms.Label()
         Me.Label20 = New System.Windows.Forms.Label()
@@ -102,11 +92,6 @@ Public Class Status
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.lblALM)
-        Me.GroupBox1.Controls.Add(Me.lblPLIM)
-        Me.GroupBox1.Controls.Add(Me.lblMLIM)
-        Me.GroupBox1.Controls.Add(Me.lblORG)
-        Me.GroupBox1.Controls.Add(Me.lblSD)
         Me.GroupBox1.Controls.Add(Me.Label22)
         Me.GroupBox1.Controls.Add(Me.Label21)
         Me.GroupBox1.Controls.Add(Me.Label20)
@@ -135,51 +120,6 @@ Public Class Status
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "STATUS"
-        '
-        'lblALM
-        '
-        Me.lblALM.BackColor = System.Drawing.SystemColors.ActiveBorder
-        Me.lblALM.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblALM.Location = New System.Drawing.Point(336, 232)
-        Me.lblALM.Name = "lblALM"
-        Me.lblALM.Size = New System.Drawing.Size(48, 24)
-        Me.lblALM.TabIndex = 26
-        '
-        'lblPLIM
-        '
-        Me.lblPLIM.BackColor = System.Drawing.SystemColors.ActiveBorder
-        Me.lblPLIM.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblPLIM.Location = New System.Drawing.Point(280, 232)
-        Me.lblPLIM.Name = "lblPLIM"
-        Me.lblPLIM.Size = New System.Drawing.Size(48, 24)
-        Me.lblPLIM.TabIndex = 25
-        '
-        'lblMLIM
-        '
-        Me.lblMLIM.BackColor = System.Drawing.SystemColors.ActiveBorder
-        Me.lblMLIM.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblMLIM.Location = New System.Drawing.Point(224, 232)
-        Me.lblMLIM.Name = "lblMLIM"
-        Me.lblMLIM.Size = New System.Drawing.Size(48, 24)
-        Me.lblMLIM.TabIndex = 24
-        '
-        'lblORG
-        '
-        Me.lblORG.BackColor = System.Drawing.SystemColors.ActiveBorder
-        Me.lblORG.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblORG.Location = New System.Drawing.Point(168, 232)
-        Me.lblORG.Name = "lblORG"
-        Me.lblORG.Size = New System.Drawing.Size(48, 24)
-        Me.lblORG.TabIndex = 23
-        '
-        'lblSD
-        '
-        Me.lblSD.BackColor = System.Drawing.SystemColors.ActiveBorder
-        Me.lblSD.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblSD.Location = New System.Drawing.Point(112, 232)
-        Me.lblSD.Name = "lblSD"
-        Me.lblSD.Size = New System.Drawing.Size(48, 24)
-        Me.lblSD.TabIndex = 22
         '
         'Label22
         '
@@ -454,6 +394,12 @@ Public Class Status
     Dim ErrorString As New StringBuilder("", 256)  'Error String
     Const T1 As Integer = 10
 
+    Dim LedRD As LED
+    Dim LedORG As LED
+    Dim LedMLIM As LED
+    Dim LedPLIM As LED
+    Dim LedALM As LED
+
 
     'Private Sub cboTargetAxis_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs)
 
@@ -507,6 +453,51 @@ Public Class Status
         ' Centering
         Me.Left = (Screen.PrimaryScreen.Bounds.Width - Me.Width) / 2
         Me.Top = (Screen.PrimaryScreen.Bounds.Height - Me.Height) / 2
+
+        LedRD = New LED
+        With LedRD
+            .Location = New Point(112, 232)
+            .kind = 2
+            .Value = False
+        End With
+        GroupBox1.Controls.Add(LedRD)
+        LedRD.BringToFront()
+
+        LedORG = New LED
+        With LedORG
+            .Location = New Point(168, 232)
+            .kind = 2
+            .Value = False
+        End With
+        GroupBox1.Controls.Add(LedORG)
+        LedORG.BringToFront()
+
+        LedMLIM = New LED
+        With LedMLIM
+            .Location = New Point(224, 232)
+            .kind = 2
+            .Value = False
+        End With
+        GroupBox1.Controls.Add(LedMLIM)
+        LedMLIM.BringToFront()
+
+        LedPLIM = New LED
+        With LedPLIM
+            .Location = New Point(280, 232)
+            .kind = 2
+            .Value = False
+        End With
+        GroupBox1.Controls.Add(LedPLIM)
+        LedPLIM.BringToFront()
+
+        LedALM = New LED
+        With LedALM
+            .Location = New Point(336, 232)
+            .kind = 1
+            .Value = False
+        End With
+        GroupBox1.Controls.Add(LedALM)
+        LedALM.BringToFront()
         '-------------
         ' Initialize
         '-------------
@@ -685,29 +676,39 @@ Public Class Status
         End If
 
         If (bLimitSts And CSMC_SD) = CSMC_SD Then
-            lblSD.Text = "ON"
+            'lblSD.Text = "ON"
+            LedRD.Value = True
         Else
-            lblSD.Text = "OFF"
+            'lblSD.Text = "OFF"
+            LedRD.Value = False
         End If
         If (bLimitSts And CSMC_ORGLIM) = CSMC_ORGLIM Then
-            lblORG.Text = "ON"
+            'lblORG.Text = "ON"
+            LedORG.Value = True
         Else
-            lblORG.Text = "OFF"
+            'lblORG.Text = "OFF"
+            LedORG.Value = False
         End If
         If (bLimitSts And CSMC_MLIM) = CSMC_MLIM Then
-            lblMLIM.Text = "ON"
+            'lblMLIM.Text = "ON"
+            LedMLIM.Value = True
         Else
-            lblMLIM.Text = "OFF"
+            'lblMLIM.Text = "OFF"
+            LedMLIM.Value = False
         End If
         If (bLimitSts And CSMC_PLIM) = CSMC_PLIM Then
-            lblPLIM.Text = "ON"
+            'lblPLIM.Text = "ON"
+            LedPLIM.Value = True
         Else
-            lblPLIM.Text = "OFF"
+            'lblPLIM.Text = "OFF"
+            LedPLIM.Value = False
         End If
         If (bLimitSts And CSMC_ALM) = CSMC_ALM Then
-            lblALM.Text = "ON"
+            'lblALM.Text = "ON"
+            LedALM.Value = True
         Else
-            lblALM.Text = "OFF"
+            'lblALM.Text = "OFF"
+            LedALM.Value = False
         End If
 
         lblComment.Text = "OK "

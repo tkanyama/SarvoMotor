@@ -17,7 +17,7 @@ Public Class Form1
         CtrlOut3 = 2        ' 偏差カウンタクリア信号
         CtrlIn = 3          ' 制御信号の信号
         OrgLog = 0          ' 原点入力論理
-        CtrlInOutLog = &H8F ' 入出力論理
+        CtrlInOutLog = &H85 ' 入出力論理
         ErcMode = 0         ' ERC信号自動出力の設定
         ErcTime = 0         ' 偏差カウンタクリア信号幅
         ErcOffTimer = 0     ' 偏差カウンタクリア信号OFFタイマ時間
@@ -199,6 +199,15 @@ Public Class Form1
         Else
             Led2.Value = True
         End If
+
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Ret = SmcWExit(Id)
+        If Ret <> 0 Then
+            System.Diagnostics.Debug.WriteLine("SmcWExitでエラーが発生しました " & Ret)
+        End If
+        End
 
     End Sub
 End Class
