@@ -164,4 +164,6 @@ Module [Global]
 	'									0:未実行
 	'									1:実行済
 
+	Public CC As Double             ' パルスをmmに変換する係数
+
 End Module

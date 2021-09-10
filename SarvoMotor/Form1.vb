@@ -4,8 +4,8 @@ Imports System.Text
 
 Public Class Form1
 
-    Private Led1 As OnOffLabel
-    Private Led2 As OnOffLabel
+    Private Led1 As LED
+    Private Led2 As LED
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
 
@@ -17,7 +17,7 @@ Public Class Form1
         CtrlOut3 = 2        ' 偏差カウンタクリア信号
         CtrlIn = 3          ' 制御信号の信号
         OrgLog = 0          ' 原点入力論理
-        CtrlInOutLog = &H83 ' 入出力論理
+        CtrlInOutLog = &H8F ' 入出力論理
         ErcMode = 0         ' ERC信号自動出力の設定
         ErcTime = 0         ' 偏差カウンタクリア信号幅
         ErcOffTimer = 0     ' 偏差カウンタクリア信号OFFタイマ時間
@@ -33,12 +33,13 @@ Public Class Form1
         LtcMode = 0         ' LTC信号入力時にラッチするカウンタの種類
         ClearCntClr = 0     ' CLR信号が変化したときのカウンダの種類
         ClrMode = 0         ' 0で固定
+        CC = 0.001
 
         AxisNo = 1
 
         Dim ErrorString As New StringBuilder("", 256)
 
-        Led1 = New OnOffLabel
+        Led1 = New LED
         With Led1
             .Location = New Point(50, 50)
             '.Size = New Size(50, 50)
@@ -47,7 +48,7 @@ Public Class Form1
         End With
         Panel2.Controls.Add(Led1)
 
-        Led2 = New OnOffLabel
+        Led2 = New LED
         With Led2
             .Location = New Point(100, 50)
             '.Size = New Size(50, 50)
@@ -55,20 +56,20 @@ Public Class Form1
             .Value = False
         End With
         Panel2.Controls.Add(Led2)
-        'device = "SMC000"
-        'Ret = SmcWInit(device, Id)
-        'If Ret <> 0 Then
-        '    SmcWGetErrorString(Ret, ErrorString)
-        '    TextBox1.Text = "SmcWInit = " & Ret & " : " & ErrorString.ToString
-        '    Exit Sub
-        'End If
+        device = "SMC000"
+        Ret = SmcWInit(device, Id)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            TextBox1.Text = "SmcWInit = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
 
-        'TextBox1.Text = "OK "
-        'Call Setting()
+        TextBox1.Text = "OK "
+        Call Setting()
 
-
-
-
+        Dim Status1 As New Status
+        Status1.Location = New Point(500, 200)
+        Status1.Visible = True
 
 
     End Sub

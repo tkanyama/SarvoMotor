@@ -1,4 +1,9 @@
-﻿Class OnOffLabel
+﻿Class LED
+    '============================================================================================
+    '
+    '   LEDを表示するクラス kind=1 （赤） ,kind=2（緑）,kind=3（青）
+    '
+    '============================================================================================
     Inherits Label
     Private OnOff As Boolean
     Private kind1 As Integer
@@ -19,6 +24,9 @@
             Case 2
                 MyBase.BackColor = Color.LawnGreen
                 MyBase.ForeColor = Color.White
+            Case 3
+                MyBase.BackColor = Color.Cyan
+                MyBase.ForeColor = Color.White
         End Select
 
     End Sub
@@ -31,6 +39,9 @@
                 MyBase.ForeColor = Color.Black
             Case 2
                 MyBase.BackColor = Color.DarkGreen
+                MyBase.ForeColor = Color.Black
+            Case 3
+                MyBase.BackColor = Color.Navy
                 MyBase.ForeColor = Color.Black
         End Select
     End Sub
