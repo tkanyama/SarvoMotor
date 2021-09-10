@@ -30,10 +30,6 @@ Public Class Ctlio
 	Private components As System.ComponentModel.IContainer
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents btnComOut1 As System.Windows.Forms.Button
     Friend WithEvents btnComOut2 As System.Windows.Forms.Button
     Friend WithEvents btnComOut3 As System.Windows.Forms.Button
@@ -66,10 +62,6 @@ Public Class Ctlio
         Me.btnComOut3 = New System.Windows.Forms.Button()
         Me.btnComOut2 = New System.Windows.Forms.Button()
         Me.btnComOut1 = New System.Windows.Forms.Button()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.btnComErcOut = New System.Windows.Forms.Button()
         Me.btnComErcClear = New System.Windows.Forms.Button()
@@ -95,10 +87,6 @@ Public Class Ctlio
         Me.GroupBox1.Controls.Add(Me.btnComOut3)
         Me.GroupBox1.Controls.Add(Me.btnComOut2)
         Me.GroupBox1.Controls.Add(Me.btnComOut1)
-        Me.GroupBox1.Controls.Add(Me.Label6)
-        Me.GroupBox1.Controls.Add(Me.Label5)
-        Me.GroupBox1.Controls.Add(Me.Label4)
-        Me.GroupBox1.Controls.Add(Me.Label3)
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Location = New System.Drawing.Point(16, 12)
         Me.GroupBox1.Name = "GroupBox1"
@@ -173,67 +161,35 @@ Public Class Ctlio
         '
         'btnComHoldOff
         '
-        Me.btnComHoldOff.Location = New System.Drawing.Point(280, 40)
+        Me.btnComHoldOff.Location = New System.Drawing.Point(280, 36)
         Me.btnComHoldOff.Name = "btnComHoldOff"
-        Me.btnComHoldOff.Size = New System.Drawing.Size(48, 20)
+        Me.btnComHoldOff.Size = New System.Drawing.Size(60, 22)
         Me.btnComHoldOff.TabIndex = 8
+        Me.btnComHoldOff.Text = "Hold Off"
         '
         'btnComOut3
         '
-        Me.btnComOut3.Location = New System.Drawing.Point(216, 40)
+        Me.btnComOut3.Location = New System.Drawing.Point(216, 36)
         Me.btnComOut3.Name = "btnComOut3"
-        Me.btnComOut3.Size = New System.Drawing.Size(48, 20)
+        Me.btnComOut3.Size = New System.Drawing.Size(48, 22)
         Me.btnComOut3.TabIndex = 7
+        Me.btnComOut3.Text = "CR"
         '
         'btnComOut2
         '
-        Me.btnComOut2.Location = New System.Drawing.Point(160, 40)
+        Me.btnComOut2.Location = New System.Drawing.Point(160, 36)
         Me.btnComOut2.Name = "btnComOut2"
-        Me.btnComOut2.Size = New System.Drawing.Size(48, 20)
+        Me.btnComOut2.Size = New System.Drawing.Size(48, 22)
         Me.btnComOut2.TabIndex = 6
+        Me.btnComOut2.Text = "RES"
         '
         'btnComOut1
         '
-        Me.btnComOut1.Location = New System.Drawing.Point(104, 40)
+        Me.btnComOut1.Location = New System.Drawing.Point(104, 36)
         Me.btnComOut1.Name = "btnComOut1"
-        Me.btnComOut1.Size = New System.Drawing.Size(48, 20)
+        Me.btnComOut1.Size = New System.Drawing.Size(48, 22)
         Me.btnComOut1.TabIndex = 5
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(280, 24)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(51, 15)
-        Me.Label6.TabIndex = 4
-        Me.Label6.Text = "Hold Off"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(224, 24)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(24, 15)
-        Me.Label5.TabIndex = 3
-        Me.Label5.Text = "CR"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(160, 24)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(32, 15)
-        Me.Label4.TabIndex = 2
-        Me.Label4.Text = "RES"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(104, 24)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(33, 15)
-        Me.Label3.TabIndex = 1
-        Me.Label3.Text = "SON"
+        Me.btnComOut1.Text = "SON"
         '
         'Label2
         '
