@@ -54,7 +54,6 @@ Public Class Status
 	Friend WithEvents lblOutPulse As System.Windows.Forms.Label
 	Friend WithEvents lblComment As System.Windows.Forms.Label
     Friend WithEvents btnComEnd As System.Windows.Forms.Button
-    Public WithEvents Timer1 As Timer
     Public WithEvents timer As System.Windows.Forms.Timer
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
@@ -85,7 +84,6 @@ Public Class Status
         Me.lblComment = New System.Windows.Forms.Label()
         Me.btnComEnd = New System.Windows.Forms.Button()
         Me.timer = New System.Windows.Forms.Timer(Me.components)
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
@@ -114,9 +112,9 @@ Public Class Status
         Me.GroupBox1.Controls.Add(Me.Label5)
         Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.Label3)
-        Me.GroupBox1.Location = New System.Drawing.Point(16, 48)
+        Me.GroupBox1.Location = New System.Drawing.Point(16, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(400, 272)
+        Me.GroupBox1.Size = New System.Drawing.Size(400, 263)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "STATUS"
@@ -274,27 +272,27 @@ Public Class Status
         Me.Label8.AutoSize = True
         Me.Label8.Location = New System.Drawing.Point(16, 188)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(69, 15)
+        Me.Label8.Size = New System.Drawing.Size(92, 15)
         Me.Label8.TabIndex = 5
-        Me.Label8.Text = "Stop Status"
+        Me.Label8.Text = "モータの停止要因"
         '
         'Label7
         '
         Me.Label7.AutoSize = True
         Me.Label7.Location = New System.Drawing.Point(16, 156)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(74, 15)
+        Me.Label7.Size = New System.Drawing.Size(92, 15)
         Me.Label7.TabIndex = 4
-        Me.Label7.Text = "Move Status"
+        Me.Label7.Text = "モータの動作状態"
         '
         'Label6
         '
         Me.Label6.AutoSize = True
         Me.Label6.Location = New System.Drawing.Point(16, 124)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(93, 15)
+        Me.Label6.Size = New System.Drawing.Size(84, 15)
         Me.Label6.TabIndex = 3
-        Me.Label6.Text = "Outpulse Status"
+        Me.Label6.Text = "パルス出力状態"
         '
         'Label5
         '
@@ -310,25 +308,25 @@ Public Class Status
         Me.Label4.AutoSize = True
         Me.Label4.Location = New System.Drawing.Point(16, 60)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(88, 15)
+        Me.Label4.Size = New System.Drawing.Size(90, 15)
         Me.Label4.TabIndex = 1
-        Me.Label4.Text = "Encoder Count"
+        Me.Label4.Text = "ピストン実動変位"
         '
         'Label3
         '
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(16, 28)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(91, 15)
+        Me.Label3.Size = New System.Drawing.Size(90, 15)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Outpulse Count"
+        Me.Label3.Text = "ピストン設定変位"
         '
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.lblComment)
-        Me.GroupBox2.Location = New System.Drawing.Point(16, 328)
+        Me.GroupBox2.Location = New System.Drawing.Point(16, 281)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(400, 128)
+        Me.GroupBox2.Size = New System.Drawing.Size(400, 73)
         Me.GroupBox2.TabIndex = 5
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "COMMENT"
@@ -338,12 +336,12 @@ Public Class Status
         Me.lblComment.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.lblComment.Location = New System.Drawing.Point(16, 24)
         Me.lblComment.Name = "lblComment"
-        Me.lblComment.Size = New System.Drawing.Size(368, 88)
+        Me.lblComment.Size = New System.Drawing.Size(368, 35)
         Me.lblComment.TabIndex = 0
         '
         'btnComEnd
         '
-        Me.btnComEnd.Location = New System.Drawing.Point(256, 464)
+        Me.btnComEnd.Location = New System.Drawing.Point(257, 360)
         Me.btnComEnd.Name = "btnComEnd"
         Me.btnComEnd.Size = New System.Drawing.Size(96, 24)
         Me.btnComEnd.TabIndex = 7
@@ -353,14 +351,10 @@ Public Class Status
         '
         Me.timer.Interval = 200
         '
-        'Timer1
-        '
-        Me.Timer1.Interval = 200
-        '
         'Status
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 14)
-        Me.ClientSize = New System.Drawing.Size(432, 502)
+        Me.ClientSize = New System.Drawing.Size(432, 391)
         Me.Controls.Add(Me.btnComEnd)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
@@ -369,7 +363,7 @@ Public Class Status
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Status"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "STATUS"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()

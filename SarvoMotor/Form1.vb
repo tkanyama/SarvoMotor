@@ -2,10 +2,9 @@
 Option Explicit On
 Imports System.Text
 
-Public Class Form1
+Public Class ServoMotor
 
-    Private Led1 As LED
-    Private Led2 As LED
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
 
@@ -17,7 +16,7 @@ Public Class Form1
         CtrlOut3 = 2        ' 偏差カウンタクリア信号
         CtrlIn = 3          ' 制御信号の信号
         OrgLog = 0          ' 原点入力論理
-        CtrlInOutLog = &H85 ' 入出力論理
+        CtrlInOutLog = &H85 ' 入出力論理［0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 1 ］
         ErcMode = 0         ' ERC信号自動出力の設定
         ErcTime = 0         ' 偏差カウンタクリア信号幅
         ErcOffTimer = 0     ' 偏差カウンタクリア信号OFFタイマ時間
@@ -39,23 +38,7 @@ Public Class Form1
 
         Dim ErrorString As New StringBuilder("", 256)
 
-        Led1 = New LED
-        With Led1
-            .Location = New Point(50, 50)
-            '.Size = New Size(50, 50)
-            .kind = 1
-            .Value = False
-        End With
-        Panel2.Controls.Add(Led1)
 
-        Led2 = New LED
-        With Led2
-            .Location = New Point(100, 50)
-            '.Size = New Size(50, 50)
-            .kind = 2
-            .Value = False
-        End With
-        Panel2.Controls.Add(Led2)
         device = "SMC000"
         Ret = SmcWInit(device, Id)
         If Ret <> 0 Then
@@ -67,9 +50,21 @@ Public Class Form1
         TextBox1.Text = "OK "
         Call Setting()
 
+        Me.StartPosition = FormStartPosition.Manual
+        Me.Location = New Point(20, 20)
+        Me.FormBorderStyle = FormBorderStyle.FixedSingle
+
         Dim Status1 As New Status
-        Status1.Location = New Point(500, 200)
         Status1.Visible = True
+        Status1.StartPosition = FormStartPosition.Manual
+        Status1.Location = New Point(20, 130)
+
+
+        Dim Cltio1 As New Ctlio
+        Cltio1.Visible = True
+        Cltio1.StartPosition = FormStartPosition.Manual
+        Cltio1.Location = New Point(20, 570)
+
 
 
     End Sub
@@ -185,31 +180,6 @@ Public Class Form1
         TextBox1.Text = "OK "
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        If Led1.Value Then
-            Led1.Value = False
-        Else
-            Led1.Value = True
-        End If
-
-    End Sub
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        If Led2.Value Then
-            Led2.Value = False
-        Else
-            Led2.Value = True
-        End If
-
-    End Sub
-
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        Ret = SmcWExit(Id)
-        If Ret <> 0 Then
-            System.Diagnostics.Debug.WriteLine("SmcWExitでエラーが発生しました " & Ret)
-        End If
-        End
-
-    End Sub
 End Class
 
 

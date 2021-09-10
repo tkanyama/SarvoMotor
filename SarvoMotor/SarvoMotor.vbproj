@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>SarvoMotor</RootNamespace>
-    <StartupObject>SarvoMotor.Form1</StartupObject>
+    <StartupObject>SarvoMotor.ServoMotor</StartupObject>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
