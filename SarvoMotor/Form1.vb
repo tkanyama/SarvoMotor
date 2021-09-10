@@ -3,6 +3,9 @@ Option Explicit On
 Imports System.Text
 
 Public Class Form1
+
+    Private Led1 As OnOffLabel
+    Private Led2 As OnOffLabel
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
 
@@ -35,18 +38,33 @@ Public Class Form1
 
         Dim ErrorString As New StringBuilder("", 256)
 
-        device = "SMC000"
-        Ret = SmcWInit(device, Id)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWInit = " & Ret & " : " & ErrorString.ToString
-            Exit Sub
-        End If
+        Led1 = New OnOffLabel
+        With Led1
+            .Location = New Point(50, 50)
+            '.Size = New Size(50, 50)
+            .kind = 1
+            .Value = False
+        End With
+        Panel2.Controls.Add(Led1)
 
-        TextBox1.Text = "OK "
-        Call Setting()
+        Led2 = New OnOffLabel
+        With Led2
+            .Location = New Point(100, 50)
+            '.Size = New Size(50, 50)
+            .kind = 2
+            .Value = False
+        End With
+        Panel2.Controls.Add(Led2)
+        'device = "SMC000"
+        'Ret = SmcWInit(device, Id)
+        'If Ret <> 0 Then
+        '    SmcWGetErrorString(Ret, ErrorString)
+        '    TextBox1.Text = "SmcWInit = " & Ret & " : " & ErrorString.ToString
+        '    Exit Sub
+        'End If
 
-
+        'TextBox1.Text = "OK "
+        'Call Setting()
 
 
 
@@ -165,4 +183,23 @@ Public Class Form1
 
         TextBox1.Text = "OK "
     End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If Led1.Value Then
+            Led1.Value = False
+        Else
+            Led1.Value = True
+        End If
+
+    End Sub
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        If Led2.Value Then
+            Led2.Value = False
+        Else
+            Led2.Value = True
+        End If
+
+    End Sub
 End Class
+
+
