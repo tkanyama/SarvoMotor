@@ -166,4 +166,7 @@ Module [Global]
 
 	Public CC As Double             ' パルスをmmに変換する係数
 
+	Public PlusSpeed As Integer     ' パルススピード
+	Public PistonSpeed As Double    ' ピストンのスピード(mm/sec)
+
 End Module
