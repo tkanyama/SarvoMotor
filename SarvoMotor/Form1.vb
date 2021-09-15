@@ -48,11 +48,11 @@ Public Class ServoMotor
         Ret = SmcWInit(device, Id)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWInit = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWInit = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
-        TextBox1.Text = "OK "
+        Label2.Text = "OK "
         Call Setting()
 
         Me.StartPosition = FormStartPosition.Manual
@@ -62,19 +62,55 @@ Public Class ServoMotor
         Dim Status1 As New Status
         Status1.Visible = True
         Status1.StartPosition = FormStartPosition.Manual
-        Status1.Location = New Point(20, 130)
+        Status1.Location = New Point(20, 150)
 
 
         Dim Cltio1 As New Ctlio
         Cltio1.Visible = True
         Cltio1.StartPosition = FormStartPosition.Manual
-        Cltio1.Location = New Point(20, 570)
+        Cltio1.Location = New Point(20, 590)
 
         Dim MotorCtl1 As New MotorCtl
         MotorCtl1.Visible = True
         MotorCtl1.StartPosition = FormStartPosition.Manual
-        MotorCtl1.Location = New Point(480, 130)
+        MotorCtl1.Location = New Point(480, 150)
 
+        'Dim menuFile As New ToolStripMenuItem               'ファイル(&F)
+        ''Dim menuFileNew As New ToolStripMenuItem            '新規作成(&N)
+        ''Dim menuFileOpen As New ToolStripMenuItem           '開く(&O)
+        'Dim menuFileSeparator1 As New ToolStripSeparator    'セパレーター
+        ''Dim menuFileSaveAs As New ToolStripMenuItem         '名前を付けて保存(&A)
+        ''Dim menuFileSave As New ToolStripMenuItem           '上書き保存(&S)
+        ''Dim menuFileSeparator2 As New ToolStripSeparator    'セパレーター
+        'Dim menuFileEnd As New ToolStripMenuItem            '終了(&X)
+
+        ''項目の設定
+        'menuFile.Text = "ファイル(&F)"
+        ''menuFileNew.Text = "新規作成(&N)"
+        ''menuFileOpen.Text = "開く(&O)"
+        ''menuFileSaveAs.Text = "名前を付けて保存(&A)"
+        ''menuFileSave.Text = "上書き保存(&S)"
+        'menuFileEnd.Text = "終了(&X)"
+
+        ''★★★ショートカットキーの作成★★★
+        ''menuFileNew.ShortcutKeys = Keys.Control Or Keys.N
+        ''menuFileOpen.ShortcutKeys = Keys.Control Or Keys.O
+        ''menuFileSave.ShortcutKeys = Keys.Shift Or Keys.Control Or Keys.S
+        'menuFileEnd.ShortcutKeys = Keys.Control Or Keys.Q
+
+        ''[ファイル(F)]項目に子項目を追加する
+        ''menuFile.DropDownItems.Add(menuFileNew)
+        ''menuFile.DropDownItems.Add(menuFileOpen)
+        'menuFile.DropDownItems.Add(menuFileSeparator1)
+        ''menuFile.DropDownItems.Add(menuFileSaveAs)
+        ''menuFile.DropDownItems.Add(menuFileSave)
+        ''menuFile.DropDownItems.Add(menuFileSeparator2)
+        'menuFile.DropDownItems.Add(menuFileEnd)
+
+        'menuFileEnd.Checked += System.EventHandler.
+
+        ''[ファイル(F)]をメニューに追加する
+        'MenuStrip1.Items.Add(menuFile)
 
     End Sub
 
@@ -84,111 +120,131 @@ Public Class ServoMotor
         Ret = SmcWSetPulseType(Id, AxisNo, PulseType, DirTimer)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetPulseType = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetPulseType = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetEncType(Id, AxisNo, EncType)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetEncType = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetEncType = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetCtrlTypeOut(Id, AxisNo, CtrlOut1, CtrlOut2, CtrlOut3)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetCtrlTypeOut = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetCtrlTypeOut = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetCtrlTypeIn(Id, AxisNo, CtrlIn)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetCtrlTypeIn = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetCtrlTypeIn = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetOrgLog(Id, AxisNo, OrgLog)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetOrgLog = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetOrgLog = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetCtrlInOutLog(Id, AxisNo, CtrlInOutLog)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetCtrlInOutLog = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetCtrlInOutLog = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetErcMode(Id, AxisNo, ErcMode)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetErcMode = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetErcMode = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetErcAlmClearTime(Id, AxisNo, ErcTime, ErcOffTimer, AlmTime)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetErcAlmClearTime = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetErcAlmClearTime = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetOrgMode(Id, AxisNo, LimitTurn, OrgType, EndDir, ZCount)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetOrgMode = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetOrgMode = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetErcMode(Id, AxisNo, ErcMode)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetErcMode = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetErcMode = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetSAccelType(Id, AxisNo, SAccelType)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetSAccelType = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetSAccelType = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetInFilterType(Id, AxisNo, FilterType)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetInFilterType = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetInFilterType = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetSDMode(Id, AxisNo, SDMode)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetSDMode = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetSDMode = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetCounterMode(Id, AxisNo, ClearCntLtc, LtcMode, ClearCntClr, ClrMode)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetCounterMode = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetCounterMode = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         Ret = SmcWSetInitParam(Id, AxisNo)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            TextBox1.Text = "SmcWSetInitParam = " & Ret & " : " & ErrorString.ToString
+            Label2.Text = "SmcWSetInitParam = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
-        TextBox1.Text = "OK "
+        Label2.Text = "OK "
     End Sub
 
+
+
+    Private Sub frmClose_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        If e.CloseReason = CloseReason.UserClosing Then
+            'ボタンでのクローズかチェック
+            Dim result As DialogResult = MessageBox.Show("プログラムを終了しますか？", "確認", MessageBoxButtons.YesNo)
+            If result = DialogResult.No Then
+                e.Cancel = True
+            End If
+        End If
+    End Sub
+
+    Private Sub 終了XToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 終了XToolStripMenuItem.Click
+        Dim result As DialogResult = MessageBox.Show("プログラムを終了しますか？", "確認", MessageBoxButtons.YesNo)
+        If result = DialogResult.Yes Then
+
+            End
+
+        End If
+    End Sub
 End Class
 
 

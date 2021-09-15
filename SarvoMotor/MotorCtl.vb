@@ -3,7 +3,7 @@ Option Explicit On
 Imports System.Text
 Public Class MotorCtl
 
-    Dim Speed = {1.0, 2.0, 5.0, 10.0}
+    Dim Speed = {0.5, 1.0, 2.0, 5.0, 10.0}
     Dim SpeedKind As Integer
     Dim rbutton() As RadioButton
     Dim rb1 As RadioButton
@@ -11,11 +11,11 @@ Public Class MotorCtl
     Dim SpeedPanel1 As SpeedPanel
     Dim ErrorString As New StringBuilder("", 256)  'Error String
     Private Sub MotorCtl_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        Dim a As Integer
         SpeedPanel1 = New SpeedPanel
         SpeedPanel1.Speed = Speed
-        SpeedPanel1.Location = New Point(30, 30)
-        Me.TabPage1.Controls.Add(SpeedPanel1)
+        SpeedPanel1.Location = New Point(25, 12)
+        Me.Controls.Add(SpeedPanel1)
 
         If MotionType = 0 Then
             Me.RadioButton1.Checked = True
@@ -23,13 +23,24 @@ Public Class MotorCtl
             Me.RadioButton3.Checked = False
             MotionType = 1
         End If
+        AddHandler RadioButton1.CheckedChanged, AddressOf RadioButton1_CheckedChanged
+        AddHandler RadioButton2.CheckedChanged, AddressOf RadioButton2_CheckedChanged
+        AddHandler RadioButton3.CheckedChanged, AddressOf RadioButton3_CheckedChanged
 
-
+        'Ret = GetMoveParam()
         TypeComboBox1.Items.Add("絶対座標")
         TypeComboBox1.Items.Add("相対座標")
         TypeComboBox1.SelectedIndex = 1
+        Me.txtDistance.Text = Format(1, "F1")
 
-        Ret = GetMoveParam()
+
+        lblComment.Text = "ok"
+
+        Me.Label1.Visible = True
+        Me.Label2.Visible = True
+        Me.txtDistance.Visible = True
+        Me.TypeComboBox1.Visible = True
+        Me.Label3.Visible = True
 
         'Call SpeedPanel(GroupBox1, Speed)
 
@@ -39,103 +50,42 @@ Public Class MotorCtl
         'End If
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        TextBox1.Text = Format(SpeedPanel1.SetSpeed, "F1")
+
+
+    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs)
+        If RadioButton1.Checked = True Then
+            MotionType = CSMC_PTP
+            Me.Label1.Visible = True
+            Me.Label2.Visible = True
+            Me.txtDistance.Visible = True
+            Me.TypeComboBox1.Visible = True
+            Me.Label3.Visible = True
+        End If
     End Sub
 
-    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
-        MotionType = CSMC_PTP
+    Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs)
+        If RadioButton2.Checked = True Then
+            MotionType = CSMC_JOG
+            Me.Label1.Visible = False
+            Me.Label2.Visible = False
+            Me.txtDistance.Visible = False
+            Me.TypeComboBox1.Visible = False
+            Me.Label3.Visible = False
+        End If
     End Sub
 
-    Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton2.CheckedChanged
-        MotionType = CSMC_JOG
+    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs)
+        If RadioButton3.Checked = True Then
+            MotionType = CSMC_ORG
+            Me.Label1.Visible = False
+            Me.Label2.Visible = False
+            Me.txtDistance.Visible = False
+            Me.TypeComboBox1.Visible = False
+            Me.Label3.Visible = False
+        End If
+
     End Sub
 
-    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
-        MotionType = CSMC_ORG
-    End Sub
-
-    Private Sub CW_Button_Click_1(sender As Object, e As EventArgs) Handles CW_Button.Click
-        StartDir = CSMC_CW
-        '----------------------------------
-        ' Set parameters to Driver
-        '----------------------------------
-        Ret = SetMoveParam()
-        If Ret = False Then
-            Exit Sub
-        End If
-
-        '---------------
-        ' Ready motion
-        '---------------
-        Ret = SmcWSetReady(Id, AxisNo, MotionType, StartDir)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
-            Exit Sub
-        End If
-
-        '---------------
-        ' Start Motion
-        '---------------
-        Ret = SmcWMotionStart(Id, AxisNo)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWMotionStart = " & Ret & " : " & ErrorString.ToString
-            Exit Sub
-        End If
-
-        '-------------------------------------
-        ' Get setting parameters from Driver
-        '-------------------------------------
-        Ret = GetMoveParam()
-        If Ret = False Then
-            Exit Sub
-        End If
-
-        lblComment.Text = "OK "
-    End Sub
-
-    Private Sub CCW_Button_Click(sender As Object, e As EventArgs) Handles CCW_Button.Click
-        StartDir = CSMC_CCW
-        '----------------------------------
-        ' Set parameters to Driver
-        '----------------------------------
-        Ret = SetMoveParam()
-        If Ret = False Then
-            Exit Sub
-        End If
-
-        '---------------
-        ' Ready motion
-        '---------------
-        Ret = SmcWSetReady(Id, AxisNo, MotionType, StartDir)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
-            Exit Sub
-        End If
-
-        '---------------
-        ' Start Motion
-        '---------------
-        Ret = SmcWMotionStart(Id, AxisNo)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWMotionStart = " & Ret & " : " & ErrorString.ToString
-            Exit Sub
-        End If
-
-        '-------------------------------------
-        ' Get setting parameters from Driver
-        '-------------------------------------
-        Ret = GetMoveParam()
-        If Ret = False Then
-            Exit Sub
-        End If
-
-        lblComment.Text = "OK "
-    End Sub
 
 
     Function SetMoveParam() As Boolean
@@ -364,15 +314,97 @@ Public Class MotorCtl
             Exit Function
         End If
 
-        txtDistance.Text = Str(lDistance * CC)
-
+        txtDistance.Text = Format(lDistance * CC, "F1")
         TypeComboBox1.SelectedIndex = bCoordinate
 
         GetMoveParam = True
 
     End Function
 
-    Private Sub STOP_Button_Click(sender As Object, e As EventArgs) Handles STOP_Button.Click
+
+    Private Sub CW_Button_Click(sender As Object, e As EventArgs) Handles CW_Button.Click
+        StartDir = CSMC_CW
+        '----------------------------------
+        ' Set parameters to Driver
+        '----------------------------------
+        Ret = SetMoveParam()
+        If Ret = False Then
+            Exit Sub
+        End If
+
+        '---------------
+        ' Ready motion
+        '---------------
+        Ret = SmcWSetReady(Id, AxisNo, MotionType, StartDir)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        '---------------
+        ' Start Motion
+        '---------------
+        Ret = SmcWMotionStart(Id, AxisNo)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWMotionStart = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        '-------------------------------------
+        ' Get setting parameters from Driver
+        '-------------------------------------
+        Ret = GetMoveParam()
+        If Ret = False Then
+            Exit Sub
+        End If
+
+        lblComment.Text = "OK "
+    End Sub
+
+    Private Sub CCW_Button_Click_1(sender As Object, e As EventArgs) Handles CCW_Button.Click
+        StartDir = CSMC_CCW
+        '----------------------------------
+        ' Set parameters to Driver
+        '----------------------------------
+        Ret = SetMoveParam()
+        If Ret = False Then
+            Exit Sub
+        End If
+
+        '---------------
+        ' Ready motion
+        '---------------
+        Ret = SmcWSetReady(Id, AxisNo, MotionType, StartDir)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        '---------------
+        ' Start Motion
+        '---------------
+        Ret = SmcWMotionStart(Id, AxisNo)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWMotionStart = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        '-------------------------------------
+        ' Get setting parameters from Driver
+        '-------------------------------------
+        Ret = GetMoveParam()
+        If Ret = False Then
+            Exit Sub
+        End If
+
+        lblComment.Text = "OK "
+    End Sub
+
+    Private Sub STOP_Button_Click_1(sender As Object, e As EventArgs) Handles STOP_Button.Click
 
         Ret = SmcWMotionStop(Id, AxisNo)
         If Ret <> 0 Then
