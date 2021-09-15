@@ -34,6 +34,11 @@ Public Class ServoMotor
         ClrMode = 0         ' 0で固定
         CC = 0.001
 
+        StartSpeed = 100
+        AccelTime = 50
+        DecelTime = 50
+        ResolveSpeed = 1
+
         AxisNo = 1
 
         Dim ErrorString As New StringBuilder("", 256)

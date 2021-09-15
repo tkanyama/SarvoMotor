@@ -179,5 +179,6 @@ Module [Global]
 
 	Public lOutPulse As Integer
 	Public lCountPulse As Integer
-
+	Public lDistance As Integer
+	Public bCoordinate As Short
 End Module

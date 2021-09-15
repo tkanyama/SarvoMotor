@@ -25,12 +25,13 @@ Partial Class MotorCtl
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.lblComment = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TypeComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.txtDistance = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Button4 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.STOP_Button = New System.Windows.Forms.Button()
+        Me.CCW_Button = New System.Windows.Forms.Button()
         Me.CW_Button = New System.Windows.Forms.Button()
         Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
@@ -38,7 +39,6 @@ Partial Class MotorCtl
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.lblComment = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -72,10 +72,10 @@ Partial Class MotorCtl
         Me.GroupBox1.Controls.Add(Me.lblComment)
         Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Controls.Add(Me.TypeComboBox1)
-        Me.GroupBox1.Controls.Add(Me.TextBox2)
+        Me.GroupBox1.Controls.Add(Me.txtDistance)
         Me.GroupBox1.Controls.Add(Me.Label1)
-        Me.GroupBox1.Controls.Add(Me.Button4)
-        Me.GroupBox1.Controls.Add(Me.Button3)
+        Me.GroupBox1.Controls.Add(Me.STOP_Button)
+        Me.GroupBox1.Controls.Add(Me.CCW_Button)
         Me.GroupBox1.Controls.Add(Me.CW_Button)
         Me.GroupBox1.Controls.Add(Me.RadioButton3)
         Me.GroupBox1.Controls.Add(Me.RadioButton2)
@@ -86,6 +86,15 @@ Partial Class MotorCtl
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "ピストン操作"
+        '
+        'lblComment
+        '
+        Me.lblComment.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblComment.Location = New System.Drawing.Point(172, 261)
+        Me.lblComment.Name = "lblComment"
+        Me.lblComment.Size = New System.Drawing.Size(169, 35)
+        Me.lblComment.TabIndex = 7
+        Me.lblComment.Text = "Label3"
         '
         'Label2
         '
@@ -106,13 +115,13 @@ Partial Class MotorCtl
         Me.TypeComboBox1.Size = New System.Drawing.Size(169, 29)
         Me.TypeComboBox1.TabIndex = 5
         '
-        'TextBox2
+        'txtDistance
         '
-        Me.TextBox2.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.TextBox2.Location = New System.Drawing.Point(250, 25)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(115, 36)
-        Me.TextBox2.TabIndex = 4
+        Me.txtDistance.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.txtDistance.Location = New System.Drawing.Point(250, 25)
+        Me.txtDistance.Name = "txtDistance"
+        Me.txtDistance.Size = New System.Drawing.Size(115, 36)
+        Me.txtDistance.TabIndex = 4
         '
         'Label1
         '
@@ -124,25 +133,25 @@ Partial Class MotorCtl
         Me.Label1.TabIndex = 3
         Me.Label1.Text = "目標値"
         '
-        'Button4
+        'STOP_Button
         '
-        Me.Button4.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.Button4.Location = New System.Drawing.Point(167, 145)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(198, 47)
-        Me.Button4.TabIndex = 2
-        Me.Button4.Text = "停止"
-        Me.Button4.UseVisualStyleBackColor = True
+        Me.STOP_Button.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.STOP_Button.Location = New System.Drawing.Point(167, 145)
+        Me.STOP_Button.Name = "STOP_Button"
+        Me.STOP_Button.Size = New System.Drawing.Size(198, 47)
+        Me.STOP_Button.TabIndex = 2
+        Me.STOP_Button.Text = "停止"
+        Me.STOP_Button.UseVisualStyleBackColor = True
         '
-        'Button3
+        'CCW_Button
         '
-        Me.Button3.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.Button3.Location = New System.Drawing.Point(278, 79)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(87, 48)
-        Me.Button3.TabIndex = 1
-        Me.Button3.Text = "押し"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.CCW_Button.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.CCW_Button.Location = New System.Drawing.Point(278, 79)
+        Me.CCW_Button.Name = "CCW_Button"
+        Me.CCW_Button.Size = New System.Drawing.Size(87, 48)
+        Me.CCW_Button.TabIndex = 1
+        Me.CCW_Button.Text = "押し"
+        Me.CCW_Button.UseVisualStyleBackColor = True
         '
         'CW_Button
         '
@@ -216,15 +225,6 @@ Partial Class MotorCtl
         Me.TabPage2.Text = "TabPage2"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
-        'lblComment
-        '
-        Me.lblComment.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblComment.Location = New System.Drawing.Point(172, 261)
-        Me.lblComment.Name = "lblComment"
-        Me.lblComment.Size = New System.Drawing.Size(169, 35)
-        Me.lblComment.TabIndex = 7
-        Me.lblComment.Text = "Label3"
-        '
         'MotorCtl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -253,10 +253,10 @@ Partial Class MotorCtl
     Friend WithEvents RadioButton3 As RadioButton
     Friend WithEvents RadioButton2 As RadioButton
     Friend WithEvents RadioButton1 As RadioButton
-    Friend WithEvents Button4 As Button
-    Friend WithEvents Button3 As Button
+    Friend WithEvents STOP_Button As Button
+    Friend WithEvents CCW_Button As Button
     Friend WithEvents CW_Button As Button
-    Friend WithEvents TextBox2 As TextBox
+    Friend WithEvents txtDistance As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents TypeComboBox1 As ComboBox
     Friend WithEvents Label2 As Label

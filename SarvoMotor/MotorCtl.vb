@@ -23,16 +23,13 @@ Public Class MotorCtl
             Me.RadioButton3.Checked = False
             MotionType = 1
         End If
-        StartSpeed = 100
-        AccelTime = 50
-        DecelTime = 50
-        ResolveSpeed = 1
+
 
         TypeComboBox1.Items.Add("絶対座標")
         TypeComboBox1.Items.Add("相対座標")
         TypeComboBox1.SelectedIndex = 1
 
-
+        Ret = GetMoveParam()
 
         'Call SpeedPanel(GroupBox1, Speed)
 
@@ -47,15 +44,15 @@ Public Class MotorCtl
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
-        MotionType = 1
+        MotionType = CSMC_PTP
     End Sub
 
     Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton2.CheckedChanged
-        MotionType = 2
+        MotionType = CSMC_JOG
     End Sub
 
     Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
-        MotionType = 3
+        MotionType = CSMC_ORG
     End Sub
 
     Private Sub CW_Button_Click_1(sender As Object, e As EventArgs) Handles CW_Button.Click
@@ -74,25 +71,66 @@ Public Class MotorCtl
         Ret = SmcWSetReady(Id, AxisNo, MotionType, StartDir)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWSetReady = " & dwRet & " : " & ErrorString.ToString
+            lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         '---------------
         ' Start Motion
         '---------------
-        dwRet = SmcWMotionStart(Id, AxisNo)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWMotionStart = " & dwRet & " : " & ErrorString.ToString
+        Ret = SmcWMotionStart(Id, AxisNo)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWMotionStart = " & Ret & " : " & ErrorString.ToString
             Exit Sub
         End If
 
         '-------------------------------------
         ' Get setting parameters from Driver
         '-------------------------------------
-        bRet = GetMoveParam()
-        If bRet = False Then
+        Ret = GetMoveParam()
+        If Ret = False Then
+            Exit Sub
+        End If
+
+        lblComment.Text = "OK "
+    End Sub
+
+    Private Sub CCW_Button_Click(sender As Object, e As EventArgs) Handles CCW_Button.Click
+        StartDir = CSMC_CCW
+        '----------------------------------
+        ' Set parameters to Driver
+        '----------------------------------
+        Ret = SetMoveParam()
+        If Ret = False Then
+            Exit Sub
+        End If
+
+        '---------------
+        ' Ready motion
+        '---------------
+        Ret = SmcWSetReady(Id, AxisNo, MotionType, StartDir)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        '---------------
+        ' Start Motion
+        '---------------
+        Ret = SmcWMotionStart(Id, AxisNo)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWMotionStart = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        '-------------------------------------
+        ' Get setting parameters from Driver
+        '-------------------------------------
+        Ret = GetMoveParam()
+        If Ret = False Then
             Exit Sub
         End If
 
@@ -105,15 +143,15 @@ Public Class MotorCtl
         '----------------------------------
         ' Set Resolution to Driver
         '----------------------------------
-        Try
-            dblResolveSpeed = Val(txtResolution.Text)
-        Catch ex As Exception
-            dblResolveSpeed = 0
-        End Try
-        dwRet = SmcWSetResolveSpeed(Id, AxisNo, dblResolveSpeed)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWSetResolveSpeed = " & dwRet & " : " & ErrorString.ToString
+        'Try
+        '    dblResolveSpeed = Val(txtResolution.Text)
+        'Catch ex As Exception
+        '    dblResolveSpeed = 0
+        'End Try
+        Ret = SmcWSetResolveSpeed(Id, AxisNo, ResolveSpeed)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetResolveSpeed = " & Ret & " : " & ErrorString.ToString
             SetMoveParam = False
             Exit Function
         End If
@@ -121,15 +159,15 @@ Public Class MotorCtl
         '----------------------------------
         ' Set StartSpeed to Driver
         '----------------------------------
-        Try
-            dblStartSpeed = Val(txtStartSpeed.Text)
-        Catch ex As Exception
-            dblStartSpeed = 0
-        End Try
-        dwRet = SmcWSetStartSpeed(Id, AxisNo, dblStartSpeed)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWSetStartSpeed = " & dwRet & " : " & ErrorString.ToString
+        'Try
+        '    dblStartSpeed = Val(txtStartSpeed.Text)
+        'Catch ex As Exception
+        '    dblStartSpeed = 0
+        'End Try
+        Ret = SmcWSetStartSpeed(Id, AxisNo, StartSpeed)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetStartSpeed = " & Ret & " : " & ErrorString.ToString
             SetMoveParam = False
             Exit Function
         End If
@@ -137,15 +175,17 @@ Public Class MotorCtl
         '----------------------------------
         ' Set TargetSpeed to Driver
         '----------------------------------
-        Try
-            dblTargetSpeed = Val(txtTargetSpeed.Text)
-        Catch ex As Exception
-            dblTargetSpeed = 0
-        End Try
-        dwRet = SmcWSetTargetSpeed(Id, AxisNo, dblTargetSpeed)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWSetTargetSpeed = " & dwRet & " : " & ErrorString.ToString
+        'Try
+        '    dblTargetSpeed = Val(txtTargetSpeed.Text)
+        'Catch ex As Exception
+        '    dblTargetSpeed = 0
+        'End Try
+
+        TargetSpeed = Int(SpeedPanel1.SetSpeed / CC)
+        Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetTargetSpeed = " & Ret & " : " & ErrorString.ToString
             SetMoveParam = False
             Exit Function
         End If
@@ -153,15 +193,15 @@ Public Class MotorCtl
         '----------------------------------
         ' Set AccelTime to Driver
         '----------------------------------
-        Try
-            dblAccelTime = Val(txtAccelTime.Text)
-        Catch ex As Exception
-            dblAccelTime = 0
-        End Try
-        dwRet = SmcWSetAccelTime(Id, AxisNo, dblAccelTime)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWSetAccelTime = " & dwRet & " : " & ErrorString.ToString
+        'Try
+        '    dblAccelTime = Val(txtAccelTime.Text)
+        'Catch ex As Exception
+        '    dblAccelTime = 0
+        'End Try
+        Ret = SmcWSetAccelTime(Id, AxisNo, AccelTime)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetAccelTime = " & Ret & " : " & ErrorString.ToString
             SetMoveParam = False
             Exit Function
         End If
@@ -169,15 +209,15 @@ Public Class MotorCtl
         '----------------------------------
         ' Set DecelTime to Driver
         '----------------------------------
-        Try
-            dblDecelTime = Val(txtDecelTime.Text)
-        Catch ex As Exception
-            dblDecelTime = 0
-        End Try
-        dwRet = SmcWSetDecelTime(Id, AxisNo, dblDecelTime)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWSetDecelTime = " & dwRet & " : " & ErrorString.ToString
+        'Try
+        '    dblDecelTime = Val(txtDecelTime.Text)
+        'Catch ex As Exception
+        '    dblDecelTime = 0
+        'End Try
+        Ret = SmcWSetDecelTime(Id, AxisNo, DecelTime)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetDecelTime = " & Ret & " : " & ErrorString.ToString
             SetMoveParam = False
             Exit Function
         End If
@@ -185,29 +225,31 @@ Public Class MotorCtl
         '-----------------------------
         ' Set SSpeed to Driver
         '-----------------------------
-        Try
-            dblSSpeed = Val(txtSSpeed.Text)
-        Catch ex As Exception
-            dblSSpeed = 0
-        End Try
-        dwRet = SmcWSetSSpeed(Id, AxisNo, dblSSpeed)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWSetSSpeed = " & dwRet & " : " & ErrorString.ToString
-            SetMoveParam = False
-            Exit Function
-        End If
+        'Try
+        '    dblSSpeed = Val(txtSSpeed.Text)
+        'Catch ex As Exception
+        '    dblSSpeed = 0
+        'End Try
+        'dwRet = SmcWSetSSpeed(Id, AxisNo, dblSSpeed)
+        'If dwRet <> 0 Then
+        '    SmcWGetErrorString(dwRet, ErrorString)
+        '    lblComment.Text = "SmcWSetSSpeed = " & dwRet & " : " & ErrorString.ToString
+        '    SetMoveParam = False
+        '    Exit Function
+        'End If
 
         '-------------------------
         ' Set Distance to Driver
         '-------------------------
+        'MotionType = TypeComboBox1.SelectedIndex
+
         If MotionType <> CSMC_PTP Then
             SetMoveParam = True
             Exit Function
         End If
 
         Try
-            lDistance = Val(txtDistance.Text)
+            lDistance = Int(Val(txtDistance.Text) / CC)
         Catch ex As Exception
             lDistance = 0
         End Try
@@ -218,10 +260,11 @@ Public Class MotorCtl
             End If
         End If
 
-        dwRet = SmcWSetStopPosition(Id, AxisNo, bCoordinate, lDistance)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWSetStopPosition = " & dwRet & " : " & ErrorString.ToString
+        bCoordinate = TypeComboBox1.SelectedIndex
+        Ret = SmcWSetStopPosition(Id, AxisNo, bCoordinate, lDistance)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetStopPosition = " & Ret & " : " & ErrorString.ToString
             SetMoveParam = False
             Exit Function
         End If
@@ -235,101 +278,117 @@ Public Class MotorCtl
         '----------------------------------
         ' Set default value of Resolution
         '----------------------------------
-        dwRet = SmcWGetResolveSpeed(Id, AxisNo, dblResolveSpeed)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWGetResolveSpeed = " & dwRet & " : " & ErrorString.ToString
+        Ret = SmcWGetResolveSpeed(Id, AxisNo, ResolveSpeed)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWGetResolveSpeed = " & Ret & " : " & ErrorString.ToString
             GetMoveParam = False
             Exit Function
         End If
 
-        txtResolution.Text = Str(dblResolveSpeed)
+        'txtResolution.Text = Str(dblResolveSpeed)
 
         '----------------------------------
         ' Set default value of StartSpeed
         '----------------------------------
-        dwRet = SmcWGetStartSpeed(Id, AxisNo, dblStartSpeed)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWGetStartSpeed = " & dwRet & " : " & ErrorString.ToString
+        Ret = SmcWGetStartSpeed(Id, AxisNo, StartSpeed)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWGetStartSpeed = " & Ret & " : " & ErrorString.ToString
             GetMoveParam = False
             Exit Function
         End If
 
-        txtStartSpeed.Text = Str(dblStartSpeed)
+        'txtStartSpeed.Text = Str(dblStartSpeed)
 
         '----------------------------------
         ' Set default value of TargetSpeed
         '----------------------------------
-        dwRet = SmcWGetTargetSpeed(Id, AxisNo, dblTargetSpeed)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWGetTargetSpeed = " & dwRet & " : " & ErrorString.ToString
+        Ret = SmcWGetTargetSpeed(Id, AxisNo, TargetSpeed)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWGetTargetSpeed = " & Ret & " : " & ErrorString.ToString
             GetMoveParam = False
             Exit Function
         End If
 
-        txtTargetSpeed.Text = Str(dblTargetSpeed)
+        'txtTargetSpeed.Text = Str(dblTargetSpeed)
 
         '----------------------------------
         ' Set default value of AccelTime
         '----------------------------------
-        dwRet = SmcWGetAccelTime(Id, AxisNo, dblAccelTime)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWGetAccelTime = " & dwRet & " : " & ErrorString.ToString
+        Ret = SmcWGetAccelTime(Id, AxisNo, AccelTime)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWGetAccelTime = " & Ret & " : " & ErrorString.ToString
             GetMoveParam = False
             Exit Function
         End If
 
-        txtAccelTime.Text = Str(dblAccelTime)
+        'txtAccelTime.Text = Str(dblAccelTime)
 
         '----------------------------------
         ' Set default value of DecelTime
         '----------------------------------
-        dwRet = SmcWGetDecelTime(Id, AxisNo, dblDecelTime)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWGetDecelTime = " & dwRet & " : " & ErrorString.ToString
+        Ret = SmcWGetDecelTime(Id, AxisNo, DecelTime)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWGetDecelTime = " & Ret & " : " & ErrorString.ToString
             GetMoveParam = False
             Exit Function
         End If
 
-        txtDecelTime.Text = Str(dblDecelTime)
+        'txtDecelTime.Text = Str(dblDecelTime)
 
         '-----------------------------
         ' Set default value of SSpeed
         '-----------------------------
-        dwRet = SmcWGetSSpeed(Id, AxisNo, dblSSpeed)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWGetSSpeed = " & dwRet & " : " & ErrorString.ToString
-            GetMoveParam = False
-            Exit Function
-        End If
+        'Ret = SmcWGetSSpeed(Id, AxisNo, dblSSpeed)
+        'If dwRet <> 0 Then
+        '    SmcWGetErrorString(dwRet, ErrorString)
+        '    lblComment.Text = "SmcWGetSSpeed = " & dwRet & " : " & ErrorString.ToString
+        '    GetMoveParam = False
+        '    Exit Function
+        'End If
 
-        txtSSpeed.Text = Str(dblSSpeed)
+        'txtSSpeed.Text = Str(dblSSpeed)
 
         '----------------------------------
         ' Set default value of lDistance
         '----------------------------------
-        dwRet = SmcWGetStopPosition(Id, AxisNo, bCoordinate, lDistance)
-        If dwRet <> 0 Then
-            SmcWGetErrorString(dwRet, ErrorString)
-            lblComment.Text = "SmcWGetStopPosition = " & dwRet & " : " & ErrorString.ToString
+        Ret = SmcWGetStopPosition(Id, AxisNo, bCoordinate, lDistance)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWGetStopPosition = " & Ret & " : " & ErrorString.ToString
             GetMoveParam = False
             Exit Function
         End If
 
-        txtDistance.Text = Str(lDistance)
+        txtDistance.Text = Str(lDistance * CC)
+
+        TypeComboBox1.SelectedIndex = bCoordinate
 
         GetMoveParam = True
 
     End Function
 
-    Private Sub GroupBox1_Enter(sender As Object, e As EventArgs) Handles GroupBox1.Enter
+    Private Sub STOP_Button_Click(sender As Object, e As EventArgs) Handles STOP_Button.Click
 
+        Ret = SmcWMotionStop(Id, AxisNo)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWMotionStop = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        lblComment.Text = "OK "
     End Sub
+
+
+
+
+
+
 
 
     'Private Sub SpeedChange()
