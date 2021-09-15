@@ -132,7 +132,7 @@ Public Class SpeedPanel
 
             Tbox1 = New TextBox
             With Tbox1
-                .Location = New Point(12, 26 + 25 * (Speed_N + 1))
+                .Location = New Point(25, 26 + 25 * (Speed_N + 1))
                 .Size = New Size(60, 23)
                 .Text = Format(_OtherSpeed, "F1")
                 .TextAlign = HorizontalAlignment.Center

@@ -375,8 +375,8 @@ Public Class Status
 #End Region
 
     Dim dwRet As Integer
-    Dim lOutPulse As Integer
-    Dim lCountPulse As Integer
+    'Dim lOutPulse As Integer
+    'Dim lCountPulse As Integer
     Dim wBankNo As Short
     Dim bPulseSts As Short
     Dim bMoveSts As Short

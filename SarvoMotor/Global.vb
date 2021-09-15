@@ -168,5 +168,16 @@ Module [Global]
 
 	Public PlusSpeed As Integer     ' パルススピード
 	Public PistonSpeed As Double    ' ピストンのスピード(mm/sec)
+	Public MotionType As Short      ' モータ動作タイプ（0:動作なし,1:PTP動作,2:JOG動作,3:原点復帰動作)
+	Public StartDir As Short        ' モータ動作開始方向（0:CW,1:CCW)
+	Public StartSpeed As Double     ' スタート時速度
+	Public TargetSpeed As Double    ' 目標速度
+	Public AccelTime As Double      ' 加速時間
+	Public DecelTime As Double      ' 減速時間
+	Public ResolveSpeed As Double   ' 速度分解能
+	Public StopPosition As Integer  ' 停止位置
+
+	Public lOutPulse As Integer
+	Public lCountPulse As Integer
 
 End Module
