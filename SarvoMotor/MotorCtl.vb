@@ -2,6 +2,7 @@
 Option Explicit On
 Imports System.Text
 Public Class MotorCtl
+    Inherits System.Windows.Forms.Form
 
     Dim Speed = {0.5, 1.0, 2.0, 5.0, 10.0}
     Dim SpeedKind As Integer
@@ -10,6 +11,7 @@ Public Class MotorCtl
     Dim Speed1 As Double
     Dim SpeedPanel1 As SpeedPanel
     Dim ErrorString As New StringBuilder("", 256)  'Error String
+    Dim lCountPulse1 As Integer
     Private Sub MotorCtl_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Dim a As Integer
         SpeedPanel1 = New SpeedPanel
@@ -36,6 +38,8 @@ Public Class MotorCtl
 
         lblComment.Text = "ok"
 
+        Label1.Text = "増分値"
+
         Me.Label1.Visible = True
         Me.Label2.Visible = True
         Me.txtDistance.Visible = True
@@ -48,6 +52,7 @@ Public Class MotorCtl
         '    PistonSpeed = 1.0
         '    PlusSpeed = Int(PistonSpeed * CC)
         'End If
+
     End Sub
 
 
@@ -361,6 +366,7 @@ Public Class MotorCtl
         End If
 
         lblComment.Text = "OK "
+        Label4.Text = ""
     End Sub
 
     Private Sub CCW_Button_Click_1(sender As Object, e As EventArgs) Handles CCW_Button.Click
@@ -402,6 +408,7 @@ Public Class MotorCtl
         End If
 
         lblComment.Text = "OK "
+        Label4.Text = ""
     End Sub
 
     Private Sub STOP_Button_Click_1(sender As Object, e As EventArgs) Handles STOP_Button.Click
@@ -416,7 +423,130 @@ Public Class MotorCtl
         lblComment.Text = "OK "
     End Sub
 
+    Private Sub TypeComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TypeComboBox1.SelectedIndexChanged
+        If TypeComboBox1.SelectedIndex = 0 Then
+            Label1.Text = "目標座標"
+        ElseIf TypeComboBox1.SelectedIndex = 1 Then
+            Label1.Text = "増分値"
+        End If
+    End Sub
 
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        Dim bEventMode As Byte
+
+        If CheckBox1.Checked = True Then
+            bEventMode = CSMC_ENABLE
+        ElseIf CheckBox1.Checked = False Then
+            bEventMode = CSMC_DISABLE
+        End If
+
+        '----------------------------------
+        ' Set Event for StopMotion to Driver
+        '----------------------------------
+        Ret = SmcWStopEvent(Id, AxisNo, Me.Handle.ToInt32, bEventMode)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWStopEvent = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+    End Sub
+
+    Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
+        Dim bEventMode As Byte
+
+        Try
+            lCountPulse1 = Int(Val(TextBox1.Text) / CC)
+        Catch ex As Exception
+            lCountPulse1 = 0
+        End Try
+
+        If CheckBox2.Checked = True Then
+            bEventMode = CSMC_ENABLE
+        ElseIf CheckBox2.Checked = False Then
+            bEventMode = CSMC_DISABLE
+        End If
+
+        '----------------------------------
+        ' Set Event for Encoder to Driver
+        '----------------------------------
+        Ret = SmcWCountEvent(Id, AxisNo, Me.Handle.ToInt32, bEventMode, CSMC_ENCODER, lCountPulse1)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWCountEvent = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+    End Sub
+
+    Protected Overrides Sub WndProc(ByRef m As Message)
+
+        Dim szMsg As String
+        Dim Title As String
+
+        'Bank Message Function
+        'If m.Msg = CSMC_MESSAGE + 3 Then
+        '    szMsg = "BankNo is " & Val(wBankNo) & "."
+        '    Title = "Bank Event"
+        '    MessageBox.Show(szMsg, Title, MessageBoxButtons.OK)-
+        'End If
+
+        'CountPulse Message Function
+        If m.Msg = CSMC_MESSAGE + 2 Then
+            szMsg = "Encoder is " & Val(lCountPulse) & "."
+            Title = "Encoder Event"
+            'MessageBox.Show(szMsg, Title, MessageBoxButtons.OK)
+            Label4.Text += " " + szMsg
+        End If
+
+        'OutPulse Message Function
+        If m.Msg = CSMC_MESSAGE + 1 Then
+            szMsg = "OutPulse is " & Val(lOutPulse) & "."
+            Title = "OutPulse Event"
+            'MessageBox.Show(szMsg, Title, MessageBoxButtons.OK)
+            Label4.Text += " " + szMsg
+        End If
+
+        'Stop Message Function
+        If m.Msg = CSMC_MESSAGE Then
+            szMsg = "AxisNo" + m.LParam.ToString + " was stop."
+            Title = "Stop"
+            'MessageBox.Show(szMsg, Title, MessageBoxButtons.OK)
+            Label4.Text += " " + szMsg
+        End If
+
+        MyBase.WndProc(m)
+
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        Dim bEventMode As Byte
+        If CheckBox2.Checked = True Then
+            If IsNumeric(TextBox1.Text) Then
+
+                Try
+                    lCountPulse1 = Int(Val(TextBox1.Text) / CC)
+                Catch ex As Exception
+                    lCountPulse1 = 0
+                End Try
+
+
+                bEventMode = CSMC_ENABLE
+                'ElseIf CheckBox2.Checked = False Then
+                '    bEventMode = CSMC_DISABLE
+
+
+                '----------------------------------
+                ' Set Event for Encoder to Driver
+                '----------------------------------
+                Ret = SmcWCountEvent(Id, AxisNo, Me.Handle.ToInt32, bEventMode, CSMC_ENCODER, lCountPulse1)
+                If Ret <> 0 Then
+                    SmcWGetErrorString(Ret, ErrorString)
+                    lblComment.Text = "SmcWCountEvent = " & Ret & " : " & ErrorString.ToString
+                    Exit Sub
+                End If
+            End If
+        End If
+    End Sub
 
 
 

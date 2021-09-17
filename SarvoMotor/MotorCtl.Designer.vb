@@ -23,6 +23,11 @@ Partial Class MotorCtl
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.lblComment = New System.Windows.Forms.Label()
         Me.txtDistance = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -34,13 +39,16 @@ Partial Class MotorCtl
         Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.TextBox1)
+        Me.GroupBox1.Controls.Add(Me.CheckBox2)
+        Me.GroupBox1.Controls.Add(Me.CheckBox1)
         Me.GroupBox1.Controls.Add(Me.Label3)
+        Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.lblComment)
         Me.GroupBox1.Controls.Add(Me.txtDistance)
         Me.GroupBox1.Controls.Add(Me.Label1)
@@ -54,10 +62,54 @@ Partial Class MotorCtl
         Me.GroupBox1.Controls.Add(Me.RadioButton1)
         Me.GroupBox1.Location = New System.Drawing.Point(160, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(380, 262)
+        Me.GroupBox1.Size = New System.Drawing.Size(380, 335)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "ピストン操作"
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Location = New System.Drawing.Point(238, 255)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(100, 23)
+        Me.TextBox1.TabIndex = 11
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Location = New System.Drawing.Point(124, 257)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(100, 19)
+        Me.CheckBox2.TabIndex = 10
+        Me.CheckBox2.Text = "Counter Event"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(16, 257)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(82, 19)
+        Me.CheckBox1.TabIndex = 9
+        Me.CheckBox1.Text = "Stop Event"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(338, 171)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(27, 15)
+        Me.Label3.TabIndex = 8
+        Me.Label3.Text = "mm"
+        '
+        'Label4
+        '
+        Me.Label4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Label4.Location = New System.Drawing.Point(16, 288)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(349, 35)
+        Me.Label4.TabIndex = 7
         '
         'lblComment
         '
@@ -66,7 +118,6 @@ Partial Class MotorCtl
         Me.lblComment.Name = "lblComment"
         Me.lblComment.Size = New System.Drawing.Size(349, 35)
         Me.lblComment.TabIndex = 7
-        Me.lblComment.Text = "Label3"
         '
         'txtDistance
         '
@@ -79,13 +130,13 @@ Partial Class MotorCtl
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.Label1.Location = New System.Drawing.Point(165, 156)
+        Me.Label1.Location = New System.Drawing.Point(141, 159)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(79, 30)
+        Me.Label1.Size = New System.Drawing.Size(103, 30)
         Me.Label1.TabIndex = 3
         Me.Label1.Text = "目標値"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label2
         '
@@ -172,20 +223,11 @@ Partial Class MotorCtl
         Me.RadioButton1.Text = "目標値移動"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(338, 171)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(27, 15)
-        Me.Label3.TabIndex = 8
-        Me.Label3.Text = "mm"
-        '
         'MotorCtl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(561, 295)
+        Me.ClientSize = New System.Drawing.Size(561, 362)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
@@ -211,4 +253,8 @@ Partial Class MotorCtl
     Friend WithEvents RadioButton2 As RadioButton
     Friend WithEvents RadioButton1 As RadioButton
     Friend WithEvents Label3 As Label
+    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents CheckBox2 As CheckBox
+    Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents Label4 As Label
 End Class
