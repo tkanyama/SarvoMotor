@@ -6,6 +6,8 @@
     <RootNamespace>SarvoMotor</RootNamespace>
     <StartupObject>SarvoMotor.ServoMotor</StartupObject>
     <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+    <ApplicationIcon>グラフ.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

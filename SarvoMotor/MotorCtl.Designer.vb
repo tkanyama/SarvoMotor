@@ -26,8 +26,8 @@ Partial Class MotorCtl
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.lblComment = New System.Windows.Forms.Label()
         Me.txtDistance = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -39,7 +39,21 @@ Partial Class MotorCtl
         Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.RadioButton5 = New System.Windows.Forms.RadioButton()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.DupButton = New System.Windows.Forms.Button()
+        Me.InsButton = New System.Windows.Forms.Button()
+        Me.DelButton = New System.Windows.Forms.Button()
+        Me.AddButton = New System.Windows.Forms.Button()
+        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -47,8 +61,8 @@ Partial Class MotorCtl
         Me.GroupBox1.Controls.Add(Me.TextBox1)
         Me.GroupBox1.Controls.Add(Me.CheckBox2)
         Me.GroupBox1.Controls.Add(Me.CheckBox1)
-        Me.GroupBox1.Controls.Add(Me.Label3)
         Me.GroupBox1.Controls.Add(Me.Label4)
+        Me.GroupBox1.Controls.Add(Me.Label3)
         Me.GroupBox1.Controls.Add(Me.lblComment)
         Me.GroupBox1.Controls.Add(Me.txtDistance)
         Me.GroupBox1.Controls.Add(Me.Label1)
@@ -62,14 +76,14 @@ Partial Class MotorCtl
         Me.GroupBox1.Controls.Add(Me.RadioButton1)
         Me.GroupBox1.Location = New System.Drawing.Point(160, 12)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(380, 335)
+        Me.GroupBox1.Size = New System.Drawing.Size(380, 297)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "ピストン操作"
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(238, 255)
+        Me.TextBox1.Location = New System.Drawing.Point(238, 207)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(100, 23)
         Me.TextBox1.TabIndex = 11
@@ -77,7 +91,7 @@ Partial Class MotorCtl
         'CheckBox2
         '
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(124, 257)
+        Me.CheckBox2.Location = New System.Drawing.Point(124, 209)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(100, 19)
         Me.CheckBox2.TabIndex = 10
@@ -87,12 +101,21 @@ Partial Class MotorCtl
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(16, 257)
+        Me.CheckBox1.Location = New System.Drawing.Point(16, 209)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(82, 19)
         Me.CheckBox1.TabIndex = 9
         Me.CheckBox1.Text = "Stop Event"
         Me.CheckBox1.UseVisualStyleBackColor = True
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(338, 210)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(27, 15)
+        Me.Label4.TabIndex = 8
+        Me.Label4.Text = "mm"
         '
         'Label3
         '
@@ -103,20 +126,12 @@ Partial Class MotorCtl
         Me.Label3.TabIndex = 8
         Me.Label3.Text = "mm"
         '
-        'Label4
-        '
-        Me.Label4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Label4.Location = New System.Drawing.Point(16, 288)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(349, 35)
-        Me.Label4.TabIndex = 7
-        '
         'lblComment
         '
         Me.lblComment.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblComment.Location = New System.Drawing.Point(16, 206)
+        Me.lblComment.Location = New System.Drawing.Point(16, 243)
         Me.lblComment.Name = "lblComment"
-        Me.lblComment.Size = New System.Drawing.Size(349, 35)
+        Me.lblComment.Size = New System.Drawing.Size(349, 40)
         Me.lblComment.TabIndex = 7
         '
         'txtDistance
@@ -223,11 +238,128 @@ Partial Class MotorCtl
         Me.RadioButton1.Text = "目標値移動"
         Me.RadioButton1.UseVisualStyleBackColor = True
         '
+        'RadioButton4
+        '
+        Me.RadioButton4.AutoSize = True
+        Me.RadioButton4.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.RadioButton4.Location = New System.Drawing.Point(6, 22)
+        Me.RadioButton4.Name = "RadioButton4"
+        Me.RadioButton4.Size = New System.Drawing.Size(113, 25)
+        Me.RadioButton4.TabIndex = 12
+        Me.RadioButton4.TabStop = True
+        Me.RadioButton4.Text = "準備・片付け"
+        Me.RadioButton4.UseVisualStyleBackColor = True
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.RadioButton5)
+        Me.GroupBox2.Controls.Add(Me.RadioButton4)
+        Me.GroupBox2.Location = New System.Drawing.Point(15, 12)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(127, 85)
+        Me.GroupBox2.TabIndex = 13
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "操作モード"
+        '
+        'RadioButton5
+        '
+        Me.RadioButton5.AutoSize = True
+        Me.RadioButton5.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.RadioButton5.Location = New System.Drawing.Point(6, 53)
+        Me.RadioButton5.Name = "RadioButton5"
+        Me.RadioButton5.Size = New System.Drawing.Size(60, 25)
+        Me.RadioButton5.TabIndex = 12
+        Me.RadioButton5.TabStop = True
+        Me.RadioButton5.Text = "試験"
+        Me.RadioButton5.UseVisualStyleBackColor = True
+        '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.Button2)
+        Me.GroupBox3.Controls.Add(Me.Button1)
+        Me.GroupBox3.Controls.Add(Me.DupButton)
+        Me.GroupBox3.Controls.Add(Me.InsButton)
+        Me.GroupBox3.Controls.Add(Me.DelButton)
+        Me.GroupBox3.Controls.Add(Me.AddButton)
+        Me.GroupBox3.Controls.Add(Me.DataGridView1)
+        Me.GroupBox3.Location = New System.Drawing.Point(15, 327)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(1057, 342)
+        Me.GroupBox3.TabIndex = 14
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "加力スケジュール"
+        '
+        'DupButton
+        '
+        Me.DupButton.Location = New System.Drawing.Point(6, 195)
+        Me.DupButton.Name = "DupButton"
+        Me.DupButton.Size = New System.Drawing.Size(74, 27)
+        Me.DupButton.TabIndex = 4
+        Me.DupButton.Text = "行複製"
+        Me.DupButton.UseVisualStyleBackColor = True
+        '
+        'InsButton
+        '
+        Me.InsButton.Location = New System.Drawing.Point(6, 150)
+        Me.InsButton.Name = "InsButton"
+        Me.InsButton.Size = New System.Drawing.Size(74, 27)
+        Me.InsButton.TabIndex = 3
+        Me.InsButton.Text = "行挿入"
+        Me.InsButton.UseVisualStyleBackColor = True
+        '
+        'DelButton
+        '
+        Me.DelButton.Location = New System.Drawing.Point(6, 104)
+        Me.DelButton.Name = "DelButton"
+        Me.DelButton.Size = New System.Drawing.Size(74, 28)
+        Me.DelButton.TabIndex = 2
+        Me.DelButton.Text = "行削除"
+        Me.DelButton.UseVisualStyleBackColor = True
+        '
+        'AddButton
+        '
+        Me.AddButton.Location = New System.Drawing.Point(6, 59)
+        Me.AddButton.Name = "AddButton"
+        Me.AddButton.Size = New System.Drawing.Size(74, 27)
+        Me.AddButton.TabIndex = 1
+        Me.AddButton.Text = "行追加"
+        Me.AddButton.UseVisualStyleBackColor = True
+        '
+        'DataGridView1
+        '
+        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridView1.Location = New System.Drawing.Point(99, 49)
+        Me.DataGridView1.Name = "DataGridView1"
+        Me.DataGridView1.RowTemplate.Height = 25
+        Me.DataGridView1.Size = New System.Drawing.Size(935, 272)
+        Me.DataGridView1.TabIndex = 0
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(6, 240)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(74, 27)
+        Me.Button1.TabIndex = 5
+        Me.Button1.Text = "データ保存"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(6, 285)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(74, 27)
+        Me.Button2.TabIndex = 6
+        Me.Button2.Text = "データ読込"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'MotorCtl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(561, 362)
+        Me.ClientSize = New System.Drawing.Size(1084, 681)
+        Me.ControlBox = False
+        Me.Controls.Add(Me.GroupBox3)
+        Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
@@ -236,6 +368,10 @@ Partial Class MotorCtl
         Me.Text = "MotorCtl"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
+        Me.GroupBox3.ResumeLayout(False)
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -256,5 +392,16 @@ Partial Class MotorCtl
     Friend WithEvents TextBox1 As TextBox
     Friend WithEvents CheckBox2 As CheckBox
     Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents RadioButton4 As RadioButton
+    Friend WithEvents GroupBox2 As GroupBox
+    Friend WithEvents RadioButton5 As RadioButton
     Friend WithEvents Label4 As Label
+    Friend WithEvents GroupBox3 As GroupBox
+    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents AddButton As Button
+    Friend WithEvents DupButton As Button
+    Friend WithEvents InsButton As Button
+    Friend WithEvents DelButton As Button
+    Friend WithEvents Button2 As Button
+    Friend WithEvents Button1 As Button
 End Class

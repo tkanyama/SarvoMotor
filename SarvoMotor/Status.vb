@@ -53,7 +53,6 @@ Public Class Status
 	Friend WithEvents lblCountPulse As System.Windows.Forms.Label
 	Friend WithEvents lblOutPulse As System.Windows.Forms.Label
 	Friend WithEvents lblComment As System.Windows.Forms.Label
-    Friend WithEvents btnComEnd As System.Windows.Forms.Button
     Public WithEvents timer As System.Windows.Forms.Timer
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
@@ -82,7 +81,6 @@ Public Class Status
         Me.Label3 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.lblComment = New System.Windows.Forms.Label()
-        Me.btnComEnd = New System.Windows.Forms.Button()
         Me.timer = New System.Windows.Forms.Timer(Me.components)
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -242,6 +240,7 @@ Public Class Status
         '
         Me.lblCountPulse.BackColor = System.Drawing.SystemColors.Control
         Me.lblCountPulse.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblCountPulse.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.lblCountPulse.Location = New System.Drawing.Point(120, 56)
         Me.lblCountPulse.Name = "lblCountPulse"
         Me.lblCountPulse.Size = New System.Drawing.Size(96, 24)
@@ -252,6 +251,7 @@ Public Class Status
         '
         Me.lblOutPulse.BackColor = System.Drawing.SystemColors.Control
         Me.lblOutPulse.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblOutPulse.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.lblOutPulse.Location = New System.Drawing.Point(120, 24)
         Me.lblOutPulse.Name = "lblOutPulse"
         Me.lblOutPulse.Size = New System.Drawing.Size(96, 24)
@@ -339,14 +339,6 @@ Public Class Status
         Me.lblComment.Size = New System.Drawing.Size(368, 35)
         Me.lblComment.TabIndex = 0
         '
-        'btnComEnd
-        '
-        Me.btnComEnd.Location = New System.Drawing.Point(257, 360)
-        Me.btnComEnd.Name = "btnComEnd"
-        Me.btnComEnd.Size = New System.Drawing.Size(96, 24)
-        Me.btnComEnd.TabIndex = 7
-        Me.btnComEnd.Text = "E&XIT"
-        '
         'timer
         '
         Me.timer.Interval = 200
@@ -354,8 +346,8 @@ Public Class Status
         'Status
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 14)
-        Me.ClientSize = New System.Drawing.Size(432, 391)
-        Me.Controls.Add(Me.btnComEnd)
+        Me.ClientSize = New System.Drawing.Size(432, 366)
+        Me.ControlBox = False
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
@@ -401,7 +393,7 @@ Public Class Status
 
     'End Sub
 
-    Private Sub btnComEnd_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnComEnd.Click
+    Private Sub btnComEnd_Click(ByVal sender As Object, ByVal e As System.EventArgs)
 
         SmcWExit(Id)
         End

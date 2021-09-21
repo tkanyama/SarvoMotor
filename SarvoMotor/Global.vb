@@ -181,4 +181,11 @@ Module [Global]
 	Public lCountPulse As Integer
 	Public lDistance As Integer
 	Public bCoordinate As Short
+
+	Public TestMode As Integer      ' 0:準備・片付け　1:試験モード
+	Public Const xSize1 As Integer = 570
+	Public Const ySize1 As Integer = 360
+	Public Const xSize2 As Integer = 1000
+	Public Const ySize2 As Integer = 720
+
 End Module

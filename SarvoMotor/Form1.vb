@@ -68,7 +68,7 @@ Public Class ServoMotor
         Dim Cltio1 As New Ctlio
         Cltio1.Visible = True
         Cltio1.StartPosition = FormStartPosition.Manual
-        Cltio1.Location = New Point(20, 590)
+        Cltio1.Location = New Point(20, 570)
 
         Dim MotorCtl1 As New MotorCtl
         MotorCtl1.Visible = True

@@ -40,11 +40,8 @@ Public Class Ctlio
     Friend WithEvents Label10 As System.Windows.Forms.Label
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents Label12 As System.Windows.Forms.Label
-    Friend WithEvents btnComErcOut As System.Windows.Forms.Button
-    Friend WithEvents btnComErcClear As System.Windows.Forms.Button
     Friend WithEvents btnComAlarmClear As System.Windows.Forms.Button
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
-    Friend WithEvents btnComEnd As System.Windows.Forms.Button
     Friend WithEvents lblComment As System.Windows.Forms.Label
     Public WithEvents timer As System.Windows.Forms.Timer
     Friend WithEvents lblHoldOff As System.Windows.Forms.Label
@@ -63,12 +60,9 @@ Public Class Ctlio
         Me.btnComOut2 = New System.Windows.Forms.Button()
         Me.btnComOut1 = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.btnComErcOut = New System.Windows.Forms.Button()
-        Me.btnComErcClear = New System.Windows.Forms.Button()
         Me.btnComAlarmClear = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.lblComment = New System.Windows.Forms.Label()
-        Me.btnComEnd = New System.Windows.Forms.Button()
         Me.timer = New System.Windows.Forms.Timer(Me.components)
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -200,22 +194,6 @@ Public Class Ctlio
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Output Data"
         '
-        'btnComErcOut
-        '
-        Me.btnComErcOut.Location = New System.Drawing.Point(18, 162)
-        Me.btnComErcOut.Name = "btnComErcOut"
-        Me.btnComErcOut.Size = New System.Drawing.Size(88, 24)
-        Me.btnComErcOut.TabIndex = 4
-        Me.btnComErcOut.Text = "Erc OutPut"
-        '
-        'btnComErcClear
-        '
-        Me.btnComErcClear.Location = New System.Drawing.Point(138, 162)
-        Me.btnComErcClear.Name = "btnComErcClear"
-        Me.btnComErcClear.Size = New System.Drawing.Size(88, 24)
-        Me.btnComErcClear.TabIndex = 5
-        Me.btnComErcClear.Text = "Erc Reset"
-        '
         'btnComAlarmClear
         '
         Me.btnComAlarmClear.Location = New System.Drawing.Point(258, 162)
@@ -242,26 +220,16 @@ Public Class Ctlio
         Me.lblComment.Size = New System.Drawing.Size(370, 31)
         Me.lblComment.TabIndex = 0
         '
-        'btnComEnd
-        '
-        Me.btnComEnd.Location = New System.Drawing.Point(306, 269)
-        Me.btnComEnd.Name = "btnComEnd"
-        Me.btnComEnd.Size = New System.Drawing.Size(112, 24)
-        Me.btnComEnd.TabIndex = 9
-        Me.btnComEnd.Text = "E&XIT"
-        '
         'timer
         '
         '
         'Ctlio
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 14)
-        Me.ClientSize = New System.Drawing.Size(432, 300)
-        Me.Controls.Add(Me.btnComEnd)
+        Me.ClientSize = New System.Drawing.Size(432, 273)
+        Me.ControlBox = False
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.btnComAlarmClear)
-        Me.Controls.Add(Me.btnComErcClear)
-        Me.Controls.Add(Me.btnComErcOut)
         Me.Controls.Add(Me.GroupBox1)
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -303,7 +271,7 @@ Public Class Ctlio
 
     'End Sub
 
-    Private Sub btnComEnd_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnComEnd.Click
+    Private Sub btnComEnd_Click(ByVal sender As Object, ByVal e As System.EventArgs)
 
         SmcWExit(Id)
         End
@@ -323,14 +291,14 @@ Public Class Ctlio
 
     End Sub
 
-    Private Sub btnComErcOut_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnComErcOut.Click
+    Private Sub btnComErcOut_Click(ByVal sender As Object, ByVal e As System.EventArgs)
 
         ErcOn = 0
         dwRet = SmcWSetErcOut(Id, AxisNo, ErcOn)
 
     End Sub
 
-    Private Sub btnComErcClear_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnComErcClear.Click
+    Private Sub btnComErcClear_Click(ByVal sender As Object, ByVal e As System.EventArgs)
 
         ErcOn = 1
         dwRet = SmcWSetErcOut(Id, AxisNo, ErcOn)
