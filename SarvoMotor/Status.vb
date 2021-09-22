@@ -434,7 +434,7 @@ Public Class Status
 
     Private Sub Status_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
-        Dim n As Short
+        'Dim n As Short
 
         ' Centering
         Me.Left = (Screen.PrimaryScreen.Bounds.Width - Me.Width) / 2

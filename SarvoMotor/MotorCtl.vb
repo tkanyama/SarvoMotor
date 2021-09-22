@@ -16,7 +16,7 @@ Public Class MotorCtl
     Dim Chart As LoadScedule
 
     Private Sub MotorCtl_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim a As Integer
+        'Dim a As Integer
         SpeedPanel1 = New SpeedPanel
         SpeedPanel1.Speed = Speed
         SpeedPanel1.Location = New Point(25, 100)

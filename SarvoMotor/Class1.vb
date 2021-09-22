@@ -660,6 +660,67 @@ Class LoadScedule
         End With
     End Sub
 
+    Public Property RowIndex() As Integer
+        Get
+            Return DataGridView1.CurrentRow.Index
+        End Get
+        Set(value As Integer)
+            DataGridView1.CurrentCell = DataGridView1.Rows(value).Cells(0)
+        End Set
+    End Property
 
+    Public ReadOnly Property Valid() As Boolean
+        Get
+            Return DataGridView1.CurrentRow.Cells(0).Value
+        End Get
+    End Property
+
+    Public ReadOnly Property SControl() As String
+        Get
+            Return DataGridView1.CurrentRow.Cells(1).Value
+        End Get
+    End Property
+
+    Public ReadOnly Property StartPoint() As Double
+        Get
+            Return Val(DataGridView1.CurrentRow.Cells(2).Value)
+        End Get
+    End Property
+
+    Public ReadOnly Property PeakP() As Double
+        Get
+            Return Val(DataGridView1.CurrentRow.Cells(3).Value)
+        End Get
+    End Property
+
+    Public ReadOnly Property PeakM() As Double
+        Get
+            Return Val(DataGridView1.CurrentRow.Cells(4).Value)
+        End Get
+    End Property
+
+    Public ReadOnly Property EndPoint() As Double
+        Get
+            Return Val(DataGridView1.CurrentRow.Cells(5).Value)
+        End Get
+    End Property
+
+    Public ReadOnly Property Delta() As Double
+        Get
+            Return Val(DataGridView1.CurrentRow.Cells(6).Value)
+        End Get
+    End Property
+
+    Public ReadOnly Property RepeatN() As Double
+        Get
+            Return Val(DataGridView1.CurrentRow.Cells(7).Value)
+        End Get
+    End Property
+
+    Public ReadOnly Property RowCount() As Double
+        Get
+            Return DataGridView1.RowCount
+        End Get
+    End Property
 
 End Class
