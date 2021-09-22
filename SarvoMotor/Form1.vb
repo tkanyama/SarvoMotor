@@ -75,6 +75,11 @@ Public Class ServoMotor
         MotorCtl1.StartPosition = FormStartPosition.Manual
         MotorCtl1.Location = New Point(480, 150)
 
+
+        Dim Testing1 As New Testing
+        Testing1.Visible = True
+        Testing1.StartPosition = FormStartPosition.Manual
+        Testing1.Location = New Point(580, 150)
         'Dim menuFile As New ToolStripMenuItem               'ファイル(&F)
         ''Dim menuFileNew As New ToolStripMenuItem            '新規作成(&N)
         ''Dim menuFileOpen As New ToolStripMenuItem           '開く(&O)

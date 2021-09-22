@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class MotorCtl
     Inherits System.Windows.Forms.Form
 
     'フォームがコンポーネントの一覧をクリーンアップするために dispose をオーバーライドします。
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class MotorCtl
     'メモ: 以下のプロシージャは Windows フォーム デザイナーで必要です。
     'Windows フォーム デザイナーを使用して変更できます。  
     'コード エディターを使って変更しないでください。
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -42,18 +42,8 @@ Partial Class MotorCtl
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.RadioButton5 = New System.Windows.Forms.RadioButton()
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.DupButton = New System.Windows.Forms.Button()
-        Me.InsButton = New System.Windows.Forms.Button()
-        Me.DelButton = New System.Windows.Forms.Button()
-        Me.AddButton = New System.Windows.Forms.Button()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
-        Me.GroupBox3.SuspendLayout()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -273,92 +263,12 @@ Partial Class MotorCtl
         Me.RadioButton5.Text = "試験"
         Me.RadioButton5.UseVisualStyleBackColor = True
         '
-        'GroupBox3
-        '
-        Me.GroupBox3.Controls.Add(Me.Button2)
-        Me.GroupBox3.Controls.Add(Me.Button1)
-        Me.GroupBox3.Controls.Add(Me.DupButton)
-        Me.GroupBox3.Controls.Add(Me.InsButton)
-        Me.GroupBox3.Controls.Add(Me.DelButton)
-        Me.GroupBox3.Controls.Add(Me.AddButton)
-        Me.GroupBox3.Controls.Add(Me.DataGridView1)
-        Me.GroupBox3.Location = New System.Drawing.Point(15, 327)
-        Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(1057, 342)
-        Me.GroupBox3.TabIndex = 14
-        Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "加力スケジュール"
-        '
-        'DupButton
-        '
-        Me.DupButton.Location = New System.Drawing.Point(6, 195)
-        Me.DupButton.Name = "DupButton"
-        Me.DupButton.Size = New System.Drawing.Size(74, 27)
-        Me.DupButton.TabIndex = 4
-        Me.DupButton.Text = "行複製"
-        Me.DupButton.UseVisualStyleBackColor = True
-        '
-        'InsButton
-        '
-        Me.InsButton.Location = New System.Drawing.Point(6, 150)
-        Me.InsButton.Name = "InsButton"
-        Me.InsButton.Size = New System.Drawing.Size(74, 27)
-        Me.InsButton.TabIndex = 3
-        Me.InsButton.Text = "行挿入"
-        Me.InsButton.UseVisualStyleBackColor = True
-        '
-        'DelButton
-        '
-        Me.DelButton.Location = New System.Drawing.Point(6, 104)
-        Me.DelButton.Name = "DelButton"
-        Me.DelButton.Size = New System.Drawing.Size(74, 28)
-        Me.DelButton.TabIndex = 2
-        Me.DelButton.Text = "行削除"
-        Me.DelButton.UseVisualStyleBackColor = True
-        '
-        'AddButton
-        '
-        Me.AddButton.Location = New System.Drawing.Point(6, 59)
-        Me.AddButton.Name = "AddButton"
-        Me.AddButton.Size = New System.Drawing.Size(74, 27)
-        Me.AddButton.TabIndex = 1
-        Me.AddButton.Text = "行追加"
-        Me.AddButton.UseVisualStyleBackColor = True
-        '
-        'DataGridView1
-        '
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Location = New System.Drawing.Point(99, 49)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.RowTemplate.Height = 25
-        Me.DataGridView1.Size = New System.Drawing.Size(935, 272)
-        Me.DataGridView1.TabIndex = 0
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(6, 240)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(74, 27)
-        Me.Button1.TabIndex = 5
-        Me.Button1.Text = "データ保存"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'Button2
-        '
-        Me.Button2.Location = New System.Drawing.Point(6, 285)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(74, 27)
-        Me.Button2.TabIndex = 6
-        Me.Button2.Text = "データ読込"
-        Me.Button2.UseVisualStyleBackColor = True
-        '
         'MotorCtl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1084, 681)
         Me.ControlBox = False
-        Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -370,8 +280,6 @@ Partial Class MotorCtl
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
-        Me.GroupBox3.ResumeLayout(False)
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -396,12 +304,4 @@ Partial Class MotorCtl
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents RadioButton5 As RadioButton
     Friend WithEvents Label4 As Label
-    Friend WithEvents GroupBox3 As GroupBox
-    Friend WithEvents DataGridView1 As DataGridView
-    Friend WithEvents AddButton As Button
-    Friend WithEvents DupButton As Button
-    Friend WithEvents InsButton As Button
-    Friend WithEvents DelButton As Button
-    Friend WithEvents Button2 As Button
-    Friend WithEvents Button1 As Button
 End Class
