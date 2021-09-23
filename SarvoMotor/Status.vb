@@ -527,7 +527,8 @@ Public Class Status
         End If
 
         'lblOutPulse.Text = Str(lOutPulse)
-        lblOutPulse.Text = (lOutPulse * CC).ToString("F3")
+        lOutDisp = lOutPulse * CC
+        lblOutPulse.Text = (lOutDisp).ToString("F3")
 
         '---------------------------
         ' Get CountPulse from Driver
@@ -540,7 +541,8 @@ Public Class Status
         End If
 
         'lblCountPulse.Text = Str(lCountPulse)
-        lblCountPulse.Text = (lCountPulse * CC).ToString("F3")
+        lCountDisp = lCountPulse * CC
+        lblCountPulse.Text = (lCountDisp).ToString("F3")
 
         '---------------------------
         ' Get BankNo from Driver

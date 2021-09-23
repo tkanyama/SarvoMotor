@@ -42,6 +42,8 @@ Partial Class MotorCtl
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.RadioButton5 = New System.Windows.Forms.RadioButton()
+        Me.TestStartButton = New System.Windows.Forms.Button()
+        Me.InitialLabel = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
@@ -263,12 +265,32 @@ Partial Class MotorCtl
         Me.RadioButton5.Text = "試験"
         Me.RadioButton5.UseVisualStyleBackColor = True
         '
+        'TestStartButton
+        '
+        Me.TestStartButton.Location = New System.Drawing.Point(567, 45)
+        Me.TestStartButton.Name = "TestStartButton"
+        Me.TestStartButton.Size = New System.Drawing.Size(86, 40)
+        Me.TestStartButton.TabIndex = 14
+        Me.TestStartButton.Text = "加力開始"
+        Me.TestStartButton.UseVisualStyleBackColor = True
+        '
+        'InitialLabel
+        '
+        Me.InitialLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.InitialLabel.Location = New System.Drawing.Point(571, 107)
+        Me.InitialLabel.Name = "InitialLabel"
+        Me.InitialLabel.Size = New System.Drawing.Size(81, 21)
+        Me.InitialLabel.TabIndex = 15
+        Me.InitialLabel.Text = "Label5"
+        '
         'MotorCtl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1084, 681)
         Me.ControlBox = False
+        Me.Controls.Add(Me.InitialLabel)
+        Me.Controls.Add(Me.TestStartButton)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -304,4 +326,6 @@ Partial Class MotorCtl
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents RadioButton5 As RadioButton
     Friend WithEvents Label4 As Label
+    Friend WithEvents TestStartButton As Button
+    Friend WithEvents InitialLabel As Label
 End Class

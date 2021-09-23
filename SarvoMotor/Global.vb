@@ -178,19 +178,28 @@ Module [Global]
 	Public StopPosition As Integer  ' 停止位置
 
 	Public lOutPulse As Integer
+	Public lOutDisp As Double
 	Public lCountPulse As Integer
+	Public lCountDisp As Double
 	Public lDistance As Integer
 	Public bCoordinate As Short
+
+	Public InitialPulse As Integer
+	Public InitialDisp As Double
 
 	Public TestMode As Integer      ' 0:準備・片付け　1:試験モード
 	Public Const xSize1 As Integer = 570
 	Public Const ySize1 As Integer = 360
-	Public Const xSize2 As Integer = 1000
+	Public Const xSize2 As Integer = 1080
 	Public Const ySize2 As Integer = 720
 
 	Public PointN As Integer
+	Public PointI As Integer
+	Public DeltaI As Integer
 	Public LoadPoint() As Double
+	Public Delta1 As Double
 	Public Chart As LoadScedule
 	Public LoadGraph1 As LoadGraph
+	Public TestStartFlag As Boolean
 
 End Module

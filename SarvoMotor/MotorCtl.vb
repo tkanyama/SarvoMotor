@@ -73,7 +73,7 @@ Public Class MotorCtl
         Me.Controls.Add(Chart)
 
         LoadGraph1 = New LoadGraph
-        LoadGraph1.Location = New Point(560, 12)
+        LoadGraph1.Location = New Point(Chart.Location.X + Chart.Width + 10, Chart.Location.Y)
         Me.Controls.Add(LoadGraph1)
 
     End Sub
@@ -535,6 +535,10 @@ Public Class MotorCtl
             Title = "Stop"
             'MessageBox.Show(szMsg, Title, MessageBoxButtons.OK)
             lblComment.Text += " " + szMsg
+
+            If TestStartFlag Then
+                NextLoad()
+            End If
         End If
 
         MyBase.WndProc(m)
@@ -582,9 +586,51 @@ Public Class MotorCtl
         If RadioButton5.Checked = True Then
             TestMode = 1
             Me.Size = New Size(xSize2, ySize2)
+            'RadioButton1.Select()
+            RadioButton1.PerformClick()
+            TypeComboBox1.SelectedIndex = 0
+            CheckBox1.Checked = True
         End If
     End Sub
 
+    Private Sub TestStartButton_Click(sender As Object, e As EventArgs) Handles TestStartButton.Click
+        If PointN > 0 Then
+            InitialPulse = lOutPulse
+            InitialDisp = lOutDisp
+            InitialLabel.Text = Format(InitialDisp)
+            PointI = 1
+            DeltaI = 1
+            If LoadPoint(PointI) > 0 Then
+                txtDistance.Text = Format(InitialDisp + Delta1, "F3")
+            Else
+                txtDistance.Text = Format(InitialDisp - Delta1, "F3")
+            End If
+            TestStartFlag = True
+        Else
+            MessageBox.Show("加力スケジュールを入力してください。",
+                "エラー",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error)
+        End If
 
+
+    End Sub
+
+    Private Sub NextLoad()
+        'PointI = 1
+        DeltaI += 1
+        If LoadPoint(PointI) > 0 Then
+            If Delta1 * DeltaI > LoadPoint(PointI) Then
+                txtDistance.Text = Format(InitialDisp + LoadPoint(PointI), "F3")
+                Delta1 = 1
+            Else
+                txtDistance.Text = Format(InitialDisp + Delta1 * DeltaI, "F3")
+                'DeltaI += 1
+            End If
+
+        Else
+                txtDistance.Text = Format(lOutDisp - Delta1, "F3")
+        End If
+    End Sub
 End Class
 

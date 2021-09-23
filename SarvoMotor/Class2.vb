@@ -39,22 +39,22 @@ Public Class LoadGraph
 
         PictureBox1 = New PictureBox
         With PictureBox1
-            .Location = New Point(90, 20)
-            .Size = New Size(300, 270)
+            .Location = New Point(90, 25)
+            .Size = New Size(300, 300)
             .BorderStyle = BorderStyle.Fixed3D
         End With
         MyBase.Controls.Add(PictureBox1)
 
         DrawButton = New Button
         With DrawButton
-            .Location = New Point(10, 20)
+            .Location = New Point(10, 25)
             .Size = New Size(74, 27)
-            .Text = "開始"
+            .Text = "作図"
         End With
         AddHandler DrawButton.Click, AddressOf DrawButton_Click
         MyBase.Controls.Add(DrawButton)
 
-        MyBase.Size = New Size(PictureBox1.Width + 100, PictureBox1.Height + 27)
+        MyBase.Size = New Size(PictureBox1.Width + 110, PictureBox1.Height + 40)
 
 
     End Sub
@@ -64,7 +64,7 @@ Public Class LoadGraph
     End Sub
 
     Public Sub DrawGraph()
-        RowIndex1 = 0
+        'RowIndex1 = 0
         With Chart
             If .RowCount > 0 Then
                 '.RowIndex = RowIndex1
@@ -75,7 +75,9 @@ Public Class LoadGraph
                 PeakM = .PeakM
                 'EndPoint = .EndPoint
                 Delta = .Delta
+                Delta1 = Delta
                 RepeatN = .RepeatN
+
 
                 Dim Kataburi As Boolean
                 If PeakM = 0 Then
@@ -342,6 +344,12 @@ Public Class LoadGraph
         P2.Y = Int(P1.Y * Yc + YOffSet)
         Return P2
     End Function
+
+    Public Sub DrawPoint(ByVal r As Integer, ByVal P As Point)
+        If r > 0 Then
+
+        End If
+    End Sub
 
 
 

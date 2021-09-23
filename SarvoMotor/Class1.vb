@@ -222,7 +222,7 @@ Class LoadScedule
             '列数・行数を指定
             '.ColumnCount = 8
             '.RowCount = 1
-            Const CellW As Integer = 100
+            Const CellW As Integer = 80
 
             .Width = CellW * 5 + 95
             .Height = 270
