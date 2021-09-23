@@ -13,7 +13,7 @@ Public Class MotorCtl
     Dim ErrorString As New StringBuilder("", 256)  'Error String
     Dim lCountPulse1 As Integer
     Dim RowCount1 As Integer
-    Dim Chart As LoadScedule
+    'Dim Chart As LoadScedule
 
     Private Sub MotorCtl_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Dim a As Integer
@@ -72,6 +72,9 @@ Public Class MotorCtl
         Chart.Location = New Point(15, 327)
         Me.Controls.Add(Chart)
 
+        LoadGraph1 = New LoadGraph
+        LoadGraph1.Location = New Point(560, 12)
+        Me.Controls.Add(LoadGraph1)
 
     End Sub
 

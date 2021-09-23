@@ -210,7 +210,7 @@ Class LoadScedule
 
         With DataGridView1
             .Location = New Point(100, 50)
-            .Size = New Size(940, 270)
+            .Size = New Size(740, 270)
         End With
         Me.Controls.Add(DataGridView1)
 
@@ -224,7 +224,7 @@ Class LoadScedule
             '.RowCount = 1
             Const CellW As Integer = 100
 
-            .Width = CellW * 7 + 95
+            .Width = CellW * 5 + 95
             .Height = 270
 
 
@@ -261,15 +261,15 @@ Class LoadScedule
             End With
             .Columns.Add(Col2)
 
-            Dim Col3 As New DataGridViewTextBoxColumn()
-            With Col3
-                .Name = "start"
-                .HeaderText = "　開始値"
-                .HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-                .Width = CellW
-                .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
-            End With
-            .Columns.Add(Col3)
+            'Dim Col3 As New DataGridViewTextBoxColumn()
+            'With Col3
+            '    .Name = "start"
+            '    .HeaderText = "　開始値"
+            '    .HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+            '    .Width = CellW
+            '    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            'End With
+            '.Columns.Add(Col3)
 
             Dim Col4 As New DataGridViewTextBoxColumn()
             With Col4
@@ -291,15 +291,15 @@ Class LoadScedule
             End With
             .Columns.Add(Col5)
 
-            Dim Col6 As New DataGridViewTextBoxColumn()
-            With Col6
-                .Name = "end"
-                .HeaderText = "終了値"
-                .HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-                .Width = CellW
-                .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
-            End With
-            .Columns.Add(Col6)
+            'Dim Col6 As New DataGridViewTextBoxColumn()
+            'With Col6
+            '    .Name = "end"
+            '    .HeaderText = "終了値"
+            '    .HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+            '    .Width = CellW
+            '    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            'End With
+            '.Columns.Add(Col6)
 
             Dim Col7 As New DataGridViewTextBoxColumn()
             With Col7
@@ -638,7 +638,7 @@ Class LoadScedule
                             cmDat(i) = cmDat(i).Trim(Chr(34))
                             Select Case i
                                 Case 0          'ブール型
-                                    If cmDat(i) = "True" Then
+                                    If cmDat(i) = "TRUE" Then
                                         .CurrentRow.Cells(i).Value = True
                                     Else
                                         .CurrentRow.Cells(i).Value = False
@@ -657,6 +657,10 @@ Class LoadScedule
 
 
             RowCount1 = .RowCount
+            .CurrentCell = .Rows(0).Cells(0)
+
+            LoadGraph1.DrawGraph()
+
         End With
     End Sub
 
@@ -681,39 +685,39 @@ Class LoadScedule
         End Get
     End Property
 
-    Public ReadOnly Property StartPoint() As Double
+    'Public ReadOnly Property StartPoint() As Double
+    '    Get
+    '        Return Val(DataGridView1.CurrentRow.Cells(2).Value)
+    '    End Get
+    'End Property
+
+    Public ReadOnly Property PeakP() As Double
         Get
             Return Val(DataGridView1.CurrentRow.Cells(2).Value)
         End Get
     End Property
 
-    Public ReadOnly Property PeakP() As Double
+    Public ReadOnly Property PeakM() As Double
         Get
             Return Val(DataGridView1.CurrentRow.Cells(3).Value)
         End Get
     End Property
 
-    Public ReadOnly Property PeakM() As Double
+    'Public ReadOnly Property EndPoint() As Double
+    '    Get
+    '        Return Val(DataGridView1.CurrentRow.Cells(5).Value)
+    '    End Get
+    'End Property
+
+    Public ReadOnly Property Delta() As Double
         Get
             Return Val(DataGridView1.CurrentRow.Cells(4).Value)
         End Get
     End Property
 
-    Public ReadOnly Property EndPoint() As Double
-        Get
-            Return Val(DataGridView1.CurrentRow.Cells(5).Value)
-        End Get
-    End Property
-
-    Public ReadOnly Property Delta() As Double
-        Get
-            Return Val(DataGridView1.CurrentRow.Cells(6).Value)
-        End Get
-    End Property
-
     Public ReadOnly Property RepeatN() As Double
         Get
-            Return Val(DataGridView1.CurrentRow.Cells(7).Value)
+            Return Val(DataGridView1.CurrentRow.Cells(5).Value)
         End Get
     End Property
 

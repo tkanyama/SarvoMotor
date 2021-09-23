@@ -188,4 +188,9 @@ Module [Global]
 	Public Const xSize2 As Integer = 1000
 	Public Const ySize2 As Integer = 720
 
+	Public PointN As Integer
+	Public LoadPoint() As Double
+	Public Chart As LoadScedule
+	Public LoadGraph1 As LoadGraph
+
 End Module
