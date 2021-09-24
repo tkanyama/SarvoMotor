@@ -398,10 +398,15 @@ Class LoadScedule
         AddHandler LoadButton.Click, AddressOf LoadButton_Click
         Me.Controls.Add(LoadButton)
 
-
+        AddHandler DataGridView1.RowHeaderMouseClick, AddressOf Header_Click
 
 
     End Sub
+
+    Private Sub Header_Click(sender As Object, e As EventArgs)
+        LoadGraph1.DrawGraph(0)
+    End Sub
+
 
     Private Sub AddButton_Click(sender As Object, e As EventArgs)
         With DataGridView1
@@ -638,7 +643,7 @@ Class LoadScedule
                             cmDat(i) = cmDat(i).Trim(Chr(34))
                             Select Case i
                                 Case 0          'ブール型
-                                    If cmDat(i) = "TRUE" Then
+                                    If cmDat(i) = "TRUE" Or cmDat(i) = "True" Then
                                         .CurrentRow.Cells(i).Value = True
                                     Else
                                         .CurrentRow.Cells(i).Value = False
@@ -694,13 +699,21 @@ Class LoadScedule
 
     Public ReadOnly Property PeakP() As Double
         Get
-            Return Val(DataGridView1.CurrentRow.Cells(2).Value)
+            If IsNumeric(DataGridView1.CurrentRow.Cells(2).Value) Then
+                Return Val(DataGridView1.CurrentRow.Cells(2).Value)
+            Else
+                Return 0.0
+            End If
         End Get
     End Property
 
     Public ReadOnly Property PeakM() As Double
         Get
-            Return Val(DataGridView1.CurrentRow.Cells(3).Value)
+            If IsNumeric(DataGridView1.CurrentRow.Cells(3).Value) Then
+                Return Val(DataGridView1.CurrentRow.Cells(3).Value)
+            Else
+                Return 0.0
+            End If
         End Get
     End Property
 
@@ -712,13 +725,21 @@ Class LoadScedule
 
     Public ReadOnly Property Delta() As Double
         Get
-            Return Val(DataGridView1.CurrentRow.Cells(4).Value)
+            If IsNumeric(DataGridView1.CurrentRow.Cells(4).Value) Then
+                Return Val(DataGridView1.CurrentRow.Cells(4).Value)
+            Else
+                Return 0.0
+            End If
         End Get
     End Property
 
-    Public ReadOnly Property RepeatN() As Double
+    Public ReadOnly Property RepeatN() As Integer
         Get
-            Return Val(DataGridView1.CurrentRow.Cells(5).Value)
+            If IsNumeric(DataGridView1.CurrentRow.Cells(5).Value) Then
+                Return Val(DataGridView1.CurrentRow.Cells(5).Value)
+            Else
+                Return 0
+            End If
         End Get
     End Property
 

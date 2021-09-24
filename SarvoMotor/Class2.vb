@@ -81,61 +81,149 @@ Public Class LoadGraph
                 Delta1 = Delta
                 RepeatN = .RepeatN
 
-
-                'Dim Kataburi As Boolean
-                If PeakM = 0 Then
-                    Kataburi = True
-                    PointN = 3 + 2 * (RepeatN - 1)
-                Else
-                    Kataburi = False
-                    PointN = 5 + 4 * (RepeatN - 1)
-                End If
-                canvas = New Bitmap(PictureBox1.Width, PictureBox1.Height)
-                'ImageオブジェクトのGraphicsオブジェクトを作成する
-                g = Graphics.FromImage(canvas)
-
-
-                GXsize = PictureBox1.Width
-                GYsize = PictureBox1.Height
-
-                GXZero = GXsize * 0.1
-                GXmax = GXsize * 0.8
-
-                If Kataburi Then
-                    If PeakP > 0 Then
-                        GYZero = GYsize * 0.9
-                        GYmax = GYsize * 0.8
+                If PeakP > 0.0 Then
+                    'Dim Kataburi As Boolean
+                    If PeakM = 0 Then
+                        Kataburi = True
+                        If RepeatN > 0 Then
+                            PointN = 3 + 2 * (RepeatN - 1)
+                        Else
+                            PointN = 2
+                        End If
                     Else
-                        GYZero = GYsize * 0.1
-                        GYmax = GYsize * 0.8
+                        If RepeatN = 0 Then RepeatN = 1
+                        Kataburi = False
+                        PointN = 5 + 4 * (RepeatN - 1)
                     End If
+                    canvas = New Bitmap(PictureBox1.Width, PictureBox1.Height)
+                    'ImageオブジェクトのGraphicsオブジェクトを作成する
+                    g = Graphics.FromImage(canvas)
 
-                Else
-                    GYZero = GYsize * 0.5
-                    GYmax = GYsize * 0.4
-                End If
-                Xmax = PointN - 1
-                Ymax = Max(Abs(PeakP), Abs(PeakM))
-                Xc = GXmax / Xmax
-                Yc = -GYmax / Ymax
-                XOffSet = GXZero
-                YOffSet = GYZero
 
-                'Dim X1 As Integer, Y1 As Integer
-                'Dim X2 As Integer, Y2 As Integer
-                PictureBox1.Image = Nothing
+                    GXsize = PictureBox1.Width
+                    GYsize = PictureBox1.Height
 
-                Dim blackPen1 As New Pen(Color.Black, 1)
-                Dim AxisX(1) As PointF
-                AxisX(0) = TransPoint(New PointF(0, 0))
-                AxisX(1) = TransPoint(New PointF(Xmax, 0))
-                g.DrawLines(blackPen1, AxisX)
+                    GXZero = GXsize * 0.1
+                    GXmax = GXsize * 0.8
 
-                If Kataburi Then
-                    If PeakP > 0 Then
+                    If Kataburi Then
+                        If PeakP > 0 Then
+                            GYZero = GYsize * 0.9
+                            GYmax = GYsize * 0.8
+                        Else
+                            GYZero = GYsize * 0.1
+                            GYmax = GYsize * 0.8
+                        End If
+
+                    Else
+                        GYZero = GYsize * 0.5
+                        GYmax = GYsize * 0.4
+                    End If
+                    Xmax = PointN - 1
+                    Ymax = Max(Abs(PeakP), Abs(PeakM))
+                    Xc = GXmax / Xmax
+                    Yc = -GYmax / Ymax
+                    XOffSet = GXZero
+                    YOffSet = GYZero
+
+                    'Dim X1 As Integer, Y1 As Integer
+                    'Dim X2 As Integer, Y2 As Integer
+                    PictureBox1.Image = Nothing
+
+                    Dim blackPen1 As New Pen(Color.Black, 1)
+                    Dim AxisX(1) As PointF
+                    AxisX(0) = TransPoint(New PointF(0, 0))
+                    AxisX(1) = TransPoint(New PointF(Xmax, 0))
+                    g.DrawLines(blackPen1, AxisX)
+
+                    If Kataburi Then
+                        If PeakP > 0 Then
+                            Dim AxisY(1) As PointF
+                            AxisY(0) = TransPoint(New PointF(0, Ymax))
+                            AxisY(1) = TransPoint(New PointF(0, 0))
+                            g.DrawLines(blackPen1, AxisY)
+
+                            Dim GrayPen1 As New Pen(Color.LightGray, 0.5)
+                            GrayPen1.DashStyle = Drawing2D.DashStyle.Dash
+                            Dim AxisYmax(1) As PointF
+                            AxisYmax(0) = TransPoint(New PointF(0, Ymax))
+                            AxisYmax(1) = TransPoint(New PointF(Xmax, Ymax))
+                            g.DrawLines(GrayPen1, AxisYmax)
+                            'Dim AxisYmin(1) As Point
+                            'AxisYmin(0) = TransPoint(New Point(0, -Ymax))
+                            'AxisYmin(1) = TransPoint(New Point(Xmax, -Ymax))
+                            'g.DrawLines(GrayPen1, AxisYmin)
+
+                            Dim fnt As New Font("MS UI Gothic", 8)
+                            Dim fmt As New StringFormat
+                            fmt.Alignment = StringAlignment.Far
+                            fmt.LineAlignment = StringAlignment.Center
+                            '文字列を位置(0,0)、黒色で表示
+                            g.DrawString(Format(Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, Ymax)), fmt)
+                            g.DrawString(Format(0), fnt, Brushes.Black, TransPoint(New PointF(0, 0)), fmt)
+                            'g.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New Point(0, -Ymax)), fmt)
+
+                            If Delta > 0 Then
+                                Dim ygrid As Integer = 0
+                                Dim gridLind(1) As PointF
+                                Do
+                                    ygrid += Delta
+                                    If ygrid >= Ymax Then Exit Do
+                                    gridLind(0) = TransPoint(New PointF(0, ygrid))
+                                    gridLind(1) = TransPoint(New PointF(Xmax, ygrid))
+                                    g.DrawLines(GrayPen1, gridLind)
+                                    'gridLind(0) = TransPoint(New PointF(0, -ygrid))
+                                    'gridLind(1) = TransPoint(New PointF(Xmax, -ygrid))
+                                    'g.DrawLines(GrayPen1, gridLind)
+                                Loop
+                            End If
+                        Else
+                            Dim AxisY(1) As PointF
+                            AxisY(0) = TransPoint(New PointF(0, -Ymax))
+                            AxisY(1) = TransPoint(New PointF(0, 0))
+                            g.DrawLines(blackPen1, AxisY)
+
+                            Dim GrayPen1 As New Pen(Color.LightGray, 0.5)
+                            GrayPen1.DashStyle = Drawing2D.DashStyle.Dash
+                            'Dim AxisYmax(1) As PointF
+                            'AxisYmax(0) = TransPoint(New PointF(0, Ymax))
+                            'AxisYmax(1) = TransPoint(New PointF(Xmax, Ymax))
+                            'g.DrawLines(GrayPen1, AxisYmax)
+                            Dim AxisYmin(1) As PointF
+                            AxisYmin(0) = TransPoint(New PointF(0, -Ymax))
+                            AxisYmin(1) = TransPoint(New PointF(Xmax, -Ymax))
+                            g.DrawLines(GrayPen1, AxisYmin)
+
+                            Dim fnt As New Font("MS UI Gothic", 8)
+                            Dim fmt As New StringFormat
+                            fmt.Alignment = StringAlignment.Far
+                            fmt.LineAlignment = StringAlignment.Center
+                            '文字列を位置(0,0)、黒色で表示
+                            'g.DrawString(Format(Ymax), fnt, Brushes.Black, TransPointF(New Point(0, Ymax)), fmt)
+                            g.DrawString(Format(0), fnt, Brushes.Black, TransPoint(New PointF(0, 0)), fmt)
+                            g.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, -Ymax)), fmt)
+
+                            If Delta > 0 Then
+                                Dim ygrid As Integer = 0
+                                Dim gridLind(1) As PointF
+                                Do
+                                    ygrid += Delta
+                                    If ygrid >= Ymax Then Exit Do
+                                    'gridLind(0) = TransPoint(New PointF(0, ygrid))
+                                    'gridLind(1) = TransPoint(New PointF(Xmax, ygrid))
+                                    'g.DrawLines(GrayPen1, gridLind)
+                                    gridLind(0) = TransPoint(New PointF(0, -ygrid))
+                                    gridLind(1) = TransPoint(New PointF(Xmax, -ygrid))
+                                    g.DrawLines(GrayPen1, gridLind)
+                                Loop
+                            End If
+
+                        End If
+
+                    Else
                         Dim AxisY(1) As PointF
                         AxisY(0) = TransPoint(New PointF(0, Ymax))
-                        AxisY(1) = TransPoint(New PointF(0, 0))
+                        AxisY(1) = TransPoint(New PointF(0, -Ymax))
                         g.DrawLines(blackPen1, AxisY)
 
                         Dim GrayPen1 As New Pen(Color.LightGray, 0.5)
@@ -144,46 +232,6 @@ Public Class LoadGraph
                         AxisYmax(0) = TransPoint(New PointF(0, Ymax))
                         AxisYmax(1) = TransPoint(New PointF(Xmax, Ymax))
                         g.DrawLines(GrayPen1, AxisYmax)
-                        'Dim AxisYmin(1) As Point
-                        'AxisYmin(0) = TransPoint(New Point(0, -Ymax))
-                        'AxisYmin(1) = TransPoint(New Point(Xmax, -Ymax))
-                        'g.DrawLines(GrayPen1, AxisYmin)
-
-                        Dim fnt As New Font("MS UI Gothic", 8)
-                        Dim fmt As New StringFormat
-                        fmt.Alignment = StringAlignment.Far
-                        fmt.LineAlignment = StringAlignment.Center
-                        '文字列を位置(0,0)、黒色で表示
-                        g.DrawString(Format(Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, Ymax)), fmt)
-                        g.DrawString(Format(0), fnt, Brushes.Black, TransPoint(New PointF(0, 0)), fmt)
-                        'g.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New Point(0, -Ymax)), fmt)
-
-                        If Delta > 0 Then
-                            Dim ygrid As Integer = 0
-                            Dim gridLind(1) As PointF
-                            Do
-                                ygrid += Delta
-                                If ygrid >= Ymax Then Exit Do
-                                gridLind(0) = TransPoint(New PointF(0, ygrid))
-                                gridLind(1) = TransPoint(New PointF(Xmax, ygrid))
-                                g.DrawLines(GrayPen1, gridLind)
-                                'gridLind(0) = TransPoint(New PointF(0, -ygrid))
-                                'gridLind(1) = TransPoint(New PointF(Xmax, -ygrid))
-                                'g.DrawLines(GrayPen1, gridLind)
-                            Loop
-                        End If
-                    Else
-                        Dim AxisY(1) As PointF
-                        AxisY(0) = TransPoint(New PointF(0, -Ymax))
-                        AxisY(1) = TransPoint(New PointF(0, 0))
-                        g.DrawLines(blackPen1, AxisY)
-
-                        Dim GrayPen1 As New Pen(Color.LightGray, 0.5)
-                        GrayPen1.DashStyle = Drawing2D.DashStyle.Dash
-                        'Dim AxisYmax(1) As PointF
-                        'AxisYmax(0) = TransPoint(New PointF(0, Ymax))
-                        'AxisYmax(1) = TransPoint(New PointF(Xmax, Ymax))
-                        'g.DrawLines(GrayPen1, AxisYmax)
                         Dim AxisYmin(1) As PointF
                         AxisYmin(0) = TransPoint(New PointF(0, -Ymax))
                         AxisYmin(1) = TransPoint(New PointF(Xmax, -Ymax))
@@ -194,7 +242,7 @@ Public Class LoadGraph
                         fmt.Alignment = StringAlignment.Far
                         fmt.LineAlignment = StringAlignment.Center
                         '文字列を位置(0,0)、黒色で表示
-                        'g.DrawString(Format(Ymax), fnt, Brushes.Black, TransPointF(New Point(0, Ymax)), fmt)
+                        g.DrawString(Format(Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, Ymax)), fmt)
                         g.DrawString(Format(0), fnt, Brushes.Black, TransPoint(New PointF(0, 0)), fmt)
                         g.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, -Ymax)), fmt)
 
@@ -204,9 +252,9 @@ Public Class LoadGraph
                             Do
                                 ygrid += Delta
                                 If ygrid >= Ymax Then Exit Do
-                                'gridLind(0) = TransPoint(New PointF(0, ygrid))
-                                'gridLind(1) = TransPoint(New PointF(Xmax, ygrid))
-                                'g.DrawLines(GrayPen1, gridLind)
+                                gridLind(0) = TransPoint(New PointF(0, ygrid))
+                                gridLind(1) = TransPoint(New PointF(Xmax, ygrid))
+                                g.DrawLines(GrayPen1, gridLind)
                                 gridLind(0) = TransPoint(New PointF(0, -ygrid))
                                 gridLind(1) = TransPoint(New PointF(Xmax, -ygrid))
                                 g.DrawLines(GrayPen1, gridLind)
@@ -215,164 +263,127 @@ Public Class LoadGraph
 
                     End If
 
-                Else
-                    Dim AxisY(1) As PointF
-                    AxisY(0) = TransPoint(New PointF(0, Ymax))
-                    AxisY(1) = TransPoint(New PointF(0, -Ymax))
-                    g.DrawLines(blackPen1, AxisY)
+                    'Dim PointFN As Integer
+                    Dim P() As PointF
+                    'If Kataburi Then
+                    '    PointN = 3 + 2 * (RepeatN - 1)
+                    'Else
+                    '    PointN = 5 + 4 * (RepeatN - 1)
+                    'End If
 
-                    Dim GrayPen1 As New Pen(Color.LightGray, 0.5)
-                    GrayPen1.DashStyle = Drawing2D.DashStyle.Dash
-                    Dim AxisYmax(1) As PointF
-                    AxisYmax(0) = TransPoint(New PointF(0, Ymax))
-                    AxisYmax(1) = TransPoint(New PointF(Xmax, Ymax))
-                    g.DrawLines(GrayPen1, AxisYmax)
-                    Dim AxisYmin(1) As PointF
-                    AxisYmin(0) = TransPoint(New PointF(0, -Ymax))
-                    AxisYmin(1) = TransPoint(New PointF(Xmax, -Ymax))
-                    g.DrawLines(GrayPen1, AxisYmin)
-
-                    Dim fnt As New Font("MS UI Gothic", 8)
-                    Dim fmt As New StringFormat
-                    fmt.Alignment = StringAlignment.Far
-                    fmt.LineAlignment = StringAlignment.Center
-                    '文字列を位置(0,0)、黒色で表示
-                    g.DrawString(Format(Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, Ymax)), fmt)
-                    g.DrawString(Format(0), fnt, Brushes.Black, TransPoint(New PointF(0, 0)), fmt)
-                    g.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, -Ymax)), fmt)
-
-                    If Delta > 0 Then
-                        Dim ygrid As Integer = 0
-                        Dim gridLind(1) As PointF
-                        Do
-                            ygrid += Delta
-                            If ygrid >= Ymax Then Exit Do
-                            gridLind(0) = TransPoint(New PointF(0, ygrid))
-                            gridLind(1) = TransPoint(New PointF(Xmax, ygrid))
-                            g.DrawLines(GrayPen1, gridLind)
-                            gridLind(0) = TransPoint(New PointF(0, -ygrid))
-                            gridLind(1) = TransPoint(New PointF(Xmax, -ygrid))
-                            g.DrawLines(GrayPen1, gridLind)
-                        Loop
+                    ReDim LoadPoint(PointN - 1)
+                    ReDim P(PointN - 1)
+                    Dim m As Integer = 0
+                    If Kataburi Then
+                        If RepeatN > 0 Then
+                            For i As Integer = 0 To RepeatN - 1
+                                If i = 0 Then
+                                    LoadPoint(m) = 0
+                                End If
+                                m += 1
+                                LoadPoint(m) = PeakP
+                                m += 1
+                                LoadPoint(m) = 0
+                            Next
+                        Else
+                            LoadPoint(0) = 0
+                            LoadPoint(1) = PeakP
+                        End If
+                    Else
+                        For i As Integer = 0 To RepeatN - 1
+                            If i = 0 Then
+                                LoadPoint(m) = 0
+                            End If
+                            m += 1
+                            LoadPoint(m) = PeakP
+                            m += 1
+                            LoadPoint(m) = 0
+                            m += 1
+                            LoadPoint(m) = PeakM
+                            m += 1
+                            LoadPoint(m) = 0
+                        Next
                     End If
 
-                End If
+                    PointN2 = 0
+                    ReDim LoadPoint2(1000), LoadX(1000)
+                    LoadPoint2(0) = 0.0
+                    LoadX(0) = 0.0
 
-                'Dim PointFN As Integer
-                Dim P() As PointF
-                'If Kataburi Then
-                '    PointN = 3 + 2 * (RepeatN - 1)
-                'Else
-                '    PointN = 5 + 4 * (RepeatN - 1)
-                'End If
+                    If Delta > 0.0 Then
 
-                ReDim LoadPoint(PointN - 1)
-                ReDim P(PointN - 1)
-                Dim m As Integer = 0
-                If Kataburi Then
-                    For i As Integer = 0 To RepeatN - 1
-                        If i = 0 Then
-                            LoadPoint(m) = 0
-                        End If
-                        m += 1
-                        LoadPoint(m) = PeakP
-                        m += 1
-                        LoadPoint(m) = 0
-                    Next
-                Else
-                    For i As Integer = 0 To RepeatN - 1
-                        If i = 0 Then
-                            LoadPoint(m) = 0
-                        End If
-                        m += 1
-                        LoadPoint(m) = PeakP
-                        m += 1
-                        LoadPoint(m) = 0
-                        m += 1
-                        LoadPoint(m) = PeakM
-                        m += 1
-                        LoadPoint(m) = 0
-                    Next
-                End If
-
-                PointN2 = 0
-                ReDim LoadPoint2(1000), LoadX(1000)
-                LoadPoint2(0) = 0.0
-                LoadX(0) = 0.0
-
-                If Delta > 0.0 Then
-
-                    PointN2 += 1
-                    Dim L1 As Double, L2 As Double, P1 As Double, m1 As Integer
-                    For i As Integer = 1 To PointN - 1
-                        L1 = LoadPoint(i - 1)
-                        L2 = LoadPoint(i)
-
-                        If Abs(L2) > Abs(L1) Then
-                            m1 = 1
-                            Do
-                                P1 = L1 + Sign(L2 - L1) * Delta * m1
-                                If Abs(P1) >= Abs(L2) Then Exit Do
-                                LoadPoint2(PointN2) = P1
-                                LoadX(PointN2) = (P1 - L1) / (L2 - L1) + i - 1
-                                PointN2 += 1
-                                m1 += 1
-                            Loop
-                            LoadPoint2(PointN2) = L2
-                            LoadX(PointN2) = i
-                            PointN2 += 1
-                        Else
-                            m1 = Int(Abs(L2 - L1) / Delta)
-                            Do
-                                P1 = L2 - Sign(L2 - L1) * Delta * m1
-                                If Abs(P1) <= 0 Then Exit Do
-                                LoadPoint2(PointN2) = P1
-                                LoadX(PointN2) = (P1 - L1) / (L2 - L1) + i - 1
-                                PointN2 += 1
-                                m1 -= 1
-                            Loop
-                            LoadPoint2(PointN2) = L2
-                            LoadX(PointN2) = i
-                            PointN2 += 1
-                        End If
-
-                    Next
-
-                Else
-                    PointN2 += 1
-                    For i As Integer = 1 To PointN - 1
-                        LoadPoint2(PointN2) = LoadPoint(i)
-                        LoadX(PointN2) = i
                         PointN2 += 1
+                        Dim L1 As Double, L2 As Double, P1 As Double, m1 As Integer
+                        For i As Integer = 1 To PointN - 1
+                            L1 = LoadPoint(i - 1)
+                            L2 = LoadPoint(i)
+
+                            If Abs(L2) > Abs(L1) Then
+                                m1 = 1
+                                Do
+                                    P1 = L1 + Sign(L2 - L1) * Delta * m1
+                                    If Abs(P1) >= Abs(L2) Then Exit Do
+                                    LoadPoint2(PointN2) = P1
+                                    LoadX(PointN2) = (P1 - L1) / (L2 - L1) + i - 1
+                                    PointN2 += 1
+                                    m1 += 1
+                                Loop
+                                LoadPoint2(PointN2) = L2
+                                LoadX(PointN2) = i
+                                PointN2 += 1
+                            Else
+                                m1 = Int(Abs(L2 - L1) / Delta)
+                                Do
+                                    P1 = L2 - Sign(L2 - L1) * Delta * m1
+                                    If Abs(P1) <= 0 Then Exit Do
+                                    LoadPoint2(PointN2) = P1
+                                    LoadX(PointN2) = (P1 - L1) / (L2 - L1) + i - 1
+                                    PointN2 += 1
+                                    m1 -= 1
+                                Loop
+                                LoadPoint2(PointN2) = L2
+                                LoadX(PointN2) = i
+                                PointN2 += 1
+                            End If
+
+                        Next
+
+                    Else
+                        PointN2 += 1
+                        For i As Integer = 1 To PointN - 1
+                            LoadPoint2(PointN2) = LoadPoint(i)
+                            LoadX(PointN2) = i
+                            PointN2 += 1
+                        Next
+
+                    End If
+                    ReDim Preserve LoadPoint2(PointN2 - 1), LoadX(PointN2 - 1)
+
+
+                    For i As Integer = 0 To PointN - 1
+                        P(i) = TransPoint(New PointF(i, LoadPoint(i)))
                     Next
 
+                    Dim GreenPen3 As New Pen(Color.Green, 2)
+                    g.DrawLines(GreenPen3, P)
+
+                    If PStep > 0 And PointN2 > 0 Then
+                        Dim P2(PStep) As PointF
+                        For i As Integer = 0 To PStep
+                            P2(i) = TransPoint(New PointF(LoadX(i), LoadPoint2(i)))
+                        Next
+                        Dim RedPen3 As New Pen(Color.Red, 3)
+                        g.DrawLines(RedPen3, P2)
+                    End If
+
+
+
+                    'リソースを解放する
+                    g.Dispose()
+                    'PictureBox1に表示する
+                    PictureBox1.Image = canvas
+
                 End If
-                ReDim Preserve LoadPoint2(PointN2 - 1), LoadX(PointN2 - 1)
-
-
-                For i As Integer = 0 To PointN - 1
-                    P(i) = TransPoint(New PointF(i, LoadPoint(i)))
-                Next
-
-                Dim GreenPen3 As New Pen(Color.Green, 2)
-                g.DrawLines(GreenPen3, P)
-
-                If PStep > 0 And PointN2 > 0 Then
-                    Dim P2(PStep) As PointF
-                    For i As Integer = 0 To PStep
-                        P2(i) = TransPoint(New PointF(LoadX(i), LoadPoint2(i)))
-                    Next
-                    Dim RedPen3 As New Pen(Color.Red, 3)
-                    g.DrawLines(RedPen3, P2)
-                End If
-
-
-
-                'リソースを解放する
-                g.Dispose()
-                'PictureBox1に表示する
-                PictureBox1.Image = canvas
-
             End If
         End With
     End Sub
