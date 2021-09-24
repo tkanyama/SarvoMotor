@@ -657,9 +657,10 @@ Class LoadScedule
 
 
             RowCount1 = .RowCount
-            .CurrentCell = .Rows(0).Cells(0)
+            RowsIndex1 = 0
+            .CurrentCell = .Rows(RowsIndex1).Cells(0)
 
-            LoadGraph1.DrawGraph()
+            LoadGraph1.DrawGraph(0)
 
         End With
     End Sub

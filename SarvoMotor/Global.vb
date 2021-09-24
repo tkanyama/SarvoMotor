@@ -193,13 +193,21 @@ Module [Global]
 	Public Const xSize2 As Integer = 1080
 	Public Const ySize2 As Integer = 720
 
+	Public RowsIndex1 As Integer
+
 	Public PointN As Integer
+	Public PointN2 As Integer
 	Public PointI As Integer
+	Public PointI2 As Integer
 	Public DeltaI As Integer
 	Public LoadPoint() As Double
+	Public LoadPoint2() As Double
+	Public LoadX() As Double
 	Public Delta1 As Double
 	Public Chart As LoadScedule
 	Public LoadGraph1 As LoadGraph
 	Public TestStartFlag As Boolean
+	Public Kataburi As Boolean
+
 
 End Module

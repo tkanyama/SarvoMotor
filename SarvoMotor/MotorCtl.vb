@@ -48,7 +48,7 @@ Public Class MotorCtl
         TypeComboBox1.Items.Add("絶対座標")
         TypeComboBox1.Items.Add("相対座標")
         TypeComboBox1.SelectedIndex = 1
-        Me.txtDistance.Text = Format(1, "F1")
+        Me.txtDistance.Text = Format(0, "F3")
 
 
         lblComment.Text = "ok"
@@ -342,7 +342,7 @@ Public Class MotorCtl
             Exit Function
         End If
 
-        txtDistance.Text = Format(lDistance * CC, "F1")
+        txtDistance.Text = Format(lDistance * CC, "F3")
         TypeComboBox1.SelectedIndex = bCoordinate
 
         GetMoveParam = True
@@ -598,13 +598,9 @@ Public Class MotorCtl
             InitialPulse = lOutPulse
             InitialDisp = lOutDisp
             InitialLabel.Text = Format(InitialDisp)
-            PointI = 1
-            DeltaI = 1
-            If LoadPoint(PointI) > 0 Then
-                txtDistance.Text = Format(InitialDisp + Delta1, "F3")
-            Else
-                txtDistance.Text = Format(InitialDisp - Delta1, "F3")
-            End If
+            PointI2 = 1
+            txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
+
             TestStartFlag = True
         Else
             MessageBox.Show("加力スケジュールを入力してください。",
@@ -617,20 +613,29 @@ Public Class MotorCtl
     End Sub
 
     Private Sub NextLoad()
-        'PointI = 1
-        DeltaI += 1
-        If LoadPoint(PointI) > 0 Then
-            If Delta1 * DeltaI > LoadPoint(PointI) Then
-                txtDistance.Text = Format(InitialDisp + LoadPoint(PointI), "F3")
-                Delta1 = 1
-            Else
-                txtDistance.Text = Format(InitialDisp + Delta1 * DeltaI, "F3")
-                'DeltaI += 1
+
+        PointI2 += 1
+        If PointI2 < PointN2 Then
+            txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
+            If PointN2 > 0 Then
+                LoadGraph1.DrawGraph(PointI2 - 1)
             End If
 
         Else
-                txtDistance.Text = Format(lOutDisp - Delta1, "F3")
+            RowsIndex1 += 1
+            If RowsIndex1 <= Chart.DataGridView1.RowCount - 1 Then
+                Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
+                LoadGraph1.DrawGraph(0)
+                PointI2 = 1
+                txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
+            Else
+                If PointN2 > 0 Then
+                    LoadGraph1.DrawGraph(PointI2 - 1)
+                End If
+                TestStartFlag = False
+            End If
         End If
+
     End Sub
 End Class
 
