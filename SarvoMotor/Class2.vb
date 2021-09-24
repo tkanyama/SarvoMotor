@@ -81,7 +81,7 @@ Public Class LoadGraph
                 Delta1 = Delta
                 RepeatN = .RepeatN
 
-                If PeakP > 0.0 Then
+                If Abs(PeakP) > 0.0 Then
                     'Dim Kataburi As Boolean
                     If PeakM = 0 Then
                         Kataburi = True

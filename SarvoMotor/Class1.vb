@@ -660,8 +660,13 @@ Class LoadScedule
                 Loop
             End Using
 
-
             RowCount1 = .RowCount
+            If RowCount1 > 0 Then
+                For i As Integer = 0 To RowCount1 - 1
+                    .Rows(i).HeaderCell.Value = Format(i + 1)
+                Next
+            End If
+
             RowsIndex1 = 0
             .CurrentCell = .Rows(RowsIndex1).Cells(0)
 
