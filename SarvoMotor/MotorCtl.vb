@@ -1,6 +1,7 @@
 ﻿Option Strict Off
 Option Explicit On
 Imports System.Text
+Imports System.Math
 Public Class MotorCtl
     Inherits System.Windows.Forms.Form
 
@@ -13,6 +14,7 @@ Public Class MotorCtl
     Dim ErrorString As New StringBuilder("", 256)  'Error String
     Dim lCountPulse1 As Integer
     Dim RowCount1 As Integer
+    Dim Timer1 As Timer
     'Dim Chart As LoadScedule
 
     Private Sub MotorCtl_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -76,9 +78,22 @@ Public Class MotorCtl
         LoadGraph1.Location = New Point(Chart.Location.X + Chart.Width + 10, Chart.Location.Y)
         Me.Controls.Add(LoadGraph1)
 
+        Timer1 = New Timer
+        Timer1.Interval = 100
+        Timer1.Enabled = False
+        AddHandler Timer1.Tick, AddressOf Timer1_Tick
+        'Me.Controls.Add(Timer1)
+
     End Sub
 
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs)
 
+        'ラベルに現在時刻表示
+
+        Me.Label5.Text = Now.ToString("hh:mm:ss")
+        RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
+        Label7.Text = bStopSts1.ToString
+    End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs)
         If RadioButton1.Checked = True Then
@@ -594,14 +609,24 @@ Public Class MotorCtl
     End Sub
 
     Private Sub TestStartButton_Click(sender As Object, e As EventArgs) Handles TestStartButton.Click
-        If PointN > 0 Then
-            InitialPulse = lOutPulse
-            InitialDisp = lOutDisp
-            InitialLabel.Text = Format(InitialDisp)
-            PointI2 = 1
-            txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
 
+        If PointN > 0 Then
+            Select Case SControlNo
+                Case 0  ' 変位制御
+                    InitialPulse = lOutPulse
+                    InitialDisp = lOutDisp
+                    InitialLabel.Text = Format(InitialDisp)
+                    PointI2 = 1
+                    lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
+                    txtDistance.Text = Format(lDistanceDisp, "F3")
+                    'txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
+                    ControlModeLabel.Text = "変位制御"
+                    RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
+            End Select
+            testModeLabel.Text = "試験中"
+            testModeLabel.ForeColor = Color.Red
             TestStartFlag = True
+            Timer1.Enabled = True
         Else
             MessageBox.Show("加力スケジュールを入力してください。",
                 "エラー",
@@ -614,27 +639,45 @@ Public Class MotorCtl
 
     Private Sub NextLoad()
 
-        PointI2 += 1
-        If PointI2 < PointN2 Then
-            txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
-            If PointN2 > 0 Then
-                LoadGraph1.DrawGraph(PointI2 - 1)
-            End If
 
-        Else
-            RowsIndex1 += 1
-            If RowsIndex1 <= Chart.DataGridView1.RowCount - 1 Then
-                Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
-                LoadGraph1.DrawGraph(0)
-                PointI2 = 1
-                txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
-            Else
+        If abs(lOutDisp - lDistanceDisp) < 0.1 Then
+            PointI2 += 1
+            If PointI2 < PointN2 Then
+                lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
+                txtDistance.Text = Format(lDistanceDisp, "F3")
                 If PointN2 > 0 Then
                     LoadGraph1.DrawGraph(PointI2 - 1)
+                    Select Case SControlNo
+                        Case 0  ' 変位制御
+                            ControlModeLabel.Text = "変位制御"
+                            RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
+                    End Select
                 End If
-                TestStartFlag = False
+
+            Else
+                RowsIndex1 += 1
+                If RowsIndex1 <= Chart.DataGridView1.RowCount - 1 Then
+                    Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
+                    LoadGraph1.DrawGraph(0)
+                    PointI2 = 1
+                    lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
+                    txtDistance.Text = Format(lDistanceDisp, "F3")
+                Else
+                    If PointN2 > 0 Then
+                        LoadGraph1.DrawGraph(PointI2 - 1)
+                    End If
+                    System.Threading.Thread.Sleep(500)
+                    testModeLabel.Text = "準備中"
+                    RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
+                    testModeLabel.ForeColor = Color.Black
+                    TestStartFlag = False
+                    Timer1.Enabled = False
+                End If
             End If
         End If
+
+
+
 
     End Sub
 End Class

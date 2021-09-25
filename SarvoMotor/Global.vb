@@ -182,7 +182,9 @@ Module [Global]
 	Public lCountPulse As Integer
 	Public lCountDisp As Double
 	Public lDistance As Integer
+	Public lDistanceDisp As Double
 	Public bCoordinate As Short
+	Public bStopSts1 As Short
 
 	Public InitialPulse As Integer
 	Public InitialDisp As Double
@@ -207,6 +209,7 @@ Module [Global]
 	Public Chart As LoadScedule
 	Public LoadGraph1 As LoadGraph
 	Public TestStartFlag As Boolean
+	Public SControlNo As Integer
 	Public Kataburi As Boolean
 
 

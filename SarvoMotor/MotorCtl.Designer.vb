@@ -44,8 +44,19 @@ Partial Class MotorCtl
         Me.RadioButton5 = New System.Windows.Forms.RadioButton()
         Me.TestStartButton = New System.Windows.Forms.Button()
         Me.InitialLabel = New System.Windows.Forms.Label()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.ControlModeLabel = New System.Windows.Forms.Label()
+        Me.testModeLabel = New System.Windows.Forms.Label()
+        Me.RecentValueLabel = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -267,21 +278,128 @@ Partial Class MotorCtl
         '
         'TestStartButton
         '
-        Me.TestStartButton.Location = New System.Drawing.Point(567, 45)
+        Me.TestStartButton.Location = New System.Drawing.Point(13, 26)
         Me.TestStartButton.Name = "TestStartButton"
         Me.TestStartButton.Size = New System.Drawing.Size(86, 40)
         Me.TestStartButton.TabIndex = 14
-        Me.TestStartButton.Text = "加力開始"
+        Me.TestStartButton.Text = "試験開始"
         Me.TestStartButton.UseVisualStyleBackColor = True
         '
         'InitialLabel
         '
         Me.InitialLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.InitialLabel.Location = New System.Drawing.Point(571, 107)
+        Me.InitialLabel.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.InitialLabel.Location = New System.Drawing.Point(13, 200)
         Me.InitialLabel.Name = "InitialLabel"
-        Me.InitialLabel.Size = New System.Drawing.Size(81, 21)
+        Me.InitialLabel.Size = New System.Drawing.Size(86, 27)
         Me.InitialLabel.TabIndex = 15
-        Me.InitialLabel.Text = "Label5"
+        Me.InitialLabel.Text = "0.0"
+        Me.InitialLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.ControlModeLabel)
+        Me.GroupBox3.Controls.Add(Me.testModeLabel)
+        Me.GroupBox3.Controls.Add(Me.RecentValueLabel)
+        Me.GroupBox3.Controls.Add(Me.InitialLabel)
+        Me.GroupBox3.Controls.Add(Me.Label8)
+        Me.GroupBox3.Controls.Add(Me.Label10)
+        Me.GroupBox3.Controls.Add(Me.Label9)
+        Me.GroupBox3.Controls.Add(Me.Label6)
+        Me.GroupBox3.Controls.Add(Me.TestStartButton)
+        Me.GroupBox3.Location = New System.Drawing.Point(555, 12)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(113, 297)
+        Me.GroupBox3.TabIndex = 16
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "試験"
+        '
+        'ControlModeLabel
+        '
+        Me.ControlModeLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.ControlModeLabel.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.ControlModeLabel.Location = New System.Drawing.Point(13, 146)
+        Me.ControlModeLabel.Name = "ControlModeLabel"
+        Me.ControlModeLabel.Size = New System.Drawing.Size(86, 27)
+        Me.ControlModeLabel.TabIndex = 15
+        Me.ControlModeLabel.Text = "変位制御"
+        Me.ControlModeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'testModeLabel
+        '
+        Me.testModeLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.testModeLabel.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.testModeLabel.Location = New System.Drawing.Point(13, 92)
+        Me.testModeLabel.Name = "testModeLabel"
+        Me.testModeLabel.Size = New System.Drawing.Size(86, 27)
+        Me.testModeLabel.TabIndex = 15
+        Me.testModeLabel.Text = "準備中"
+        Me.testModeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'RecentValueLabel
+        '
+        Me.RecentValueLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.RecentValueLabel.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.RecentValueLabel.Location = New System.Drawing.Point(13, 254)
+        Me.RecentValueLabel.Name = "RecentValueLabel"
+        Me.RecentValueLabel.Size = New System.Drawing.Size(86, 27)
+        Me.RecentValueLabel.TabIndex = 15
+        Me.RecentValueLabel.Text = "0.0"
+        Me.RecentValueLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(13, 236)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(43, 15)
+        Me.Label8.TabIndex = 16
+        Me.Label8.Text = "現在値"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(13, 74)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(31, 15)
+        Me.Label10.TabIndex = 16
+        Me.Label10.Text = "状態"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(13, 128)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(31, 15)
+        Me.Label9.TabIndex = 16
+        Me.Label9.Text = "制御"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(13, 182)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(43, 15)
+        Me.Label6.TabIndex = 16
+        Me.Label6.Text = "初期値"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(749, 64)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(41, 15)
+        Me.Label5.TabIndex = 17
+        Me.Label5.Text = "Label5"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(749, 104)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(41, 15)
+        Me.Label7.TabIndex = 18
+        Me.Label7.Text = "Label7"
         '
         'MotorCtl
         '
@@ -289,8 +407,9 @@ Partial Class MotorCtl
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1084, 681)
         Me.ControlBox = False
-        Me.Controls.Add(Me.InitialLabel)
-        Me.Controls.Add(Me.TestStartButton)
+        Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -302,7 +421,10 @@ Partial Class MotorCtl
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -328,4 +450,14 @@ Partial Class MotorCtl
     Friend WithEvents Label4 As Label
     Friend WithEvents TestStartButton As Button
     Friend WithEvents InitialLabel As Label
+    Friend WithEvents GroupBox3 As GroupBox
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Label10 As Label
+    Friend WithEvents Label9 As Label
+    Friend WithEvents Label6 As Label
+    Friend WithEvents ControlModeLabel As Label
+    Friend WithEvents testModeLabel As Label
+    Friend WithEvents RecentValueLabel As Label
+    Friend WithEvents Label5 As Label
+    Friend WithEvents Label7 As Label
 End Class

@@ -73,6 +73,13 @@ Public Class LoadGraph
                 '.RowIndex = RowIndex1
                 Valid = .Valid
                 SControl = .SControl
+                Select Case SControl
+                    Case "変位"
+                        SControlNo = 0
+                    Case "荷重"
+                        SControlNo = 1
+                End Select
+
                 'StartPoint = .StartPoint
                 PeakP = .PeakP
                 PeakM = .PeakM

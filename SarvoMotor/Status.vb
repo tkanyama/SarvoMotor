@@ -628,6 +628,7 @@ Public Class Status
             Exit Sub
         End If
 
+        bStopSts1 = bStopSts
         Select Case bStopSts
             Case CSMC_MOVE
                 lblStopSts.Text = "Moving"
