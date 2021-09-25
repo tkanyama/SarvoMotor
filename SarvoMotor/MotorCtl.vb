@@ -639,8 +639,16 @@ Public Class MotorCtl
 
     Private Sub NextLoad()
 
+        Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
+            'Exit Sub
+        End If
 
-        If abs(lOutDisp - lDistanceDisp) < 0.1 Then
+
+        If Ret = 0 And bStopSts1 = 255 Then
+            'If abs(lOutDisp - lDistanceDisp) < 0.1 Then
             PointI2 += 1
             If PointI2 < PointN2 Then
                 lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
