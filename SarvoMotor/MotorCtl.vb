@@ -639,6 +639,7 @@ Public Class MotorCtl
 
     Private Sub NextLoad()
 
+
         Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
@@ -646,43 +647,52 @@ Public Class MotorCtl
             'Exit Sub
         End If
 
+        Select Case SControlNo
 
-        If Ret = 0 And bStopSts1 = 255 Then
-            'If abs(lOutDisp - lDistanceDisp) < 0.1 Then
-            PointI2 += 1
-            If PointI2 < PointN2 Then
-                lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
-                txtDistance.Text = Format(lDistanceDisp, "F3")
-                If PointN2 > 0 Then
-                    LoadGraph1.DrawGraph(PointI2 - 1)
-                    Select Case SControlNo
-                        Case 0  ' 変位制御
-                            ControlModeLabel.Text = "変位制御"
+            Case 0      ' 変位制御
+
+                If Ret = 0 And bStopSts1 = 255 Then
+                    'If abs(lOutDisp - lDistanceDisp) < 0.1 Then
+                    PointI2 += 1
+                    If PointI2 < PointN2 Then
+                        lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
+                        txtDistance.Text = Format(lDistanceDisp, "F3")
+                        If PointN2 > 0 Then
+                            LoadGraph1.DrawGraph(PointI2 - 1)
+                            Select Case SControlNo
+                                Case 0  ' 変位制御
+                                    ControlModeLabel.Text = "変位制御"
+                                    RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
+                            End Select
+                        End If
+
+                    Else
+                        RowsIndex1 += 1
+                        If RowsIndex1 <= Chart.DataGridView1.RowCount - 1 Then
+                            Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
+                            LoadGraph1.DrawGraph(0)
+                            PointI2 = 1
+                            lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
+                            txtDistance.Text = Format(lDistanceDisp, "F3")
+                        Else
+                            If PointN2 > 0 Then
+                                LoadGraph1.DrawGraph(PointI2 - 1)
+                            End If
+                            System.Threading.Thread.Sleep(500)
+                            testModeLabel.Text = "準備中"
                             RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
-                    End Select
+                            testModeLabel.ForeColor = Color.Black
+                            TestStartFlag = False
+                            Timer1.Enabled = False
+                        End If
+                    End If
                 End If
 
-            Else
-                RowsIndex1 += 1
-                If RowsIndex1 <= Chart.DataGridView1.RowCount - 1 Then
-                    Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
-                    LoadGraph1.DrawGraph(0)
-                    PointI2 = 1
-                    lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
-                    txtDistance.Text = Format(lDistanceDisp, "F3")
-                Else
-                    If PointN2 > 0 Then
-                        LoadGraph1.DrawGraph(PointI2 - 1)
-                    End If
-                    System.Threading.Thread.Sleep(500)
-                    testModeLabel.Text = "準備中"
-                    RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
-                    testModeLabel.ForeColor = Color.Black
-                    TestStartFlag = False
-                    Timer1.Enabled = False
-                End If
-            End If
-        End If
+            Case 1      ' 荷重制御
+
+        End Select
+
+
 
 
 
