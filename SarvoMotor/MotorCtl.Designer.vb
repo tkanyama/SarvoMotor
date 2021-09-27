@@ -23,6 +23,9 @@ Partial Class MotorCtl
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.SpaceKeyLabel = New System.Windows.Forms.Label()
+        Me.EnterKeyLabel = New System.Windows.Forms.Label()
+        Me.KeyTextBox = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
@@ -52,8 +55,6 @@ Partial Class MotorCtl
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -61,6 +62,9 @@ Partial Class MotorCtl
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.SpaceKeyLabel)
+        Me.GroupBox1.Controls.Add(Me.EnterKeyLabel)
+        Me.GroupBox1.Controls.Add(Me.KeyTextBox)
         Me.GroupBox1.Controls.Add(Me.TextBox1)
         Me.GroupBox1.Controls.Add(Me.CheckBox2)
         Me.GroupBox1.Controls.Add(Me.CheckBox1)
@@ -83,6 +87,32 @@ Partial Class MotorCtl
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "ピストン操作"
+        '
+        'SpaceKeyLabel
+        '
+        Me.SpaceKeyLabel.AutoSize = True
+        Me.SpaceKeyLabel.Location = New System.Drawing.Point(288, 104)
+        Me.SpaceKeyLabel.Name = "SpaceKeyLabel"
+        Me.SpaceKeyLabel.Size = New System.Drawing.Size(68, 15)
+        Me.SpaceKeyLabel.TabIndex = 13
+        Me.SpaceKeyLabel.Text = "[Space Key]"
+        '
+        'EnterKeyLabel
+        '
+        Me.EnterKeyLabel.AutoSize = True
+        Me.EnterKeyLabel.Location = New System.Drawing.Point(228, 42)
+        Me.EnterKeyLabel.Name = "EnterKeyLabel"
+        Me.EnterKeyLabel.Size = New System.Drawing.Size(64, 15)
+        Me.EnterKeyLabel.TabIndex = 13
+        Me.EnterKeyLabel.Text = "[Enter Key]"
+        '
+        'KeyTextBox
+        '
+        Me.KeyTextBox.Location = New System.Drawing.Point(327, 243)
+        Me.KeyTextBox.Multiline = True
+        Me.KeyTextBox.Name = "KeyTextBox"
+        Me.KeyTextBox.Size = New System.Drawing.Size(38, 38)
+        Me.KeyTextBox.TabIndex = 12
         '
         'TextBox1
         '
@@ -134,7 +164,7 @@ Partial Class MotorCtl
         Me.lblComment.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.lblComment.Location = New System.Drawing.Point(16, 243)
         Me.lblComment.Name = "lblComment"
-        Me.lblComment.Size = New System.Drawing.Size(349, 40)
+        Me.lblComment.Size = New System.Drawing.Size(305, 38)
         Me.lblComment.TabIndex = 7
         '
         'txtDistance
@@ -383,32 +413,12 @@ Partial Class MotorCtl
         Me.Label6.TabIndex = 16
         Me.Label6.Text = "初期値"
         '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(749, 64)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(41, 15)
-        Me.Label5.TabIndex = 17
-        Me.Label5.Text = "Label5"
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(749, 104)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(41, 15)
-        Me.Label7.TabIndex = 18
-        Me.Label7.Text = "Label7"
-        '
         'MotorCtl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1084, 681)
         Me.ControlBox = False
-        Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
@@ -424,7 +434,6 @@ Partial Class MotorCtl
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
@@ -458,6 +467,7 @@ Partial Class MotorCtl
     Friend WithEvents ControlModeLabel As Label
     Friend WithEvents testModeLabel As Label
     Friend WithEvents RecentValueLabel As Label
-    Friend WithEvents Label5 As Label
-    Friend WithEvents Label7 As Label
+    Friend WithEvents KeyTextBox As TextBox
+    Friend WithEvents SpaceKeyLabel As Label
+    Friend WithEvents EnterKeyLabel As Label
 End Class

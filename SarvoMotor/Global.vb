@@ -177,40 +177,39 @@ Module [Global]
 	Public ResolveSpeed As Double   ' 速度分解能
 	Public StopPosition As Integer  ' 停止位置
 
-	Public lOutPulse As Integer
-	Public lOutDisp As Double
-	Public lCountPulse As Integer
-	Public lCountDisp As Double
-	Public lDistance As Integer
-	Public lDistanceDisp As Double
-	Public bCoordinate As Short
-	Public bStopSts1 As Short
+	Public lOutPulse As Integer     ' ボードから出力したパルス数
+	Public lOutDisp As Double       ' 同ピストン変位 (lOutPulse * CC)
+	Public lCountPulse As Integer   ' エンコーダが検出したパルス数
+	Public lCountDisp As Double     ' 同ピストン変位 (lCountDisp * CC)
+	Public lDistance As Integer     ' 絶対または相対目標パルス数
+	Public lDistanceDisp As Double  ' 同ピストン変位 (lDistanceDisp * CC)
+	Public bCoordinate As Short     ' 相対パルスまたは絶対パルスの指標（1:相対、0:絶対）
+	Public bStopSts1 As Short       ' 停止原因の指標（0:動作中、1:停止コマンドによる停止、255;目標値到達による通常停止)
 
-	Public InitialPulse As Integer
-	Public InitialDisp As Double
+	Public InitialPulse As Integer  ' 試験開始時の絶対パルス数（イニシャル値）
+	Public InitialDisp As Double    ' 同ピストン変位 (InitialPulse * CC)
 
 	Public TestMode As Integer      ' 0:準備・片付け　1:試験モード
-	Public Const xSize1 As Integer = 570
-	Public Const ySize1 As Integer = 360
-	Public Const xSize2 As Integer = 1080
-	Public Const ySize2 As Integer = 720
+	Public Const xSize1 As Integer = 570    ' 準備時の操作パネルの幅
+	Public Const ySize1 As Integer = 360    ' 準備時の操作パネルの高さ
+	Public Const xSize2 As Integer = 1080   ' 試験時の操作パネルの幅
+	Public Const ySize2 As Integer = 720    ' 試験時の操作パネルの高さ
 
-	Public RowsIndex1 As Integer
+	Public RowsIndex1 As Integer    ' 加力スケジュール表の現在の行
 
-	Public PointN As Integer
-	Public PointN2 As Integer
-	Public PointI As Integer
-	Public PointI2 As Integer
-	Public DeltaI As Integer
-	Public LoadPoint() As Double
-	Public LoadPoint2() As Double
-	Public LoadX() As Double
-	Public Delta1 As Double
-	Public Chart As LoadScedule
-	Public LoadGraph1 As LoadGraph
-	Public TestStartFlag As Boolean
-	Public SControlNo As Integer
-	Public Kataburi As Boolean
+	Public PointN As Integer        ' 加力上下限目標値の数
+	Public PointN2 As Integer       ' 分割された加力目標値の数
+	Public PointI As Integer        ' 現在の加力上下限値の番号
+	Public PointI2 As Integer       ' 現在の分割された加力目標値の番号
+	Public LoadPoint() As Double    ' 加力上下限目標値
+	Public LoadPoint2() As Double   ' 分割された加力目標値
+	Public LoadX() As Double        ' 分割された加力目標値のX座標
+	Public Delta1 As Double         ' 分割の増分値
+	Public Chart As LoadScedule     ' 加力スケジュールの表
+	Public LoadGraph1 As LoadGraph  ' 加力スケジュールのグラフ
+	Public TestStartFlag As Boolean ' 試験時フラグ（True:試験時）
+	Public SControlNo As Integer    ' 制御番号(0:変位制御、1:荷重制御)
+	Public Kataburi As Boolean      ' 片振りフラグ(True:片振り、False:両振り)
 
 
 End Module
