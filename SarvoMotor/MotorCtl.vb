@@ -654,6 +654,14 @@ Public Class MotorCtl
 
         If PointN > 0 Then
             If TestStartFlag = False Then
+                RowsIndex1 = 0
+                Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
+                LoadGraph1.DrawGraph(0)
+
+                'PointI2 = 1
+                'lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
+                'txtDistance.Text = Format(lDistanceDisp, "F3")
+
                 Select Case SControlNo
                     Case 0  ' 変位制御
                         InitialPulse = lOutPulse
@@ -668,7 +676,11 @@ Public Class MotorCtl
                         RadioButton1.PerformClick()
                         TypeComboBox1.SelectedIndex = 0
                         CheckBox1.Checked = True
+
+                    Case 1  ' 荷重制御
+
                 End Select
+
                 TestStartButton.Text = "試験停止"
                 testModeLabel.Text = "試験中"
                 testModeLabel.ForeColor = Color.Red
