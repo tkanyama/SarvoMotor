@@ -211,5 +211,5 @@ Module [Global]
 	Public SControlNo As Integer    ' 制御番号(0:変位制御、1:荷重制御)
 	Public Kataburi As Boolean      ' 片振りフラグ(True:片振り、False:両振り)
 
-
+	Public Const Strokelimit = 151.18   ' ピストンのプラス側リミット変位
 End Module

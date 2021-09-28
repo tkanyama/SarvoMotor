@@ -53,6 +53,8 @@ Public Class Status
 	Friend WithEvents lblCountPulse As System.Windows.Forms.Label
 	Friend WithEvents lblOutPulse As System.Windows.Forms.Label
 	Friend WithEvents lblComment As System.Windows.Forms.Label
+    Friend WithEvents Button2 As Button
+    Friend WithEvents Button1 As Button
     Public WithEvents timer As System.Windows.Forms.Timer
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
@@ -62,6 +64,8 @@ Public Class Status
         Me.Label20 = New System.Windows.Forms.Label()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.btnComEncPulse = New System.Windows.Forms.Button()
         Me.btnComOutPulse = New System.Windows.Forms.Button()
         Me.Label17 = New System.Windows.Forms.Label()
@@ -93,6 +97,8 @@ Public Class Status
         Me.GroupBox1.Controls.Add(Me.Label20)
         Me.GroupBox1.Controls.Add(Me.Label19)
         Me.GroupBox1.Controls.Add(Me.Label18)
+        Me.GroupBox1.Controls.Add(Me.Button2)
+        Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.btnComEncPulse)
         Me.GroupBox1.Controls.Add(Me.btnComOutPulse)
         Me.GroupBox1.Controls.Add(Me.Label17)
@@ -162,26 +168,42 @@ Public Class Status
         Me.Label18.TabIndex = 17
         Me.Label18.Text = "RD"
         '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(325, 55)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(69, 24)
+        Me.Button2.TabIndex = 16
+        Me.Button2.Text = "+Lim Set"
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(325, 23)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(69, 24)
+        Me.Button1.TabIndex = 15
+        Me.Button1.Text = "+Lim Set"
+        '
         'btnComEncPulse
         '
-        Me.btnComEncPulse.Location = New System.Drawing.Point(288, 56)
+        Me.btnComEncPulse.Location = New System.Drawing.Point(248, 55)
         Me.btnComEncPulse.Name = "btnComEncPulse"
-        Me.btnComEncPulse.Size = New System.Drawing.Size(96, 24)
+        Me.btnComEncPulse.Size = New System.Drawing.Size(75, 24)
         Me.btnComEncPulse.TabIndex = 16
         Me.btnComEncPulse.Text = "Zero Reset"
         '
         'btnComOutPulse
         '
-        Me.btnComOutPulse.Location = New System.Drawing.Point(288, 24)
+        Me.btnComOutPulse.Location = New System.Drawing.Point(248, 23)
         Me.btnComOutPulse.Name = "btnComOutPulse"
-        Me.btnComOutPulse.Size = New System.Drawing.Size(96, 24)
+        Me.btnComOutPulse.Size = New System.Drawing.Size(75, 24)
         Me.btnComOutPulse.TabIndex = 15
         Me.btnComOutPulse.Text = "Zero Reset"
         '
         'Label17
         '
         Me.Label17.AutoSize = True
-        Me.Label17.Location = New System.Drawing.Point(232, 60)
+        Me.Label17.Location = New System.Drawing.Point(210, 59)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(35, 15)
         Me.Label17.TabIndex = 14
@@ -190,7 +212,7 @@ Public Class Status
         'Label16
         '
         Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(232, 28)
+        Me.Label16.Location = New System.Drawing.Point(210, 28)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(35, 15)
         Me.Label16.TabIndex = 13
@@ -232,7 +254,7 @@ Public Class Status
         Me.lblBankNo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.lblBankNo.Location = New System.Drawing.Point(120, 88)
         Me.lblBankNo.Name = "lblBankNo"
-        Me.lblBankNo.Size = New System.Drawing.Size(96, 24)
+        Me.lblBankNo.Size = New System.Drawing.Size(90, 24)
         Me.lblBankNo.TabIndex = 9
         Me.lblBankNo.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -243,7 +265,7 @@ Public Class Status
         Me.lblCountPulse.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.lblCountPulse.Location = New System.Drawing.Point(120, 56)
         Me.lblCountPulse.Name = "lblCountPulse"
-        Me.lblCountPulse.Size = New System.Drawing.Size(96, 24)
+        Me.lblCountPulse.Size = New System.Drawing.Size(90, 24)
         Me.lblCountPulse.TabIndex = 8
         Me.lblCountPulse.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -254,7 +276,7 @@ Public Class Status
         Me.lblOutPulse.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.lblOutPulse.Location = New System.Drawing.Point(120, 24)
         Me.lblOutPulse.Name = "lblOutPulse"
-        Me.lblOutPulse.Size = New System.Drawing.Size(96, 24)
+        Me.lblOutPulse.Size = New System.Drawing.Size(90, 24)
         Me.lblOutPulse.TabIndex = 7
         Me.lblOutPulse.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -702,6 +724,39 @@ Public Class Status
 
         lblComment.Text = "OK "
         timer.Enabled = True
+
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+        '---------------------------
+        ' Set OutPulse for Driver
+        '---------------------------
+        Dim stl As Integer = Int(Strokelimit / CC)
+        dwRet = SmcWSetOutPulse(Id, AxisNo, stl)
+        If dwRet <> 0 Then
+            SmcWGetErrorString(dwRet, ErrorString)
+            lblComment.Text = "SmcWSetOutPulse = " & dwRet & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        lblComment.Text = "OK "
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+
+        '---------------------------
+        ' Set CountPulse for Driver
+        '---------------------------
+        Dim stl As Integer = Int(Strokelimit / CC)
+        dwRet = SmcWSetCountPulse(Id, AxisNo, stl)
+        If dwRet <> 0 Then
+            SmcWGetErrorString(dwRet, ErrorString)
+            lblComment.Text = "SmcWSetCountPulse = " & dwRet & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        lblComment.Text = "OK "
 
     End Sub
 

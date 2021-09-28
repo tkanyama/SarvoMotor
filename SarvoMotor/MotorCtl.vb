@@ -655,6 +655,20 @@ Public Class MotorCtl
         If PointN > 0 Then
             If TestStartFlag = False Then
                 RowsIndex1 = 0
+                Do
+                    If Chart.DataGridView1.Rows(RowsIndex1).Cells(0).Value = True Then
+                        Exit Do
+                    End If
+                    RowsIndex1 += 1
+                    If RowsIndex1 > Chart.DataGridView1.RowCount - 1 Then
+                        MessageBox.Show("有効データがありません。。",
+                            "エラー",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error)
+                        Exit Sub
+                    End If
+                Loop
+
                 Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
                 LoadGraph1.DrawGraph(0)
 
@@ -783,7 +797,30 @@ Public Class MotorCtl
                         RowsIndex1 += 1
 
                         If RowsIndex1 <= Chart.DataGridView1.RowCount - 1 Then  ' 次の行がある場合
-
+                            Do
+                                If Chart.DataGridView1.Rows(RowsIndex1).Cells(0).Value = True Then
+                                    Exit Do
+                                End If
+                                RowsIndex1 += 1
+                                If RowsIndex1 > Chart.DataGridView1.RowCount - 1 Then
+                                    If PointN2 > 0 Then
+                                        LoadGraph1.DrawGraph(PointI2 - 1)
+                                    End If
+                                    System.Threading.Thread.Sleep(500)
+                                    TestStartButton.Text = "試験開始"
+                                    testModeLabel.Text = "準備中"
+                                    RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
+                                    testModeLabel.ForeColor = Color.Black
+                                    TestStartFlag = False
+                                    Timer1.Enabled = False
+                                    Timer2.Enabled = False
+                                    RemoveHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
+                                    Me.TopMost = False
+                                    EnterKeyLabel.Visible = False
+                                    SpaceKeyLabel.Visible = False
+                                    Exit Sub
+                                End If
+                            Loop
                             Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
                             LoadGraph1.DrawGraph(0)
                             PointI2 = 1
