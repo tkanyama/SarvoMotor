@@ -62,6 +62,11 @@ Public Class LoadGraph
 
     End Sub
 
+    Public WriteOnly Property Button_Enabled() As Boolean
+        Set(value As Boolean)
+            DrawButton.Enabled = value
+        End Set
+    End Property
     Private Sub DrawButton_Click(sender As Object, e As EventArgs)
         DrawGraph(0)
     End Sub

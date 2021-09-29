@@ -212,4 +212,8 @@ Module [Global]
 	Public Kataburi As Boolean      ' 片振りフラグ(True:片振り、False:両振り)
 
 	Public Const Strokelimit = 151.18   ' ピストンのプラス側リミット変位
+
+	Public Status1 As Status
+	Public Cltio1 As Ctlio
+
 End Module

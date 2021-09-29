@@ -59,13 +59,13 @@ Public Class ServoMotor
         Me.Location = New Point(20, 20)
         Me.FormBorderStyle = FormBorderStyle.FixedSingle
 
-        Dim Status1 As New Status
+        Status1 = New Status
         Status1.Visible = True
         Status1.StartPosition = FormStartPosition.Manual
         Status1.Location = New Point(20, 150)
 
 
-        Dim Cltio1 As New Ctlio
+        Cltio1 = New Ctlio
         Cltio1.Visible = True
         Cltio1.StartPosition = FormStartPosition.Manual
         Cltio1.Location = New Point(20, 570)

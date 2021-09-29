@@ -30,6 +30,7 @@ Public Class MotorCtl
         SpeedPanel1 = New SpeedPanel
         SpeedPanel1.Speed = Speed
         SpeedPanel1.Location = New Point(25, 100)
+        AddHandler SpeedPanel1.SpeedChange, AddressOf SpeedChange_Event
         Me.Controls.Add(SpeedPanel1)
 
         '［準備・片付けモードの選択]
@@ -99,11 +100,37 @@ Public Class MotorCtl
         SpaceKeyLabel.Visible = False   ' [SpaceKey]ラベル
     End Sub
 
+
+    Private Sub SpeedChange_Event(sender As Object, e As EventArgs)
+        'If TestStartFlag Then
+        Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
+        If Ret = 0 Then
+            If bStopSts1 = 0 Then
+                Dim TargetSpeed1 As Double = Int(SpeedPanel1.SetSpeed / CC)
+                If TargetSpeed1 <> TargetSpeed Then
+                    TargetSpeed = TargetSpeed1
+                    ' 変更後の速度を設定
+                    Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed)
+                    ' 変更後の加速時間を設定(10msec)
+                    Ret = SmcWSetAccelTime(Id, AxisNo, 0)
+                    ' 変更内容（動作速度と加減速時間を変更）を登録します。
+                    Ret = SmcWSetMotionChangeReady(Id, AxisNo, 4)
+                    ' モータ速度を変更します。
+                    Ret = SmcWMotionChange(Id, AxisNo)
+
+                End If
+            End If
+        End If
+        'End If
+    End Sub
     Private Sub Timer1_Tick(sender As Object, e As EventArgs)
         '
         '   荷重制御時のリアルタイム処理
         '
         RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
+
+
+
 
     End Sub
 
@@ -113,6 +140,19 @@ Public Class MotorCtl
         '
         KeyTextBox.Select()     ' 常にKeyTextBoxをフォーカスする
         KeyTextBox.Text = ""
+
+        If TestStartFlag Then
+            Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
+            If Ret = 0 Then
+
+                If bStopSts1 = 0 Then
+                    TestStartButton.Enabled = False
+                Else
+                    TestStartButton.Enabled = True
+                End If
+            End If
+        End If
+
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs)
@@ -627,10 +667,12 @@ Public Class MotorCtl
         '
         '   「準備・片付け」選択時の処理
         '
+
         If RadioButton4.Checked = True Then
             TestMode = 0
             Me.Size = New Size(xSize1, ySize1)
         End If
+
     End Sub
 
     Private Sub RadioButton5_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton5.CheckedChanged
@@ -672,10 +714,6 @@ Public Class MotorCtl
                 Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
                 LoadGraph1.DrawGraph(0)
 
-                'PointI2 = 1
-                'lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
-                'txtDistance.Text = Format(lDistanceDisp, "F3")
-
                 Select Case SControlNo
                     Case 0  ' 変位制御
                         InitialPulse = lOutPulse
@@ -695,30 +733,11 @@ Public Class MotorCtl
 
                 End Select
 
-                TestStartButton.Text = "試験停止"
-                testModeLabel.Text = "試験中"
-                testModeLabel.ForeColor = Color.Red
-                TestStartFlag = True
-                Timer1.Enabled = True
-                Timer2.Enabled = True
-
-                AddHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
-                Me.TopMost = True
-                EnterKeyLabel.Visible = True
-                SpaceKeyLabel.Visible = True
+                Test_start()
 
             Else
-                TestStartButton.Text = "試験開始"
-                testModeLabel.Text = "準備中"
-                testModeLabel.ForeColor = Color.Black
-                TestStartFlag = False
-                Timer1.Enabled = False
-                Timer2.Enabled = False
 
-                AddHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
-                Me.TopMost = False
-                EnterKeyLabel.Visible = False
-                SpaceKeyLabel.Visible = False
+                Test_Stop()
 
             End If
 
@@ -730,6 +749,78 @@ Public Class MotorCtl
                 MessageBoxIcon.Error)
         End If
 
+
+    End Sub
+
+    Private Sub Test_start()
+
+        TestStartButton.Text = "試験停止"
+        testModeLabel.Text = "試験中"
+        testModeLabel.ForeColor = Color.Red
+        TestStartFlag = True
+        Timer1.Enabled = True
+        Timer2.Enabled = True
+
+        AddHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
+        Me.TopMost = True
+        EnterKeyLabel.Visible = True
+        SpaceKeyLabel.Visible = True
+
+        RadioButton1.Enabled = False
+        RadioButton2.Enabled = False
+        RadioButton3.Enabled = False
+        RadioButton4.Enabled = False
+        RadioButton5.Enabled = False
+
+        TypeComboBox1.Enabled = False
+        CheckBox1.Enabled = False
+        CheckBox2.Enabled = False
+
+        txtDistance.Enabled = False
+        TextBox1.Enabled = False
+
+        Chart.Button_Enabled = False
+        LoadGraph1.Button_Enabled = False
+
+        Status1.Button_Enabled = False
+        Cltio1.Button_Enabled = False
+
+    End Sub
+
+    Private Sub Test_Stop()
+
+        TestStartButton.Text = "試験開始"
+        testModeLabel.Text = "準備中"
+        testModeLabel.ForeColor = Color.Black
+        TestStartFlag = False
+        Timer1.Enabled = False
+        Timer2.Enabled = False
+
+        RemoveHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
+        Me.TopMost = False
+        EnterKeyLabel.Visible = False
+        SpaceKeyLabel.Visible = False
+
+        RadioButton1.Enabled = True
+        RadioButton2.Enabled = True
+        RadioButton3.Enabled = True
+        RadioButton4.Enabled = True
+        RadioButton5.Enabled = True
+
+        TypeComboBox1.Enabled = True
+        CheckBox1.Enabled = True
+        CheckBox2.Enabled = True
+
+        txtDistance.Enabled = True
+        TextBox1.Enabled = True
+
+        Chart.Button_Enabled = True
+        LoadGraph1.Button_Enabled = True
+
+        Status1.Button_Enabled = True
+        Cltio1.Button_Enabled = True
+
+        TestStartButton.Enabled = True
 
     End Sub
 
@@ -806,18 +897,9 @@ Public Class MotorCtl
                                     If PointN2 > 0 Then
                                         LoadGraph1.DrawGraph(PointI2 - 1)
                                     End If
-                                    System.Threading.Thread.Sleep(500)
-                                    TestStartButton.Text = "試験開始"
-                                    testModeLabel.Text = "準備中"
-                                    RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
-                                    testModeLabel.ForeColor = Color.Black
-                                    TestStartFlag = False
-                                    Timer1.Enabled = False
-                                    Timer2.Enabled = False
-                                    RemoveHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
-                                    Me.TopMost = False
-                                    EnterKeyLabel.Visible = False
-                                    SpaceKeyLabel.Visible = False
+
+                                    Test_Stop()
+
                                     Exit Sub
                                 End If
                             Loop
@@ -831,18 +913,10 @@ Public Class MotorCtl
                             If PointN2 > 0 Then
                                 LoadGraph1.DrawGraph(PointI2 - 1)
                             End If
-                            System.Threading.Thread.Sleep(500)
-                            TestStartButton.Text = "試験開始"
-                            testModeLabel.Text = "準備中"
-                            RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
-                            testModeLabel.ForeColor = Color.Black
-                            TestStartFlag = False
-                            Timer1.Enabled = False
-                            Timer2.Enabled = False
-                            RemoveHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
-                            Me.TopMost = False
-                            EnterKeyLabel.Visible = False
-                            SpaceKeyLabel.Visible = False
+
+                            Test_Stop()
+
+
                         End If
                     End If
                 End If

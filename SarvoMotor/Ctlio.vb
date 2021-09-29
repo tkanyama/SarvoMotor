@@ -561,6 +561,16 @@ Public Class Ctlio
 
     End Sub
 
+    Public WriteOnly Property Button_Enabled() As Boolean
+        Set(value As Boolean)
+            btnComAlarmClear.Enabled = value
+            btnComHoldOff.Enabled = value
+            btnComOut1.Enabled = value
+            btnComOut2.Enabled = value
+            btnComOut3.Enabled = value
+        End Set
+    End Property
+
     'Private Sub txtDeviceName_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs)
 
     '    Dim n As Short

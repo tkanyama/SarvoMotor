@@ -89,6 +89,7 @@ Public Class SpeedPanel
         End If
     End Sub
 
+    Public Event SpeedChange(ByVal sender As Object, ByVal e As EventArgs)
     Public Property Speed() As Double()
         Get
             Return _Speed
@@ -169,6 +170,7 @@ Public Class SpeedPanel
         If flag = False Then
             _SetSpeed = _OtherSpeed
         End If
+        RaiseEvent SpeedChange(Me, New EventArgs)
     End Sub
 
     Private Sub TBox1Changed(sender As Object, e As EventArgs)
@@ -404,149 +406,203 @@ Class LoadScedule
     End Sub
 
     Private Sub Header_Click(sender As Object, e As EventArgs)
-        LoadGraph1.DrawGraph(0)
+        If Not TestStartFlag Then
+            LoadGraph1.DrawGraph(0)
+        End If
     End Sub
 
+    Public WriteOnly Property Button_Enabled() As Boolean
+        Set(value As Boolean)
+            AddButton.Enabled = value
+            DelButton.Enabled = value
+            InsButton.Enabled = value
+            DupButton.Enabled = value
+            SaveButton.Enabled = value
+            LoadButton.Enabled = value
+            DataGridView1.Enabled = value
+        End Set
+    End Property
 
     Private Sub AddButton_Click(sender As Object, e As EventArgs)
-        With DataGridView1
-            RowCount1 = .RowCount
-            .Rows.Add()
-            RowCount1 += 1
-            .Rows(RowCount1 - 1).HeaderCell.Value = Format(RowCount1)
-            .Rows(RowCount1 - 1).Cells(0).Value = True
-            .Rows(RowCount1 - 1).Cells(0).Selected = True
-            .CurrentCell = DataGridView1(0, RowCount1 - 1)
-        End With
+        If Not TestStartFlag Then
+            With DataGridView1
+                RowCount1 = .RowCount
+                .Rows.Add()
+                RowCount1 += 1
+                .Rows(RowCount1 - 1).HeaderCell.Value = Format(RowCount1)
+                .Rows(RowCount1 - 1).Cells(0).Value = True
+                .Rows(RowCount1 - 1).Cells(0).Selected = True
+                .CurrentCell = DataGridView1(0, RowCount1 - 1)
+            End With
+        Else
+            MessageBox.Show("試験中は操作できません！",
+                "エラー",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error)
+        End If
     End Sub
 
     Private Sub DelButton_Click(sender As Object, e As EventArgs)
-        With DataGridView1
-            Dim row1 As Integer = .CurrentRow.Index
-            .Rows.RemoveAt(row1)
-            RowCount1 = .RowCount
-            If RowCount1 > 0 Then
-                For i As Integer = 0 To RowCount1 - 1
-                    .Rows(i).HeaderCell.Value = Format(i + 1)
-                Next
-            End If
-        End With
-    End Sub
-
-    Private Sub InsButton_Click(sender As Object, e As EventArgs)
-        With DataGridView1
-            Dim row1 As Integer
-            If RowCount1 > 0 Then
-                row1 = .CurrentRow.Index
-                .Rows.Insert(row1)
-            Else
-                .Rows.Add()
-                row1 = 0
-            End If
-            .Rows(row1).Cells(0).Value = True
-            RowCount1 = .RowCount
-            If RowCount1 > 0 Then
-                For i As Integer = 0 To RowCount1 - 1
-                    .Rows(i).HeaderCell.Value = Format(i + 1)
-                Next
-            End If
-
-        End With
-    End Sub
-
-    Private Sub DupButton_Click(sender As Object, e As EventArgs)
-        With DataGridView1
-            If RowCount1 > 0 Then
+        If Not TestStartFlag Then
+            With DataGridView1
                 Dim row1 As Integer = .CurrentRow.Index
-                'Dim clonedrow As DataGridViewRow
-                'clonedrow = DataGridView1.Rows(row1).Clone()
-                .Rows.Insert(row1 + 1)
-                For i As Integer = 0 To .Rows(row1).Cells.Count - 1
-                    .Rows(row1 + 1).Cells(i).Value = .Rows(row1).Cells(i).Value
-                Next
+                .Rows.RemoveAt(row1)
                 RowCount1 = .RowCount
                 If RowCount1 > 0 Then
                     For i As Integer = 0 To RowCount1 - 1
                         .Rows(i).HeaderCell.Value = Format(i + 1)
                     Next
                 End If
-            End If
-        End With
+            End With
+        Else
+            MessageBox.Show("試験中は操作できません！",
+                "エラー",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error)
+        End If
+    End Sub
+
+    Private Sub InsButton_Click(sender As Object, e As EventArgs)
+        If Not TestStartFlag Then
+            With DataGridView1
+                Dim row1 As Integer
+                If RowCount1 > 0 Then
+                    row1 = .CurrentRow.Index
+                    .Rows.Insert(row1)
+                Else
+                    .Rows.Add()
+                    row1 = 0
+                End If
+                .Rows(row1).Cells(0).Value = True
+                RowCount1 = .RowCount
+                If RowCount1 > 0 Then
+                    For i As Integer = 0 To RowCount1 - 1
+                        .Rows(i).HeaderCell.Value = Format(i + 1)
+                    Next
+                End If
+
+            End With
+        Else
+            MessageBox.Show("試験中は操作できません！",
+                "エラー",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error)
+        End If
+    End Sub
+
+    Private Sub DupButton_Click(sender As Object, e As EventArgs)
+        If Not TestStartFlag Then
+            With DataGridView1
+                If RowCount1 > 0 Then
+                    Dim row1 As Integer = .CurrentRow.Index
+                    'Dim clonedrow As DataGridViewRow
+                    'clonedrow = DataGridView1.Rows(row1).Clone()
+                    .Rows.Insert(row1 + 1)
+                    For i As Integer = 0 To .Rows(row1).Cells.Count - 1
+                        .Rows(row1 + 1).Cells(i).Value = .Rows(row1).Cells(i).Value
+                    Next
+                    RowCount1 = .RowCount
+                    If RowCount1 > 0 Then
+                        For i As Integer = 0 To RowCount1 - 1
+                            .Rows(i).HeaderCell.Value = Format(i + 1)
+                        Next
+                    End If
+                End If
+            End With
+        Else
+            MessageBox.Show("試験中は操作できません！",
+                "エラー",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error)
+        End If
     End Sub
 
     Private Sub SaveButton_Click(sender As Object, e As EventArgs)
+        If Not TestStartFlag Then
+            Dim DirName As String = "C:\加力スケジュール"
+            If System.IO.File.Exists(DirName) = False Then
+                System.IO.Directory.CreateDirectory(DirName)
+            End If
+            'SaveFileDialogクラスのインスタンスを作成
+            Dim sfd As New SaveFileDialog()
 
-        Dim DirName As String = "C:\加力スケジュール"
-        If System.IO.File.Exists(DirName) = False Then
-            System.IO.Directory.CreateDirectory(DirName)
+            'はじめのファイル名を指定する
+            'はじめに「ファイル名」で表示される文字列を指定する
+            sfd.FileName = "data1.csv"
+            'はじめに表示されるフォルダを指定する
+            '指定しない（空の文字列）の時は、現在のディレクトリが表示される
+            sfd.InitialDirectory = DirName
+            '[ファイルの種類]に表示される選択肢を指定する
+            sfd.Filter = "csvファイル(*.csv)|*.csv"
+            '[ファイルの種類]ではじめに選択されるものを指定する
+            '2番目の「すべてのファイル」が選択されているようにする
+            sfd.FilterIndex = 0
+            'タイトルを設定する
+            sfd.Title = "保存先のファイルを選択してください"
+            'ダイアログボックスを閉じる前に現在のディレクトリを復元するようにする
+            sfd.RestoreDirectory = True
+            '既に存在するファイル名を指定したとき警告する
+            'デフォルトでTrueなので指定する必要はない
+            sfd.OverwritePrompt = True
+            '存在しないパスが指定されたとき警告を表示する
+            'デフォルトでTrueなので指定する必要はない
+            sfd.CheckPathExists = True
+
+            'ダイアログを表示する
+            If sfd.ShowDialog() = DialogResult.OK Then
+                'OKボタンがクリックされたとき、選択されたファイル名を表示する
+                CsvFileSave(sfd.FileName)
+            End If
+        Else
+            MessageBox.Show("試験中は操作できません！",
+                "エラー",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error)
         End If
-        'SaveFileDialogクラスのインスタンスを作成
-        Dim sfd As New SaveFileDialog()
-
-        'はじめのファイル名を指定する
-        'はじめに「ファイル名」で表示される文字列を指定する
-        sfd.FileName = "data1.csv"
-        'はじめに表示されるフォルダを指定する
-        '指定しない（空の文字列）の時は、現在のディレクトリが表示される
-        sfd.InitialDirectory = DirName
-        '[ファイルの種類]に表示される選択肢を指定する
-        sfd.Filter = "csvファイル(*.csv)|*.csv"
-        '[ファイルの種類]ではじめに選択されるものを指定する
-        '2番目の「すべてのファイル」が選択されているようにする
-        sfd.FilterIndex = 0
-        'タイトルを設定する
-        sfd.Title = "保存先のファイルを選択してください"
-        'ダイアログボックスを閉じる前に現在のディレクトリを復元するようにする
-        sfd.RestoreDirectory = True
-        '既に存在するファイル名を指定したとき警告する
-        'デフォルトでTrueなので指定する必要はない
-        sfd.OverwritePrompt = True
-        '存在しないパスが指定されたとき警告を表示する
-        'デフォルトでTrueなので指定する必要はない
-        sfd.CheckPathExists = True
-
-        'ダイアログを表示する
-        If sfd.ShowDialog() = DialogResult.OK Then
-            'OKボタンがクリックされたとき、選択されたファイル名を表示する
-            CsvFileSave(sfd.FileName)
-        End If
-
     End Sub
 
 
     Private Sub LoadButton_Click(sender As Object, e As EventArgs)
-        Dim DirName As String = "C:\加力スケジュール"
+        If Not TestStartFlag Then
+            Dim DirName As String = "C:\加力スケジュール"
 
-        'OpenFileDialogクラスのインスタンスを作成
-        Dim ofd As New OpenFileDialog()
+            'OpenFileDialogクラスのインスタンスを作成
+            Dim ofd As New OpenFileDialog()
 
-        'はじめのファイル名を指定する
-        'はじめに「ファイル名」で表示される文字列を指定する
-        ofd.FileName = "data1.csv"
-        'はじめに表示されるフォルダを指定する
-        '指定しない（空の文字列）の時は、現在のディレクトリが表示される
-        ofd.InitialDirectory = DirName
-        '[ファイルの種類]に表示される選択肢を指定する
-        '指定しないとすべてのファイルが表示される
-        ofd.Filter = "csvファイル(*.csv)|*.csv"
-        '[ファイルの種類]ではじめに選択されるものを指定する
-        '2番目の「すべてのファイル」が選択されているようにする
-        ofd.FilterIndex = 0
-        'タイトルを設定する
-        ofd.Title = "開くファイルを選択してください"
-        'ダイアログボックスを閉じる前に現在のディレクトリを復元するようにする
-        ofd.RestoreDirectory = True
-        '存在しないファイルの名前が指定されたとき警告を表示する
-        'デフォルトでTrueなので指定する必要はない
-        ofd.CheckFileExists = True
-        '存在しないパスが指定されたとき警告を表示する
-        'デフォルトでTrueなので指定する必要はない
-        ofd.CheckPathExists = True
+            'はじめのファイル名を指定する
+            'はじめに「ファイル名」で表示される文字列を指定する
+            ofd.FileName = "data1.csv"
+            'はじめに表示されるフォルダを指定する
+            '指定しない（空の文字列）の時は、現在のディレクトリが表示される
+            ofd.InitialDirectory = DirName
+            '[ファイルの種類]に表示される選択肢を指定する
+            '指定しないとすべてのファイルが表示される
+            ofd.Filter = "csvファイル(*.csv)|*.csv"
+            '[ファイルの種類]ではじめに選択されるものを指定する
+            '2番目の「すべてのファイル」が選択されているようにする
+            ofd.FilterIndex = 0
+            'タイトルを設定する
+            ofd.Title = "開くファイルを選択してください"
+            'ダイアログボックスを閉じる前に現在のディレクトリを復元するようにする
+            ofd.RestoreDirectory = True
+            '存在しないファイルの名前が指定されたとき警告を表示する
+            'デフォルトでTrueなので指定する必要はない
+            ofd.CheckFileExists = True
+            '存在しないパスが指定されたとき警告を表示する
+            'デフォルトでTrueなので指定する必要はない
+            ofd.CheckPathExists = True
 
-        'ダイアログを表示する
-        If ofd.ShowDialog() = DialogResult.OK Then
-            'OKボタンがクリックされたとき、選択されたファイル名を表示する
-            CsvFileLoad(ofd.FileName)
+            'ダイアログを表示する
+            If ofd.ShowDialog() = DialogResult.OK Then
+                'OKボタンがクリックされたとき、選択されたファイル名を表示する
+                CsvFileLoad(ofd.FileName)
+            End If
+
+        Else
+            MessageBox.Show("試験中は操作できません！",
+                "エラー",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error)
         End If
 
     End Sub

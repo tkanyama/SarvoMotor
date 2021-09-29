@@ -308,6 +308,7 @@ Partial Class MotorCtl
         '
         'TestStartButton
         '
+        Me.TestStartButton.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.TestStartButton.Location = New System.Drawing.Point(13, 26)
         Me.TestStartButton.Name = "TestStartButton"
         Me.TestStartButton.Size = New System.Drawing.Size(86, 40)

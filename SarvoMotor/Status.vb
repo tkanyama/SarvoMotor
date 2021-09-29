@@ -727,6 +727,15 @@ Public Class Status
 
     End Sub
 
+    Public WriteOnly Property Button_Enabled() As Boolean
+        Set(value As Boolean)
+            Button1.Enabled = value
+            Button2.Enabled = value
+            btnComEncPulse.Enabled = value
+            btnComOutPulse.Enabled = value
+        End Set
+    End Property
+
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
         '---------------------------
