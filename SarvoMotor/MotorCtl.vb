@@ -15,12 +15,12 @@ Public Class MotorCtl
     Inherits System.Windows.Forms.Form
 
     Dim Speed = {0.5, 1.0, 2.0, 5.0, 10.0}          ' ピストンスピードの種類(mm/Sec)
-    Dim SpeedPanel1 As SpeedPanel                   ' ピストンスピード選択パネルコントロール
+    'Dim SpeedPanel1 As SpeedPanel                   ' ピストンスピード選択パネルコントロール
     Dim ErrorString As New StringBuilder("", 256)   ' Error String
     Dim lCountPulse1 As Integer                     ' エンコーダーからのパルス
     Dim Timer1 As Timer                             ' リアルタイム制御のためのタイマー
     Dim Timer2 As Timer                             ' キーボードの割り込みを優先するためのタイマー
-
+    Dim ToolTip1 As ToolTip
 
     Private Sub MotorCtl_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         '
@@ -98,6 +98,28 @@ Public Class MotorCtl
 
         EnterKeyLabel.Visible = False   ' [EnterKey]ラベル
         SpaceKeyLabel.Visible = False   ' [SpaceKey]ラベル
+
+        'ToolTipを作成する
+        'ToolTip1 = New ToolTip(Me.components)
+        'フォームにcomponentsがない場合
+        ToolTip1 = New ToolTip()
+        'ToolTipの設定を行う
+        'ToolTipが表示されるまでの時間
+        ToolTip1.InitialDelay = 1000
+        'ToolTipが表示されている時に、別のToolTipを表示するまでの時間
+        ToolTip1.ReshowDelay = 1000
+        'ToolTipを表示する時間
+        ToolTip1.AutoPopDelay = 5000
+        'フォームがアクティブでない時でもToolTipを表示する
+        ToolTip1.ShowAlways = True
+
+        'Button1とButton2にToolTipが表示されるようにする
+        ToolTip1.SetToolTip(CW_Button, "アクチュエータのピストンを引きます")
+        ToolTip1.SetToolTip(CCW_Button, "アクチュエータのピストンを押します")
+        ToolTip1.SetToolTip(STOP_Button, "アクチュエータを停止します")
+        ToolTip1.SetToolTip(SpeedPanel1, "ピストンの速度を切り替えます" + vbCrLf + "動作中でも切り替え可能です")
+
+        Label5.Visible = False
     End Sub
 
 
@@ -733,11 +755,11 @@ Public Class MotorCtl
 
                 End Select
 
-                Test_start()
+                TestStartView()
 
             Else
 
-                Test_Stop()
+                TestStopView()
 
             End If
 
@@ -752,8 +774,10 @@ Public Class MotorCtl
 
     End Sub
 
-    Private Sub Test_start()
-
+    Private Sub TestStartView()
+        '
+        '   試験時のボタン表示等の設定
+        '
         TestStartButton.Text = "試験停止"
         testModeLabel.Text = "試験中"
         testModeLabel.ForeColor = Color.Red
@@ -762,7 +786,7 @@ Public Class MotorCtl
         Timer2.Enabled = True
 
         AddHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
-        Me.TopMost = True
+        'Me.TopMost = True
         EnterKeyLabel.Visible = True
         SpaceKeyLabel.Visible = True
 
@@ -785,10 +809,13 @@ Public Class MotorCtl
         Status1.Button_Enabled = False
         Cltio1.Button_Enabled = False
 
+        Label5.Visible = True
     End Sub
 
-    Private Sub Test_Stop()
-
+    Private Sub TestStopView()
+        '
+        '   試験終了時のボタン表示等の設定
+        '
         TestStartButton.Text = "試験開始"
         testModeLabel.Text = "準備中"
         testModeLabel.ForeColor = Color.Black
@@ -797,7 +824,7 @@ Public Class MotorCtl
         Timer2.Enabled = False
 
         RemoveHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
-        Me.TopMost = False
+        'Me.TopMost = False
         EnterKeyLabel.Visible = False
         SpaceKeyLabel.Visible = False
 
@@ -821,7 +848,7 @@ Public Class MotorCtl
         Cltio1.Button_Enabled = True
 
         TestStartButton.Enabled = True
-
+        Label5.Visible = False
     End Sub
 
     Private Sub KeyTextBox1_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs)  ' Handles TextBox1.KeyDown
@@ -831,18 +858,41 @@ Public Class MotorCtl
         'キーが押されたか調べる
         If TestStartFlag = True Then
             Dim key1 As String = e.KeyCode.ToString
+
+            Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
+            If Ret <> 0 Then
+                SmcWGetErrorString(Ret, ErrorString)
+                lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
+                'Exit Sub
+            End If
+
             Select Case key1
                 Case "Return", "Enter"
+
                     'lblComment.Text += key1
-                    If (lDistanceDisp - lOutDisp) > 0 Then
-                        CW_Button.PerformClick()
-                    Else
-                        CCW_Button.PerformClick()
+                    If bStopSts1 <> 0 Then  ' モーターが止まっているときは動作開始
+                        If (lDistanceDisp - lOutDisp) > 0 Then
+                            CW_Button.PerformClick()
+                        Else
+                            CCW_Button.PerformClick()
+                        End If
+                    Else                    ' モーターが動いている場合は停止
+                        STOP_Button.PerformClick()
                     End If
+
 
                 Case "Space"
                     'lblComment.Text += key1
                     STOP_Button.PerformClick()
+
+                Case "F1", "S"
+                    If bStopSts1 <> 0 Then  ' モーターが止まっているときは動作開始
+                        Dim SpeedInputForm1 = New SpeedInputForm
+                        SpeedInputForm1.StartPosition = FormStartPosition.CenterScreen
+                        SpeedInputForm1.Show()
+                    End If
+
+                    'SpeedInputForm1.
             End Select
         End If
 
@@ -898,7 +948,7 @@ Public Class MotorCtl
                                         LoadGraph1.DrawGraph(PointI2 - 1)
                                     End If
 
-                                    Test_Stop()
+                                    TestStopView()
 
                                     Exit Sub
                                 End If
@@ -914,7 +964,7 @@ Public Class MotorCtl
                                 LoadGraph1.DrawGraph(PointI2 - 1)
                             End If
 
-                            Test_Stop()
+                            TestStopView()
 
 
                         End If

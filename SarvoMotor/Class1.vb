@@ -149,6 +149,8 @@ Public Class SpeedPanel
         End Get
         Set(value As Double)
             _OtherSpeed = value
+            Tbox1.Text = Format(_OtherSpeed, "F3")
+            rbutton(Speed_N).Checked = True
         End Set
     End Property
 
@@ -199,11 +201,16 @@ Class LoadScedule
     Dim DupButton As Button
     Dim SaveButton As Button
     Dim LoadButton As Button
+    Dim MonotonousP As Button
+    Dim MonotonousM As Button
+
     Public RowCount1 As Integer
     Dim BSize As Size
     Dim BXStart As Integer
     Dim BYStart As Integer
     Dim BPitch As Integer
+    Dim ToolTip1 As ToolTip
+
     Public Sub New()
 
         MyBase.New()
@@ -233,15 +240,15 @@ Class LoadScedule
 
             '列名を指定
 
-            Dim col1 As New DataGridViewCheckBoxColumn
-            With col1
+            Dim Col1 As New DataGridViewCheckBoxColumn
+            With Col1
                 .Name = "select"
                 .HeaderText = "有効"
                 .HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
                 .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
                 .Width = 50
             End With
-            .Columns.Add(col1)
+            .Columns.Add(Col1)
 
             'Dim Col1 As New DataGridViewTextBoxColumn()
             'Col1.HeaderText = "No"
@@ -400,9 +407,91 @@ Class LoadScedule
         AddHandler LoadButton.Click, AddressOf LoadButton_Click
         Me.Controls.Add(LoadButton)
 
+        MonotonousP = New Button
+        With MonotonousP
+            .Location = New Point(200, 15)
+            .Size = BSize
+            .Text = "単調載荷＋"
+            .TextAlign = HorizontalAlignment.Center
+        End With
+        AddHandler MonotonousP.Click, AddressOf MonotonousP_Click
+        Me.Controls.Add(MonotonousP)
+
+        MonotonousM = New Button
+        With MonotonousM
+            .Location = New Point(300, 15)
+            .Size = BSize
+            .Text = "単調載荷－"
+            .TextAlign = HorizontalAlignment.Center
+        End With
+        AddHandler MonotonousM.Click, AddressOf MonotonousM_Click
+        Me.Controls.Add(MonotonousM)
+
         AddHandler DataGridView1.RowHeaderMouseClick, AddressOf Header_Click
 
+        ToolTip1 = New ToolTip()
+        'ToolTipの設定を行う
+        'ToolTipが表示されるまでの時間
+        ToolTip1.InitialDelay = 1000
+        'ToolTipが表示されている時に、別のToolTipを表示するまでの時間
+        ToolTip1.ReshowDelay = 1000
+        'ToolTipを表示する時間
+        ToolTip1.AutoPopDelay = 5000
+        'フォームがアクティブでない時でもToolTipを表示する
+        ToolTip1.ShowAlways = True
 
+        'Button1とButton2にToolTipが表示されるようにする
+        ToolTip1.SetToolTip(AddButton, "最後に行を追加します")
+        ToolTip1.SetToolTip(DelButton, "現在の行を削除します")
+        ToolTip1.SetToolTip(InsButton, "現在の行の前に行を挿入します")
+        ToolTip1.SetToolTip(DupButton, "現在の行の複製を次の行に挿入します")
+        ToolTip1.SetToolTip(SaveButton, "表データをファイルに保存します")
+        ToolTip1.SetToolTip(LoadButton, "表データをファイルから読み込みます")
+
+
+
+
+
+    End Sub
+
+    Private Sub MonotonousP_Click(sender As Object, e As EventArgs)
+        With DataGridView1
+            If .RowCount > 0 Then
+                For i As Integer = 0 To .RowCount - 1
+                    .Rows.RemoveAt(0)
+                Next
+            End If
+            RowCount1 = .RowCount
+            .Rows.Add()
+            RowCount1 += 1
+            .Rows(RowCount1 - 1).HeaderCell.Value = Format(RowCount1)
+            .Rows(RowCount1 - 1).Cells(0).Value = True
+            .Rows(RowCount1 - 1).Cells(1).Value = "変位"
+            .Rows(RowCount1 - 1).Cells(2).Value = Strokelimit
+            .Rows(RowCount1 - 1).Cells(0).Selected = True
+            .CurrentCell = DataGridView1(0, RowCount1 - 1)
+            LoadGraph1.DrawGraph(0)
+        End With
+    End Sub
+
+    Private Sub MonotonousM_Click(sender As Object, e As EventArgs)
+        With DataGridView1
+            If .RowCount > 0 Then
+                For i As Integer = 0 To .RowCount - 1
+                    .Rows.RemoveAt(0)
+                Next
+            End If
+            RowCount1 = .RowCount
+            .Rows.Add()
+            RowCount1 += 1
+            .Rows(RowCount1 - 1).HeaderCell.Value = Format(RowCount1)
+            .Rows(RowCount1 - 1).Cells(0).Value = True
+            .Rows(RowCount1 - 1).Cells(1).Value = "変位"
+            .Rows(RowCount1 - 1).Cells(2).Value = -Strokelimit
+            .Rows(RowCount1 - 1).Cells(0).Selected = True
+            .CurrentCell = DataGridView1(0, RowCount1 - 1)
+            LoadGraph1.DrawGraph(0)
+        End With
     End Sub
 
     Private Sub Header_Click(sender As Object, e As EventArgs)
@@ -420,6 +509,8 @@ Class LoadScedule
             SaveButton.Enabled = value
             LoadButton.Enabled = value
             DataGridView1.Enabled = value
+            MonotonousP.Enabled = value
+            MonotonousM.Enabled = value
         End Set
     End Property
 

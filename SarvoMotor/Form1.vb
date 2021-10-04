@@ -235,22 +235,36 @@ Public Class ServoMotor
 
 
     Private Sub frmClose_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        If e.CloseReason = CloseReason.UserClosing Then
-            'ボタンでのクローズかチェック
-            Dim result As DialogResult = MessageBox.Show("プログラムを終了しますか？", "確認", MessageBoxButtons.YesNo)
-            If result = DialogResult.No Then
+        If Not TestStartFlag Then
+            If e.CloseReason = CloseReason.UserClosing Then
+                'ボタンでのクローズかチェック
+                Dim result As DialogResult = MessageBox.Show("プログラムを終了しますか？", "確認", MessageBoxButtons.YesNo)
+                If result = DialogResult.No Then
+                    e.Cancel = True
+                End If
+            End If
+        Else
+            If e.CloseReason = CloseReason.UserClosing Then
+                'Dim result As DialogResult = MessageBox.Show("試験モードを終了してください", "エラー", MessageBoxButtons.OK)
                 e.Cancel = True
             End If
+
         End If
+
     End Sub
 
     Private Sub 終了XToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 終了XToolStripMenuItem.Click
-        Dim result As DialogResult = MessageBox.Show("プログラムを終了しますか？", "確認", MessageBoxButtons.YesNo)
-        If result = DialogResult.Yes Then
+        If Not TestStartFlag Then
+            Dim result As DialogResult = MessageBox.Show("プログラムを終了しますか？", "確認", MessageBoxButtons.YesNo)
+            If result = DialogResult.Yes Then
 
-            End
+                End
+            Else
+                Dim result2 As DialogResult = MessageBox.Show("試験モードを終了してください", "エラー", MessageBoxButtons.OK)
+            End If
 
         End If
+
     End Sub
 End Class
 

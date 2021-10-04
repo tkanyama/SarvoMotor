@@ -55,6 +55,7 @@ Partial Class MotorCtl
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -414,12 +415,22 @@ Partial Class MotorCtl
         Me.Label6.TabIndex = 16
         Me.Label6.Text = "初期値"
         '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(130, 312)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(237, 15)
+        Me.Label5.TabIndex = 17
+        Me.Label5.Text = "Press 'F1' or 'S' key Then Speed Input Dialog"
+        '
         'MotorCtl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1084, 681)
         Me.ControlBox = False
+        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
@@ -435,6 +446,7 @@ Partial Class MotorCtl
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -471,4 +483,5 @@ Partial Class MotorCtl
     Friend WithEvents KeyTextBox As TextBox
     Friend WithEvents SpaceKeyLabel As Label
     Friend WithEvents EnterKeyLabel As Label
+    Friend WithEvents Label5 As Label
 End Class

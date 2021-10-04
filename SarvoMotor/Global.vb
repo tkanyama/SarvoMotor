@@ -195,6 +195,8 @@ Module [Global]
 	Public Const xSize2 As Integer = 1080   ' 試験時の操作パネルの幅
 	Public Const ySize2 As Integer = 720    ' 試験時の操作パネルの高さ
 
+	Public SpeedPanel1 As SpeedPanel                   ' ピストンスピード選択パネルコントロール
+
 	Public RowsIndex1 As Integer    ' 加力スケジュール表の現在の行
 
 	Public PointN As Integer        ' 加力上下限目標値の数

@@ -265,6 +265,8 @@ Public Class Ctlio
     Dim OUT2 As LED
     Dim OUT3 As LED
 
+    Dim ToolTip1 As ToolTip
+
     'Private Sub cboTargetAxis_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs)
 
     '    AxisNo = cboTargetAxis.SelectedIndex + 1
@@ -461,6 +463,20 @@ Public Class Ctlio
         timer.Interval = 10
 
         lblComment.Text = "OK "
+
+        ToolTip1 = New ToolTip()
+        'ToolTipの設定を行う
+        'ToolTipが表示されるまでの時間
+        ToolTip1.InitialDelay = 1000
+        'ToolTipが表示されている時に、別のToolTipを表示するまでの時間
+        ToolTip1.ReshowDelay = 1000
+        'ToolTipを表示する時間
+        ToolTip1.AutoPopDelay = 10000
+        'フォームがアクティブでない時でもToolTipを表示する
+        ToolTip1.ShowAlways = True
+
+        'Button1とButton2にToolTipが表示されるようにする
+        ToolTip1.SetToolTip(btnComOut1, "最初に必ずオンにしてください。")
 
     End Sub
 
