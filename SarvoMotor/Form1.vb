@@ -56,24 +56,24 @@ Public Class ServoMotor
         Call Setting()
 
         Me.StartPosition = FormStartPosition.Manual
-        Me.Location = New Point(20, 20)
+        Me.Location = New Point(20, 17)
         Me.FormBorderStyle = FormBorderStyle.FixedSingle
 
         Status1 = New Status
         Status1.Visible = True
         Status1.StartPosition = FormStartPosition.Manual
-        Status1.Location = New Point(20, 150)
+        Status1.Location = New Point(20, 140)
 
 
         Cltio1 = New Ctlio
         Cltio1.Visible = True
         Cltio1.StartPosition = FormStartPosition.Manual
-        Cltio1.Location = New Point(20, 570)
+        Cltio1.Location = New Point(20, 548)
 
         Dim MotorCtl1 As New MotorCtl
         MotorCtl1.Visible = True
         MotorCtl1.StartPosition = FormStartPosition.Manual
-        MotorCtl1.Location = New Point(480, 150)
+        MotorCtl1.Location = New Point(465, 140)
 
 
         'Dim Testing1 As New Testing

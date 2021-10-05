@@ -97,7 +97,7 @@ Public Class SpeedPanel
         Set(value As Double())
             _Speed = value
             Speed_N = _Speed.Length
-            MyBase.Size = New Size(118, 60 + 25 * (Speed_N + 1))
+            MyBase.Size = New Size(125, 60 + 25 * (Speed_N + 1))
             ReDim rbutton(Speed_N)
 
             If _SetSpeed = 0 Then
@@ -106,7 +106,7 @@ Public Class SpeedPanel
             For i As Integer = 0 To Speed_N - 1
                 rbutton(i) = New RadioButton
                 With rbutton(i)
-                    .Location = New Point(12, 26 + 25 * i)
+                    .Location = New Point(15, 26 + 25 * i)
                     .Text = Format(_Speed(i), "F1") + "mm/s"
                     If _SetSpeed = _Speed(i) Then
                         .Checked = True
@@ -120,7 +120,7 @@ Public Class SpeedPanel
 
             rbutton(Speed_N) = New RadioButton
             With rbutton(Speed_N)
-                .Location = New Point(12, 26 + 25 * Speed_N)
+                .Location = New Point(15, 26 + 25 * Speed_N)
                 .Text = "その他"
                 If _SetSpeed = _OtherSpeed Then
                     .Checked = True
@@ -447,6 +447,8 @@ Class LoadScedule
         ToolTip1.SetToolTip(DupButton, "現在の行の複製を次の行に挿入します")
         ToolTip1.SetToolTip(SaveButton, "表データをファイルに保存します")
         ToolTip1.SetToolTip(LoadButton, "表データをファイルから読み込みます")
+        ToolTip1.SetToolTip(MonotonousP, "プラス（引き）側へ単調載する場合にクリックします")
+        ToolTip1.SetToolTip(MonotonousM, "マイナス（押し）側へ単調載する場合にクリックします")
 
 
 

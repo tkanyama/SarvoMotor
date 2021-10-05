@@ -290,7 +290,7 @@ Partial Class MotorCtl
         Me.GroupBox2.Controls.Add(Me.RadioButton4)
         Me.GroupBox2.Location = New System.Drawing.Point(15, 12)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(127, 85)
+        Me.GroupBox2.Size = New System.Drawing.Size(125, 85)
         Me.GroupBox2.TabIndex = 13
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "操作モード"

@@ -29,7 +29,7 @@ Public Class MotorCtl
         ' [スピード選択パネルの作成とメインパネルへの貼り付け]
         SpeedPanel1 = New SpeedPanel
         SpeedPanel1.Speed = Speed
-        SpeedPanel1.Location = New Point(25, 100)
+        SpeedPanel1.Location = New Point(15, 100)
         AddHandler SpeedPanel1.SpeedChange, AddressOf SpeedChange_Event
         Me.Controls.Add(SpeedPanel1)
 
@@ -120,6 +120,9 @@ Public Class MotorCtl
         ToolTip1.SetToolTip(SpeedPanel1, "ピストンの速度を切り替えます" + vbCrLf + "動作中でも切り替え可能です")
 
         Label5.Visible = False
+
+        RadioButton3.Visible = False
+
     End Sub
 
 
@@ -876,14 +879,17 @@ Public Class MotorCtl
                         Else
                             CCW_Button.PerformClick()
                         End If
+                        Label5.Visible = False
                     Else                    ' モーターが動いている場合は停止
                         STOP_Button.PerformClick()
+                        Label5.Visible = True
                     End If
 
 
                 Case "Space"
                     'lblComment.Text += key1
                     STOP_Button.PerformClick()
+                    Label5.Visible = True
 
                 Case "F1", "S"
                     If bStopSts1 <> 0 Then  ' モーターが止まっているときは動作開始
