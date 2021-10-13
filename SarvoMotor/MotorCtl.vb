@@ -10,7 +10,6 @@
 Option Strict Off
 Option Explicit On
 Imports System.Text
-Imports System.Math
 Public Class MotorCtl
     Inherits System.Windows.Forms.Form
 

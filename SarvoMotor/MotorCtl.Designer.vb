@@ -56,6 +56,7 @@ Partial Class MotorCtl
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
+        Me.FormsPlot1 = New ScottPlot.FormsPlot()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -424,12 +425,22 @@ Partial Class MotorCtl
         Me.Label5.TabIndex = 17
         Me.Label5.Text = "Press 'F1' or 'S' key Then Speed Input Dialog"
         '
+        'FormsPlot1
+        '
+        Me.FormsPlot1.BackColor = System.Drawing.Color.Transparent
+        Me.FormsPlot1.Location = New System.Drawing.Point(694, 12)
+        Me.FormsPlot1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.FormsPlot1.Name = "FormsPlot1"
+        Me.FormsPlot1.Size = New System.Drawing.Size(377, 297)
+        Me.FormsPlot1.TabIndex = 18
+        '
         'MotorCtl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1084, 681)
         Me.ControlBox = False
+        Me.Controls.Add(Me.FormsPlot1)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
@@ -484,4 +495,5 @@ Partial Class MotorCtl
     Friend WithEvents SpaceKeyLabel As Label
     Friend WithEvents EnterKeyLabel As Label
     Friend WithEvents Label5 As Label
+    Friend WithEvents FormsPlot1 As ScottPlot.FormsPlot
 End Class
