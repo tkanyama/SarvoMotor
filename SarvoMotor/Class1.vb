@@ -263,8 +263,10 @@ Class LoadScedule
                 .HeaderText = "制御"
                 .HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
                 '.Items.Add("")
-                .Items.Add("変位")
-                .Items.Add("荷重")
+                .Items.Add("ストローク")
+                For i As Integer = 0 To AIOMaxCh - 1
+                    .Items.Add("Ch" + Format(i))
+                Next
                 .Width = CellW
                 .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             End With
@@ -468,7 +470,7 @@ Class LoadScedule
             RowCount1 += 1
             .Rows(RowCount1 - 1).HeaderCell.Value = Format(RowCount1)
             .Rows(RowCount1 - 1).Cells(0).Value = True
-            .Rows(RowCount1 - 1).Cells(1).Value = "変位"
+            .Rows(RowCount1 - 1).Cells(1).Value = "ストローク"
             .Rows(RowCount1 - 1).Cells(2).Value = Strokelimit
             .Rows(RowCount1 - 1).Cells(0).Selected = True
             .CurrentCell = DataGridView1(0, RowCount1 - 1)
@@ -488,7 +490,7 @@ Class LoadScedule
             RowCount1 += 1
             .Rows(RowCount1 - 1).HeaderCell.Value = Format(RowCount1)
             .Rows(RowCount1 - 1).Cells(0).Value = True
-            .Rows(RowCount1 - 1).Cells(1).Value = "変位"
+            .Rows(RowCount1 - 1).Cells(1).Value = "ストローク"
             .Rows(RowCount1 - 1).Cells(2).Value = -Strokelimit
             .Rows(RowCount1 - 1).Cells(0).Selected = True
             .CurrentCell = DataGridView1(0, RowCount1 - 1)

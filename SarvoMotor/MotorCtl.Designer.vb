@@ -57,9 +57,15 @@ Partial Class MotorCtl
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.FormsPlot1 = New ScottPlot.FormsPlot()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.AIODataTextBox = New System.Windows.Forms.TextBox()
+        Me.AIOCheckBox = New System.Windows.Forms.CheckBox()
+        Me.Text_ErrorString = New System.Windows.Forms.TextBox()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -428,11 +434,60 @@ Partial Class MotorCtl
         'FormsPlot1
         '
         Me.FormsPlot1.BackColor = System.Drawing.Color.Transparent
-        Me.FormsPlot1.Location = New System.Drawing.Point(694, 12)
+        Me.FormsPlot1.Location = New System.Drawing.Point(860, 12)
         Me.FormsPlot1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.FormsPlot1.Name = "FormsPlot1"
-        Me.FormsPlot1.Size = New System.Drawing.Size(377, 297)
+        Me.FormsPlot1.Size = New System.Drawing.Size(211, 297)
         Me.FormsPlot1.TabIndex = 18
+        '
+        'GroupBox4
+        '
+        Me.GroupBox4.Controls.Add(Me.Button1)
+        Me.GroupBox4.Controls.Add(Me.AIODataTextBox)
+        Me.GroupBox4.Controls.Add(Me.AIOCheckBox)
+        Me.GroupBox4.Controls.Add(Me.Text_ErrorString)
+        Me.GroupBox4.Location = New System.Drawing.Point(683, 12)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(170, 296)
+        Me.GroupBox4.TabIndex = 19
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "電圧入力"
+        '
+        'AIODataTextBox
+        '
+        Me.AIODataTextBox.Font = New System.Drawing.Font("ＭＳ ゴシック", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.AIODataTextBox.Location = New System.Drawing.Point(16, 74)
+        Me.AIODataTextBox.Multiline = True
+        Me.AIODataTextBox.Name = "AIODataTextBox"
+        Me.AIODataTextBox.Size = New System.Drawing.Size(137, 177)
+        Me.AIODataTextBox.TabIndex = 3
+        '
+        'AIOCheckBox
+        '
+        Me.AIOCheckBox.AutoSize = True
+        Me.AIOCheckBox.Location = New System.Drawing.Point(16, 22)
+        Me.AIOCheckBox.Name = "AIOCheckBox"
+        Me.AIOCheckBox.Size = New System.Drawing.Size(98, 19)
+        Me.AIOCheckBox.TabIndex = 2
+        Me.AIOCheckBox.Text = "電圧入力有効"
+        Me.AIOCheckBox.UseVisualStyleBackColor = True
+        '
+        'Text_ErrorString
+        '
+        Me.Text_ErrorString.Location = New System.Drawing.Point(16, 254)
+        Me.Text_ErrorString.Multiline = True
+        Me.Text_ErrorString.Name = "Text_ErrorString"
+        Me.Text_ErrorString.Size = New System.Drawing.Size(136, 36)
+        Me.Text_ErrorString.TabIndex = 1
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(16, 42)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(136, 26)
+        Me.Button1.TabIndex = 4
+        Me.Button1.Text = "電圧入力設定"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'MotorCtl
         '
@@ -440,6 +495,7 @@ Partial Class MotorCtl
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1084, 681)
         Me.ControlBox = False
+        Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.FormsPlot1)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.GroupBox3)
@@ -456,6 +512,8 @@ Partial Class MotorCtl
         Me.GroupBox2.PerformLayout()
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -496,4 +554,9 @@ Partial Class MotorCtl
     Friend WithEvents EnterKeyLabel As Label
     Friend WithEvents Label5 As Label
     Friend WithEvents FormsPlot1 As ScottPlot.FormsPlot
+    Friend WithEvents GroupBox4 As GroupBox
+    Friend WithEvents Text_ErrorString As TextBox
+    Friend WithEvents AIOCheckBox As CheckBox
+    Friend WithEvents AIODataTextBox As TextBox
+    Friend WithEvents Button1 As Button
 End Class

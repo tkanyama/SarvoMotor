@@ -3,6 +3,7 @@ Option Explicit On
 Module [Global]
 
 	Public Ret As Integer       ' 関数の戻り値（0以外はエラー)
+	Public Ret2 As Integer
 	Public Id As Short          ' ボードの番号　"SMC000"の場合は0
 	Public AxisNo As Short      ' 1 軸番号
 	Public device As String
@@ -218,4 +219,15 @@ Module [Global]
 	Public Status1 As Status
 	Public Cltio1 As Ctlio
 
+	Public AIOCheck(7) As Boolean
+	Public AIOCoef(7) As Double
+	Public AIOPoint(7) As Integer
+	Public AIOUnit(7) As String
+	Public Const AIOMaxCh As Integer = 8
+	Public AIOChNo As Integer
+	Public AIOStartFlag As Boolean
+	Public Const AIODevice = "AIO000"
+	Public AIOId As Short
+	Public AIOData(7) As Double
+	Public AiData(256) As Single
 End Module

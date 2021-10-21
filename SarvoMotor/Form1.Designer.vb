@@ -28,6 +28,8 @@ Partial Class ServoMotor
         Me.ファイルFToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.終了XToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.電圧入力設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -52,7 +54,7 @@ Partial Class ServoMotor
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルFToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルFToolStripMenuItem, Me.編集ToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(1036, 24)
@@ -77,6 +79,19 @@ Partial Class ServoMotor
         Me.終了XToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Q), System.Windows.Forms.Keys)
         Me.終了XToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.終了XToolStripMenuItem.Text = "終了(&X)"
+        '
+        '編集ToolStripMenuItem
+        '
+        Me.編集ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.電圧入力設定ToolStripMenuItem})
+        Me.編集ToolStripMenuItem.Name = "編集ToolStripMenuItem"
+        Me.編集ToolStripMenuItem.Size = New System.Drawing.Size(43, 20)
+        Me.編集ToolStripMenuItem.Text = "編集"
+        '
+        '電圧入力設定ToolStripMenuItem
+        '
+        Me.電圧入力設定ToolStripMenuItem.Name = "電圧入力設定ToolStripMenuItem"
+        Me.電圧入力設定ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.電圧入力設定ToolStripMenuItem.Text = "電圧入力設定"
         '
         'ServoMotor
         '
@@ -103,4 +118,6 @@ Partial Class ServoMotor
     Friend WithEvents ファイルFToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents 終了XToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 編集ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 電圧入力設定ToolStripMenuItem As ToolStripMenuItem
 End Class

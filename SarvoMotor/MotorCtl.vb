@@ -124,6 +124,15 @@ Public Class MotorCtl
 
         'FormsPlot1.Plot.PlotPoint(0.0, 0.0)
 
+        If AIOChNo = 0 Then AIOChNo = AIOMaxCh
+
+        For i As Integer = 0 To AIOMaxCh - 1
+            If AIOCheck(i) = Nothing Then AIOCheck(i) = True
+            If AIOCoef(i) = 0.0 Then AIOCoef(i) = 1.0
+            If AIOPoint(i) = 0 Then AIOPoint(i) = 3
+            If AIOUnit(i) = "" Then AIOUnit(i) = "V"
+        Next
+
     End Sub
 
 
@@ -155,7 +164,46 @@ Public Class MotorCtl
         '
         RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
 
+        If AIOStartFlag Then
+            'アナログ入力
 
+            Ret = AioMultiAiEx(AIOId, CShort(AIOChNo), AiData)
+            If Ret <> 0 Then
+                Ret2 = AioGetErrorString(Ret, ErrorString)
+                Text_ErrorString.Text = "AioMultiAiEx = " & Ret & " : " & ErrorString.ToString()
+                If Ret <> 21861 Then
+                    Exit Sub
+                End If
+            Else
+                Text_ErrorString.Text = "アナログ入力 : 正常終了"
+            End If
+
+            '変換データの表示
+            Dim fm1 As String
+            AIODataTextBox.Text = ""
+            For i As Integer = 0 To AIOChNo - 1
+                If AIOCheck(i) Then
+                    AIOData(i) = AiData(i) * AIOCoef(i)
+                    Select Case AIOPoint(i)
+                        Case 0
+                            fm1 = "+0;-0"
+                        Case 1
+                            fm1 = "+0.0;-0.0"
+                        Case 2
+                            fm1 = "+0.#0;-0.#0"
+                        Case 3
+                            fm1 = "+0.##0;-0.##0"
+                        Case 4
+                            fm1 = "+0.###0;-0.###0"
+                        Case 5
+                            fm1 = "+0.####0;-0.####0"
+                        Case Else
+                            fm1 = "F4"
+                    End Select
+                    AIODataTextBox.Text = AIODataTextBox.Text + Format(i) & ":" + Format(AIOData(i), fm1) + vbCrLf
+                End If
+            Next i
+        End If
 
 
     End Sub
@@ -740,6 +788,18 @@ Public Class MotorCtl
                 Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
                 LoadGraph1.DrawGraph(0)
 
+                If AIOCheckBox.Checked = True Then
+                    AIOStartFlag = True
+                    Ret = AioInit(AIODevice, AIOId)
+                    If Ret <> 0 Then
+                        Dim Ret2 As Integer = AioGetErrorString(Ret, ErrorString)
+                        Text_ErrorString.Text = "AioInit = " & Ret & " : " & ErrorString.ToString()
+                        Exit Sub
+                    End If
+
+                    Text_ErrorString.Text = "初期化処理 : 正常終了"
+                End If
+
                 Select Case SControlNo
                     Case 0  ' 変位制御
                         InitialPulse = lOutPulse
@@ -762,6 +822,17 @@ Public Class MotorCtl
                 TestStartView()
 
             Else
+                If AIOStartFlag = True Then
+                    AIOStartFlag = False
+                    Ret = AioExit(AIOId)
+                    If Ret <> 0 Then
+                        Ret2 = AioGetErrorString(Ret, ErrorString)
+                        Text_ErrorString.Text = "AioExit = " & Ret & " : " & ErrorString.ToString()
+                        Exit Sub
+                    End If
+
+                    Text_ErrorString.Text = "終了処理 : 正常終了"
+                End If
 
                 TestStopView()
 
@@ -993,6 +1064,14 @@ Public Class MotorCtl
 
 
 
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim fm1 As New AIOSettingForm
+        Dim Ret = fm1.ShowDialog
+        If Ret = DialogResult.OK Then
+
+        End If
     End Sub
 End Class
 

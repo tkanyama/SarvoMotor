@@ -266,6 +266,14 @@ Public Class ServoMotor
         End If
 
     End Sub
+
+    Private Sub 電圧入力設定ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 電圧入力設定ToolStripMenuItem.Click
+        Dim fm1 As New AIOSettingForm
+        Dim Ret = fm1.ShowDialog
+        If Ret = DialogResult.OK Then
+
+        End If
+    End Sub
 End Class
 
 
