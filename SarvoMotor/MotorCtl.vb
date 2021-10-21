@@ -122,6 +122,8 @@ Public Class MotorCtl
 
         RadioButton3.Visible = False
 
+        'FormsPlot1.Plot.PlotPoint(0.0, 0.0)
+
     End Sub
 
 

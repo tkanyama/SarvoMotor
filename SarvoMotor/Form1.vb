@@ -44,7 +44,7 @@ Public Class ServoMotor
         Dim ErrorString As New StringBuilder("", 256)
 
 
-        device = "SMC000"
+        device = "SMC001"
         Ret = SmcWInit(device, Id)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
