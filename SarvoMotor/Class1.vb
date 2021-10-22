@@ -615,7 +615,7 @@ Class LoadScedule
     Private Sub SaveButton_Click(sender As Object, e As EventArgs)
         If Not TestStartFlag Then
             Dim DirName As String = "C:\加力スケジュール"
-            If System.IO.File.Exists(DirName) = False Then
+            If System.IO.Directory.Exists(DirName) = False Then
                 System.IO.Directory.CreateDirectory(DirName)
             End If
             'SaveFileDialogクラスのインスタンスを作成

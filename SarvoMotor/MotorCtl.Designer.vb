@@ -46,7 +46,7 @@ Partial Class MotorCtl
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.RadioButton5 = New System.Windows.Forms.RadioButton()
         Me.TestStartButton = New System.Windows.Forms.Button()
-        Me.InitialLabel = New System.Windows.Forms.Label()
+        Me.DestinationLabel = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.ControlModeLabel = New System.Windows.Forms.Label()
         Me.testModeLabel = New System.Windows.Forms.Label()
@@ -58,10 +58,12 @@ Partial Class MotorCtl
         Me.Label5 = New System.Windows.Forms.Label()
         Me.FormsPlot1 = New ScottPlot.FormsPlot()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.AIODataTextBox = New System.Windows.Forms.TextBox()
-        Me.AIOCheckBox = New System.Windows.Forms.CheckBox()
-        Me.Text_ErrorString = New System.Windows.Forms.TextBox()
+        Me.Text_ErrorString = New System.Windows.Forms.Label()
+        Me.AIODataTextBox = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.AIOCheckBox = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -324,23 +326,23 @@ Partial Class MotorCtl
         Me.TestStartButton.Text = "試験開始"
         Me.TestStartButton.UseVisualStyleBackColor = True
         '
-        'InitialLabel
+        'DestinationLabel
         '
-        Me.InitialLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.InitialLabel.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.InitialLabel.Location = New System.Drawing.Point(13, 200)
-        Me.InitialLabel.Name = "InitialLabel"
-        Me.InitialLabel.Size = New System.Drawing.Size(86, 27)
-        Me.InitialLabel.TabIndex = 15
-        Me.InitialLabel.Text = "0.0"
-        Me.InitialLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.DestinationLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.DestinationLabel.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.DestinationLabel.Location = New System.Drawing.Point(13, 200)
+        Me.DestinationLabel.Name = "DestinationLabel"
+        Me.DestinationLabel.Size = New System.Drawing.Size(86, 27)
+        Me.DestinationLabel.TabIndex = 15
+        Me.DestinationLabel.Text = "0.0"
+        Me.DestinationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'GroupBox3
         '
         Me.GroupBox3.Controls.Add(Me.ControlModeLabel)
         Me.GroupBox3.Controls.Add(Me.testModeLabel)
         Me.GroupBox3.Controls.Add(Me.RecentValueLabel)
-        Me.GroupBox3.Controls.Add(Me.InitialLabel)
+        Me.GroupBox3.Controls.Add(Me.DestinationLabel)
         Me.GroupBox3.Controls.Add(Me.Label8)
         Me.GroupBox3.Controls.Add(Me.Label10)
         Me.GroupBox3.Controls.Add(Me.Label9)
@@ -420,7 +422,7 @@ Partial Class MotorCtl
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(43, 15)
         Me.Label6.TabIndex = 16
-        Me.Label6.Text = "初期値"
+        Me.Label6.Text = "目標値"
         '
         'Label5
         '
@@ -442,10 +444,12 @@ Partial Class MotorCtl
         '
         'GroupBox4
         '
-        Me.GroupBox4.Controls.Add(Me.Button1)
-        Me.GroupBox4.Controls.Add(Me.AIODataTextBox)
-        Me.GroupBox4.Controls.Add(Me.AIOCheckBox)
         Me.GroupBox4.Controls.Add(Me.Text_ErrorString)
+        Me.GroupBox4.Controls.Add(Me.AIODataTextBox)
+        Me.GroupBox4.Controls.Add(Me.Label7)
+        Me.GroupBox4.Controls.Add(Me.ComboBox1)
+        Me.GroupBox4.Controls.Add(Me.Button1)
+        Me.GroupBox4.Controls.Add(Me.AIOCheckBox)
         Me.GroupBox4.Location = New System.Drawing.Point(683, 12)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(170, 296)
@@ -453,14 +457,49 @@ Partial Class MotorCtl
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "電圧入力"
         '
+        'Text_ErrorString
+        '
+        Me.Text_ErrorString.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Text_ErrorString.Location = New System.Drawing.Point(16, 254)
+        Me.Text_ErrorString.Name = "Text_ErrorString"
+        Me.Text_ErrorString.Size = New System.Drawing.Size(140, 36)
+        Me.Text_ErrorString.TabIndex = 8
+        '
         'AIODataTextBox
         '
+        Me.AIODataTextBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.AIODataTextBox.Font = New System.Drawing.Font("ＭＳ ゴシック", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.AIODataTextBox.Location = New System.Drawing.Point(16, 74)
-        Me.AIODataTextBox.Multiline = True
         Me.AIODataTextBox.Name = "AIODataTextBox"
-        Me.AIODataTextBox.Size = New System.Drawing.Size(137, 177)
-        Me.AIODataTextBox.TabIndex = 3
+        Me.AIODataTextBox.Size = New System.Drawing.Size(140, 177)
+        Me.AIODataTextBox.TabIndex = 7
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Yu Gothic UI", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.Label7.Location = New System.Drawing.Point(111, 27)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(45, 12)
+        Me.Label7.TabIndex = 6
+        Me.Label7.Text = "平均個数"
+        '
+        'ComboBox1
+        '
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Location = New System.Drawing.Point(117, 44)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(39, 23)
+        Me.ComboBox1.TabIndex = 5
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(16, 42)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(89, 26)
+        Me.Button1.TabIndex = 4
+        Me.Button1.Text = "電圧入力設定"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'AIOCheckBox
         '
@@ -471,23 +510,6 @@ Partial Class MotorCtl
         Me.AIOCheckBox.TabIndex = 2
         Me.AIOCheckBox.Text = "電圧入力有効"
         Me.AIOCheckBox.UseVisualStyleBackColor = True
-        '
-        'Text_ErrorString
-        '
-        Me.Text_ErrorString.Location = New System.Drawing.Point(16, 254)
-        Me.Text_ErrorString.Multiline = True
-        Me.Text_ErrorString.Name = "Text_ErrorString"
-        Me.Text_ErrorString.Size = New System.Drawing.Size(136, 36)
-        Me.Text_ErrorString.TabIndex = 1
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(16, 42)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(136, 26)
-        Me.Button1.TabIndex = 4
-        Me.Button1.Text = "電圧入力設定"
-        Me.Button1.UseVisualStyleBackColor = True
         '
         'MotorCtl
         '
@@ -540,7 +562,7 @@ Partial Class MotorCtl
     Friend WithEvents RadioButton5 As RadioButton
     Friend WithEvents Label4 As Label
     Friend WithEvents TestStartButton As Button
-    Friend WithEvents InitialLabel As Label
+    Friend WithEvents DestinationLabel As Label
     Friend WithEvents GroupBox3 As GroupBox
     Friend WithEvents Label8 As Label
     Friend WithEvents Label10 As Label
@@ -555,8 +577,10 @@ Partial Class MotorCtl
     Friend WithEvents Label5 As Label
     Friend WithEvents FormsPlot1 As ScottPlot.FormsPlot
     Friend WithEvents GroupBox4 As GroupBox
-    Friend WithEvents Text_ErrorString As TextBox
     Friend WithEvents AIOCheckBox As CheckBox
-    Friend WithEvents AIODataTextBox As TextBox
     Friend WithEvents Button1 As Button
+    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents AIODataTextBox As Label
+    Friend WithEvents Label7 As Label
+    Friend WithEvents Text_ErrorString As Label
 End Class

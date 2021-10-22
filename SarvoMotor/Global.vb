@@ -186,6 +186,8 @@ Module [Global]
 	Public lDistanceDisp As Double  ' 同ピストン変位 (lDistanceDisp * CC)
 	Public bCoordinate As Short     ' 相対パルスまたは絶対パルスの指標（1:相対、0:絶対）
 	Public bStopSts1 As Short       ' 停止原因の指標（0:動作中、1:停止コマンドによる停止、255;目標値到達による通常停止)
+	Public NextFlag As Boolean
+	Public Arrive As Boolean
 
 	Public InitialPulse As Integer  ' 試験開始時の絶対パルス数（イニシャル値）
 	Public InitialDisp As Double    ' 同ピストン変位 (InitialPulse * CC)
@@ -219,15 +221,21 @@ Module [Global]
 	Public Status1 As Status
 	Public Cltio1 As Ctlio
 
-	Public AIOCheck(7) As Boolean
-	Public AIOCoef(7) As Double
-	Public AIOPoint(7) As Integer
-	Public AIOUnit(7) As String
 	Public Const AIOMaxCh As Integer = 8
+	Public MeanSampleN As Integer = 10
+	Public Const AIODevice = "AIO000"
+	Public AIOCheck(AIOMaxCh - 1) As Boolean
+	Public AIOCoef(AIOMaxCh - 1) As Double
+	Public AIOPoint(AIOMaxCh - 1) As Integer
+	Public AIOUnit(AIOMaxCh - 1) As String
+
+	Public ControlChNo As Integer
 	Public AIOChNo As Integer
 	Public AIOStartFlag As Boolean
-	Public Const AIODevice = "AIO000"
 	Public AIOId As Short
-	Public AIOData(7) As Double
+	Public AIOData(AIOMaxCh - 1) As Double
+	Public AIOMeanData(AIOMaxCh - 1, MeanSampleN - 1) As Double
+	Public AIOMean(AIOMaxCh - 1) As Double
+	Public MeanDataNo As Integer
 	Public AiData(256) As Single
 End Module
