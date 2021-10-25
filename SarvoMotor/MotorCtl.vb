@@ -586,15 +586,15 @@ Public Class MotorCtl
         End If
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles EventCheckBox.CheckedChanged
         '
         '   モーター停止イベントをフォームのイベントに追加する処理
         '
         Dim bEventMode As Byte
 
-        If CheckBox1.Checked = True Then
+        If EventCheckBox.Checked = True Then
             bEventMode = CSMC_ENABLE
-        ElseIf CheckBox1.Checked = False Then
+        ElseIf EventCheckBox.Checked = False Then
             bEventMode = CSMC_DISABLE
         End If
 
@@ -686,16 +686,16 @@ Public Class MotorCtl
                 End If
                 If SControlNo = 0 Then
                     If bStopSts1 = 255 Then
-                        NextFlag = True
+                        'NextFlag = True
                         NextLoad()
-                    Else
-                        NextFlag = False
+                        'Else
+                        'NextFlag = False
                     End If
-                Else
-                    If Arrive Then
-                        NextFlag = True
-                        NextLoad()
-                    End If
+                    'Else
+                    '    If Arrive Then
+                    '        NextFlag = True
+                    '        NextLoad()
+                    '    End If
                 End If
 
             End If
@@ -758,9 +758,9 @@ Public Class MotorCtl
             TestMode = 1
             Me.Size = New Size(xSize2, ySize2)
             'RadioButton1.Select()
-            RadioButton1.PerformClick()
+            'RadioButton1.PerformClick()
             TypeComboBox1.SelectedIndex = 0
-            CheckBox1.Checked = True
+            'CheckBox1.Checked = True
         End If
     End Sub
 
@@ -829,8 +829,9 @@ Public Class MotorCtl
                         RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
                         RadioButton1.PerformClick()
                         TypeComboBox1.SelectedIndex = 0
-                        CheckBox1.Checked = True
+                        EventCheckBox.Checked = True
                         MotionType = CSMC_PTP
+                        EventCheckBox.Checked = True
                         'RadioButton1.Checked = True
                         'RadioButton2.Checked = False
                         'RadioButton3.Checked = False
@@ -846,8 +847,9 @@ Public Class MotorCtl
                         RecentValueLabel.Text = Format(AIOMean(ControlChNo), "F3")
                         RadioButton2.PerformClick()
                         TypeComboBox1.SelectedIndex = 0
-                        CheckBox1.Checked = True
+                        EventCheckBox.Checked = True
                         MotionType = CSMC_JOG
+                        EventCheckBox.Checked = False
                         'RadioButton1.Checked = False
                         'RadioButton2.Checked = True
                         'RadioButton3.Checked = False
@@ -953,43 +955,53 @@ Public Class MotorCtl
                 RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
             Case Else
                 RecentValueLabel.Text = Format(AIOMean(ControlChNo), "F3")
-                Ret = SmcWGetReady(Id, AxisNo, MotionType, StartDir)
+
+                Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
                 If Ret <> 0 Then
                     SmcWGetErrorString(Ret, ErrorString)
                     lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
-                    Exit Sub
+                    'Exit Sub
                 End If
-                Dim StopFlag As Boolean = False
-                If StartDir = 0 Then
-                    If AIOMean(ControlChNo) >= lDistanceDisp Then
-                        Arrive = True
-                        StopFlag = True
-                    End If
-                Else
-                    If AIOMean(ControlChNo) <= lDistanceDisp Then
-                        StopFlag = True
-                        Arrive = True
-                    End If
-                End If
-                If StopFlag Then
-                    Ret = SmcWMotionStop(Id, AxisNo)
+
+                If bStopSts1 = 0 Then
+                    Ret = SmcWGetReady(Id, AxisNo, MotionType, StartDir)
                     If Ret <> 0 Then
                         SmcWGetErrorString(Ret, ErrorString)
-                        lblComment.Text = "SmcWMotionStop = " & Ret & " : " & ErrorString.ToString
+                        lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
                         Exit Sub
                     End If
-                    'Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
-                    'If Ret <> 0 Then
-                    '    SmcWGetErrorString(Ret, ErrorString)
-                    '    lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
-                    '    'Exit Sub
-                    ''End If
-                    ''Arive = True
-                    ''NextFlag = True
-                    'NextLoad()
-                Else
-                    'Arrive = False
-                    'NextLoad()
+                    Dim StopFlag As Boolean = False
+                    If StartDir = 0 Then
+                        If AIOMean(ControlChNo) >= lDistanceDisp Then
+                            Arrive = True
+                            StopFlag = True
+                        End If
+                    Else
+                        If AIOMean(ControlChNo) <= lDistanceDisp Then
+                            StopFlag = True
+                            Arrive = True
+                        End If
+                    End If
+                    If StopFlag Then
+                        Ret = SmcWMotionStop(Id, AxisNo)
+                        If Ret <> 0 Then
+                            SmcWGetErrorString(Ret, ErrorString)
+                            lblComment.Text = "SmcWMotionStop = " & Ret & " : " & ErrorString.ToString
+                            Exit Sub
+                        End If
+                        'Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
+                        'If Ret <> 0 Then
+                        '    SmcWGetErrorString(Ret, ErrorString)
+                        '    lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
+                        '    'Exit Sub
+                        ''End If
+                        ''Arive = True
+                        'NextFlag = True
+                        NextLoad()
+                    Else
+                        'Arrive = False
+                        'NextLoad()
+                    End If
                 End If
         End Select
 
@@ -1021,7 +1033,7 @@ Public Class MotorCtl
         RadioButton5.Enabled = False
 
         TypeComboBox1.Enabled = False
-        CheckBox1.Enabled = False
+        EventCheckBox.Enabled = False
         CheckBox2.Enabled = False
 
         txtDistance.Enabled = False
@@ -1059,7 +1071,7 @@ Public Class MotorCtl
         RadioButton5.Enabled = True
 
         TypeComboBox1.Enabled = True
-        CheckBox1.Enabled = True
+        EventCheckBox.Enabled = True
         CheckBox2.Enabled = True
 
         txtDistance.Enabled = True
@@ -1107,16 +1119,21 @@ Public Class MotorCtl
                                 CCW_Button.PerformClick()
                             End If
                         Else
-                            If (lDistanceDisp - AIOMean(ControlChNo)) > 0 Then
+                            'If (lDistanceDisp - AIOMean(ControlChNo)) > 0 Then
+                            '    CW_Button.PerformClick()
+                            'Else
+                            '    CCW_Button.PerformClick()
+                            'End If
+                            If LoadDir2(PointI2) > 0 Then
                                 CW_Button.PerformClick()
                             Else
                                 CCW_Button.PerformClick()
                             End If
                         End If
                         Label5.Visible = False
-                            Arrive = True
-                        Else                    ' モーターが動いている場合は停止
-                            STOP_Button.PerformClick()
+                        Arrive = True
+                    Else                    ' モーターが動いている場合は停止
+                        STOP_Button.PerformClick()
                         Arrive = False
                         Label5.Visible = True
                     End If
@@ -1155,156 +1172,130 @@ Public Class MotorCtl
         '    'Exit Sub
         'End If
 
-        If NextFlag Then
-            PointI2 += 1
+        'If NextFlag Then
+        PointI2 += 1
 
-            If PointI2 < PointN2 Then           ' その加力スケジュールの行で目標値が残っている場合
-                If SControlNo = 0 Then
-                    lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
-                    txtDistance.Text = Format(lDistanceDisp, "F3")
-                    DestinationLabel.Text = Format(lDistanceDisp, "F3")
+        If PointI2 < PointN2 Then           ' その加力スケジュールの行で目標値が残っている場合
+            If SControlNo = 0 Then
+                lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
+                txtDistance.Text = Format(lDistanceDisp, "F3")
+                DestinationLabel.Text = Format(lDistanceDisp, "F3")
 
-                    If PointN2 > 0 Then
-                        LoadGraph1.DrawGraph(PointI2 - 1)
+                If PointN2 > 0 Then
+                    LoadGraph1.DrawGraph(PointI2 - 1)
 
-                        'ControlModeLabel.Text = "ストローク"
-                        RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
+                    'ControlModeLabel.Text = "ストローク"
+                    RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
 
-                    End If
-                Else
-                    lDistanceDisp = LoadPoint2(PointI2)
-                    txtDistance.Text = Format(lDistanceDisp, "F3")
-                    DestinationLabel.Text = Format(lDistanceDisp, "F3")
-
-                    If PointN2 > 0 Then
-                        LoadGraph1.DrawGraph(PointI2 - 1)
-
-                        'ControlModeLabel.Text = "ストローク"
-                        RecentValueLabel.Text = Format(AIOMean(ControlChNo), "F3")
-
-                    End If
                 End If
+            Else
+                lDistanceDisp = LoadPoint2(PointI2)
+                txtDistance.Text = Format(lDistanceDisp, "F3")
+                DestinationLabel.Text = Format(lDistanceDisp, "F3")
 
+                If PointN2 > 0 Then
+                    LoadGraph1.DrawGraph(PointI2 - 1)
 
-            Else           ' その加力スケジュールの行で目標値が残っていない場合は次の行へ
-
-                RowsIndex1 += 1
-
-                If RowsIndex1 <= Chart.DataGridView1.RowCount - 1 Then  ' 次の行がある場合
-
-                    Do
-                        If Chart.DataGridView1.Rows(RowsIndex1).Cells(0).Value = True Then
-                            Dim s As String = Chart.DataGridView1.Rows(RowsIndex1).Cells(1).Value
-                            Select Case s
-                                Case "ストローク"
-                                    SControlNo = 0
-                                Case Else
-                                    SControlNo = Val(s.Substring(2, 1)) + 1
-                            End Select
-                            Exit Do
-                        End If
-                        RowsIndex1 += 1
-                        If RowsIndex1 > Chart.DataGridView1.RowCount - 1 Then
-                            MessageBox.Show("有効データがありません。。",
-                            "エラー",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error)
-                            Exit Sub
-                        End If
-                    Loop
-
-                    Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
-                    LoadGraph1.DrawGraph(0)
-
-                    'If AIOCheckBox.Checked = True Then
-                    '    AIOStartFlag = True
-                    '    Ret = AioInit(AIODevice, AIOId)
-                    '    If Ret <> 0 Then
-                    '        Dim Ret2 As Integer = AioGetErrorString(Ret, ErrorString)
-                    '        Text_ErrorString.Text = "AioInit = " & Ret & " : " & ErrorString.ToString()
-                    '        Exit Sub
-                    '    End If
-
-                    '    Text_ErrorString.Text = "初期化処理 : 正常終了"
-                    '    MeanDataNo = 0
-                    '    For i As Integer = 0 To AIOMaxCh - 1
-                    '        AIOMean(i) = 0.0
-                    '        For j As Integer = 0 To MeanSampleN - 1
-                    '            AIOMeanData(i, j) = 0.0
-                    '        Next
-                    '    Next
-                    'End If
-
-                    Select Case SControlNo
-                        Case 0  ' ストローク制御
-                            InitialPulse = lOutPulse
-                            InitialDisp = lOutDisp
-                            'DestinationLabel.Text = Format(InitialDisp)
-                            PointI2 = 1
-                            lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
-                            txtDistance.Text = Format(lDistanceDisp, "F3")
-                            DestinationLabel.Text = Format(lDistanceDisp, "F3")
-                            'txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
-                            ControlModeLabel.Text = "ストローク"
-                            RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
-                            RadioButton1.PerformClick()
-                            TypeComboBox1.SelectedIndex = 0
-                            CheckBox1.Checked = True
-
-
-                        Case Else  ' 電圧制御
-                            PointI2 = 1
-                            ControlChNo = SControlNo - 1
-                            lDistanceDisp = LoadPoint2(PointI2)
-                            txtDistance.Text = Format(lDistanceDisp, "F3")
-                            DestinationLabel.Text = Format(lDistanceDisp, "F3")
-                            'txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
-                            ControlModeLabel.Text = "Ch" + Format(ControlChNo)
-                            RecentValueLabel.Text = Format(AIOMean(ControlChNo), "F3")
-                            RadioButton2.PerformClick()
-                            TypeComboBox1.SelectedIndex = 0
-                            CheckBox1.Checked = True
-                    End Select
-
-
-
-
-
-
-
-                    'Do
-                    '    If Chart.DataGridView1.Rows(RowsIndex1).Cells(0).Value = True Then
-                    '        Exit Do
-                    '    End If
-                    '    RowsIndex1 += 1
-                    '    If RowsIndex1 > Chart.DataGridView1.RowCount - 1 Then
-                    '        If PointN2 > 0 Then
-                    '            LoadGraph1.DrawGraph(PointI2 - 1)
-                    '        End If
-
-                    '        TestStopView()
-
-                    '        Exit Sub
-                    '    End If
-                    'Loop
-                    'Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
-                    'LoadGraph1.DrawGraph(0)
-                    'PointI2 = 1
-                    'lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
-                    'txtDistance.Text = Format(lDistanceDisp, "F3")
-                    'DestinationLabel.Text = Format(lDistanceDisp, "F3")
-
-                Else        ' 次の行がない場合は試験終了
-                    If PointN2 > 0 Then
-                        LoadGraph1.DrawGraph(PointI2 - 1)
-                    End If
-
-                    TestStopView()
-
+                    'ControlModeLabel.Text = "ストローク"
+                    RecentValueLabel.Text = Format(AIOMean(ControlChNo), "F3")
 
                 End If
             End If
+
+
+        Else           ' その加力スケジュールの行で目標値が残っていない場合は次の行へ
+
+            RowsIndex1 += 1
+
+            If RowsIndex1 <= Chart.DataGridView1.RowCount - 1 Then  ' 次の行がある場合
+
+                Do
+                    If Chart.DataGridView1.Rows(RowsIndex1).Cells(0).Value = True Then
+                        Dim s As String = Chart.DataGridView1.Rows(RowsIndex1).Cells(1).Value
+                        Select Case s
+                            Case "ストローク"
+                                SControlNo = 0
+                            Case Else
+                                SControlNo = Val(s.Substring(2, 1)) + 1
+                        End Select
+                        Exit Do
+                    End If
+                    RowsIndex1 += 1
+                    If RowsIndex1 > Chart.DataGridView1.RowCount - 1 Then
+                        MessageBox.Show("有効データがありません。。",
+                        "エラー",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error)
+                        Exit Sub
+                    End If
+                Loop
+
+                Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
+                LoadGraph1.DrawGraph(0)
+
+                'If AIOCheckBox.Checked = True Then
+                '    AIOStartFlag = True
+                '    Ret = AioInit(AIODevice, AIOId)
+                '    If Ret <> 0 Then
+                '        Dim Ret2 As Integer = AioGetErrorString(Ret, ErrorString)
+                '        Text_ErrorString.Text = "AioInit = " & Ret & " : " & ErrorString.ToString()
+                '        Exit Sub
+                '    End If
+
+                '    Text_ErrorString.Text = "初期化処理 : 正常終了"
+                '    MeanDataNo = 0
+                '    For i As Integer = 0 To AIOMaxCh - 1
+                '        AIOMean(i) = 0.0
+                '        For j As Integer = 0 To MeanSampleN - 1
+                '            AIOMeanData(i, j) = 0.0
+                '        Next
+                '    Next
+                'End If
+
+                Select Case SControlNo
+                    Case 0  ' ストローク制御
+                        InitialPulse = lOutPulse
+                        InitialDisp = lOutDisp
+                        'DestinationLabel.Text = Format(InitialDisp)
+                        PointI2 = 1
+                        lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
+                        txtDistance.Text = Format(lDistanceDisp, "F3")
+                        DestinationLabel.Text = Format(lDistanceDisp, "F3")
+                        'txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
+                        ControlModeLabel.Text = "ストローク"
+                        RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
+                        RadioButton1.PerformClick()
+                        TypeComboBox1.SelectedIndex = 0
+                        EventCheckBox.Checked = True
+
+
+                    Case Else  ' 電圧制御
+                        PointI2 = 1
+                        ControlChNo = SControlNo - 1
+                        lDistanceDisp = LoadPoint2(PointI2)
+                        txtDistance.Text = Format(lDistanceDisp, "F3")
+                        DestinationLabel.Text = Format(lDistanceDisp, "F3")
+                        'txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
+                        ControlModeLabel.Text = "Ch" + Format(ControlChNo)
+                        RecentValueLabel.Text = Format(AIOMean(ControlChNo), "F3")
+                        RadioButton2.PerformClick()
+                        TypeComboBox1.SelectedIndex = 0
+                        EventCheckBox.Checked = False
+                End Select
+
+
+
+            Else        ' 次の行がない場合は試験終了
+                If PointN2 > 0 Then
+                    LoadGraph1.DrawGraph(PointI2 - 1)
+                End If
+
+                TestStopView()
+
+
+            End If
         End If
+        'End If
 
 
         'Select Case SControlNo

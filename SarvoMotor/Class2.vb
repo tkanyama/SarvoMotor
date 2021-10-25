@@ -318,7 +318,7 @@ Public Class LoadGraph
                     End If
 
                     PointN2 = 0
-                    ReDim LoadPoint2(1000), LoadX(1000)
+                    ReDim LoadPoint2(1000), LoadX(1000), LoadDir2(1000)
                     LoadPoint2(0) = 0.0
                     LoadX(0) = 0.0
 
@@ -336,24 +336,29 @@ Public Class LoadGraph
                                     P1 = L1 + Sign(L2 - L1) * Delta * m1
                                     If Abs(P1) >= Abs(L2) Then Exit Do
                                     LoadPoint2(PointN2) = P1
+                                    LoadDir2(PointN2) = Sign(LoadPoint2(PointN2) - LoadPoint2(PointN2 - 1))
                                     LoadX(PointN2) = (P1 - L1) / (L2 - L1) + i - 1
                                     PointN2 += 1
                                     m1 += 1
                                 Loop
                                 LoadPoint2(PointN2) = L2
+                                LoadDir2(PointN2) = Sign(LoadPoint2(PointN2) - LoadPoint2(PointN2 - 1))
                                 LoadX(PointN2) = i
                                 PointN2 += 1
                             Else
                                 m1 = Int(Abs(L2 - L1) / Delta)
+                                If m1 * Delta = Abs(L1) Then m1 -= 1
                                 Do
                                     P1 = L2 - Sign(L2 - L1) * Delta * m1
                                     If Abs(P1) <= 0 Then Exit Do
                                     LoadPoint2(PointN2) = P1
+                                    LoadDir2(PointN2) = Sign(LoadPoint2(PointN2) - LoadPoint2(PointN2 - 1))
                                     LoadX(PointN2) = (P1 - L1) / (L2 - L1) + i - 1
                                     PointN2 += 1
                                     m1 -= 1
                                 Loop
                                 LoadPoint2(PointN2) = L2
+                                LoadDir2(PointN2) = Sign(LoadPoint2(PointN2) - LoadPoint2(PointN2 - 1))
                                 LoadX(PointN2) = i
                                 PointN2 += 1
                             End If
@@ -364,12 +369,13 @@ Public Class LoadGraph
                         PointN2 += 1
                         For i As Integer = 1 To PointN - 1
                             LoadPoint2(PointN2) = LoadPoint(i)
+                            LoadDir2(PointN2) = Sign(LoadPoint2(PointN2) - LoadPoint2(PointN2 - 1))
                             LoadX(PointN2) = i
                             PointN2 += 1
                         Next
 
                     End If
-                    ReDim Preserve LoadPoint2(PointN2 - 1), LoadX(PointN2 - 1)
+                    ReDim Preserve LoadPoint2(PointN2 - 1), LoadX(PointN2 - 1), LoadDir2(PointN2 - 1)
 
 
                     For i As Integer = 0 To PointN - 1

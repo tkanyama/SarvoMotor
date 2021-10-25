@@ -208,6 +208,7 @@ Module [Global]
 	Public PointI2 As Integer       ' 現在の分割された加力目標値の番号
 	Public LoadPoint() As Double    ' 加力上下限目標値
 	Public LoadPoint2() As Double   ' 分割された加力目標値
+	Public LoadDir2() As Double     ' 加力方向
 	Public LoadX() As Double        ' 分割された加力目標値のX座標
 	Public Delta1 As Double         ' 分割の増分値
 	Public Chart As LoadScedule     ' 加力スケジュールの表

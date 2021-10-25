@@ -28,7 +28,7 @@ Partial Class MotorCtl
         Me.KeyTextBox = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.EventCheckBox = New System.Windows.Forms.CheckBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.lblComment = New System.Windows.Forms.Label()
@@ -77,7 +77,7 @@ Partial Class MotorCtl
         Me.GroupBox1.Controls.Add(Me.KeyTextBox)
         Me.GroupBox1.Controls.Add(Me.TextBox1)
         Me.GroupBox1.Controls.Add(Me.CheckBox2)
-        Me.GroupBox1.Controls.Add(Me.CheckBox1)
+        Me.GroupBox1.Controls.Add(Me.EventCheckBox)
         Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.Label3)
         Me.GroupBox1.Controls.Add(Me.lblComment)
@@ -141,15 +141,15 @@ Partial Class MotorCtl
         Me.CheckBox2.Text = "Counter Event"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
-        'CheckBox1
+        'EventCheckBox
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(16, 209)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(82, 19)
-        Me.CheckBox1.TabIndex = 9
-        Me.CheckBox1.Text = "Stop Event"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.EventCheckBox.AutoSize = True
+        Me.EventCheckBox.Location = New System.Drawing.Point(16, 209)
+        Me.EventCheckBox.Name = "EventCheckBox"
+        Me.EventCheckBox.Size = New System.Drawing.Size(82, 19)
+        Me.EventCheckBox.TabIndex = 9
+        Me.EventCheckBox.Text = "Stop Event"
+        Me.EventCheckBox.UseVisualStyleBackColor = True
         '
         'Label4
         '
@@ -556,7 +556,7 @@ Partial Class MotorCtl
     Friend WithEvents Label3 As Label
     Friend WithEvents TextBox1 As TextBox
     Friend WithEvents CheckBox2 As CheckBox
-    Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents EventCheckBox As CheckBox
     Friend WithEvents RadioButton4 As RadioButton
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents RadioButton5 As RadioButton
