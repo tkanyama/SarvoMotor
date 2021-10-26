@@ -23,8 +23,12 @@ Partial Class MotorCtl
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
         Me.SpeedControlCheckBox = New System.Windows.Forms.CheckBox()
+        Me.Button5 = New System.Windows.Forms.Button()
         Me.SpaceKeyLabel = New System.Windows.Forms.Label()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.EnterKeyLabel = New System.Windows.Forms.Label()
         Me.KeyTextBox = New System.Windows.Forms.TextBox()
         Me.EventCheckBox = New System.Windows.Forms.CheckBox()
@@ -61,6 +65,7 @@ Partial Class MotorCtl
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.AIOCheckBox = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -69,8 +74,13 @@ Partial Class MotorCtl
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.CheckBox1)
+        Me.GroupBox1.Controls.Add(Me.Button4)
+        Me.GroupBox1.Controls.Add(Me.Button3)
         Me.GroupBox1.Controls.Add(Me.SpeedControlCheckBox)
+        Me.GroupBox1.Controls.Add(Me.Button5)
         Me.GroupBox1.Controls.Add(Me.SpaceKeyLabel)
+        Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.EnterKeyLabel)
         Me.GroupBox1.Controls.Add(Me.KeyTextBox)
         Me.GroupBox1.Controls.Add(Me.EventCheckBox)
@@ -93,29 +103,65 @@ Partial Class MotorCtl
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "ピストン操作"
         '
+        'Button4
+        '
+        Me.Button4.Location = New System.Drawing.Point(323, 36)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(40, 21)
+        Me.Button4.TabIndex = 20
+        Me.Button4.Text = ">>"
+        Me.Button4.UseVisualStyleBackColor = True
+        '
+        'Button3
+        '
+        Me.Button3.Location = New System.Drawing.Point(271, 36)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(40, 21)
+        Me.Button3.TabIndex = 20
+        Me.Button3.Text = ">"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
         'SpeedControlCheckBox
         '
         Me.SpeedControlCheckBox.AutoSize = True
-        Me.SpeedControlCheckBox.Location = New System.Drawing.Point(170, 209)
+        Me.SpeedControlCheckBox.Location = New System.Drawing.Point(169, 221)
         Me.SpeedControlCheckBox.Name = "SpeedControlCheckBox"
         Me.SpeedControlCheckBox.Size = New System.Drawing.Size(110, 19)
         Me.SpeedControlCheckBox.TabIndex = 14
         Me.SpeedControlCheckBox.Text = "目標値減速調整"
         Me.SpeedControlCheckBox.UseVisualStyleBackColor = True
         '
+        'Button5
+        '
+        Me.Button5.Location = New System.Drawing.Point(167, 36)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(40, 21)
+        Me.Button5.TabIndex = 20
+        Me.Button5.Text = "<<"
+        Me.Button5.UseVisualStyleBackColor = True
+        '
         'SpaceKeyLabel
         '
         Me.SpaceKeyLabel.AutoSize = True
-        Me.SpaceKeyLabel.Location = New System.Drawing.Point(288, 104)
+        Me.SpaceKeyLabel.Location = New System.Drawing.Point(286, 138)
         Me.SpaceKeyLabel.Name = "SpaceKeyLabel"
         Me.SpaceKeyLabel.Size = New System.Drawing.Size(68, 15)
         Me.SpaceKeyLabel.TabIndex = 13
         Me.SpaceKeyLabel.Text = "[Space Key]"
         '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(219, 36)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(40, 21)
+        Me.Button2.TabIndex = 20
+        Me.Button2.Text = "<"
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'EnterKeyLabel
         '
         Me.EnterKeyLabel.AutoSize = True
-        Me.EnterKeyLabel.Location = New System.Drawing.Point(228, 42)
+        Me.EnterKeyLabel.Location = New System.Drawing.Point(235, 85)
         Me.EnterKeyLabel.Name = "EnterKeyLabel"
         Me.EnterKeyLabel.Size = New System.Drawing.Size(64, 15)
         Me.EnterKeyLabel.TabIndex = 13
@@ -132,7 +178,7 @@ Partial Class MotorCtl
         'EventCheckBox
         '
         Me.EventCheckBox.AutoSize = True
-        Me.EventCheckBox.Location = New System.Drawing.Point(16, 209)
+        Me.EventCheckBox.Location = New System.Drawing.Point(15, 221)
         Me.EventCheckBox.Name = "EventCheckBox"
         Me.EventCheckBox.Size = New System.Drawing.Size(82, 19)
         Me.EventCheckBox.TabIndex = 9
@@ -142,7 +188,7 @@ Partial Class MotorCtl
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(338, 171)
+        Me.Label3.Location = New System.Drawing.Point(336, 194)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(27, 15)
         Me.Label3.TabIndex = 8
@@ -159,7 +205,7 @@ Partial Class MotorCtl
         'txtDistance
         '
         Me.txtDistance.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.txtDistance.Location = New System.Drawing.Point(250, 156)
+        Me.txtDistance.Location = New System.Drawing.Point(248, 179)
         Me.txtDistance.Name = "txtDistance"
         Me.txtDistance.Size = New System.Drawing.Size(88, 36)
         Me.txtDistance.TabIndex = 4
@@ -168,7 +214,7 @@ Partial Class MotorCtl
         'Label1
         '
         Me.Label1.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.Label1.Location = New System.Drawing.Point(141, 159)
+        Me.Label1.Location = New System.Drawing.Point(139, 182)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(103, 30)
         Me.Label1.TabIndex = 3
@@ -179,7 +225,7 @@ Partial Class MotorCtl
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.Label2.Location = New System.Drawing.Point(31, 134)
+        Me.Label2.Location = New System.Drawing.Point(29, 157)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(77, 21)
         Me.Label2.TabIndex = 6
@@ -189,7 +235,7 @@ Partial Class MotorCtl
         '
         Me.TypeComboBox1.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.TypeComboBox1.FormattingEnabled = True
-        Me.TypeComboBox1.Location = New System.Drawing.Point(16, 163)
+        Me.TypeComboBox1.Location = New System.Drawing.Point(14, 186)
         Me.TypeComboBox1.Name = "TypeComboBox1"
         Me.TypeComboBox1.Size = New System.Drawing.Size(105, 29)
         Me.TypeComboBox1.TabIndex = 5
@@ -197,7 +243,7 @@ Partial Class MotorCtl
         'STOP_Button
         '
         Me.STOP_Button.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.STOP_Button.Location = New System.Drawing.Point(167, 92)
+        Me.STOP_Button.Location = New System.Drawing.Point(165, 126)
         Me.STOP_Button.Name = "STOP_Button"
         Me.STOP_Button.Size = New System.Drawing.Size(198, 47)
         Me.STOP_Button.TabIndex = 2
@@ -207,7 +253,7 @@ Partial Class MotorCtl
         'CCW_Button
         '
         Me.CCW_Button.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.CCW_Button.Location = New System.Drawing.Point(278, 26)
+        Me.CCW_Button.Location = New System.Drawing.Point(165, 69)
         Me.CCW_Button.Name = "CCW_Button"
         Me.CCW_Button.Size = New System.Drawing.Size(87, 48)
         Me.CCW_Button.TabIndex = 1
@@ -217,7 +263,7 @@ Partial Class MotorCtl
         'CW_Button
         '
         Me.CW_Button.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.CW_Button.Location = New System.Drawing.Point(167, 26)
+        Me.CW_Button.Location = New System.Drawing.Point(276, 69)
         Me.CW_Button.Name = "CW_Button"
         Me.CW_Button.Size = New System.Drawing.Size(87, 48)
         Me.CW_Button.TabIndex = 1
@@ -481,6 +527,16 @@ Partial Class MotorCtl
         Me.AIOCheckBox.Text = "電圧入力有効"
         Me.AIOCheckBox.UseVisualStyleBackColor = True
         '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(168, 11)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(97, 19)
+        Me.CheckBox1.TabIndex = 21
+        Me.CheckBox1.Text = "ピストン微調整"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'MotorCtl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -496,7 +552,7 @@ Partial Class MotorCtl
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "MotorCtl"
-        Me.Text = "MotorCtl"
+        Me.Text = "モーターコントロール"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
@@ -549,4 +605,9 @@ Partial Class MotorCtl
     Friend WithEvents Label7 As Label
     Friend WithEvents Text_ErrorString As Label
     Friend WithEvents SpeedControlCheckBox As CheckBox
+    Friend WithEvents Button2 As Button
+    Friend WithEvents Button3 As Button
+    Friend WithEvents Button4 As Button
+    Friend WithEvents Button5 As Button
+    Friend WithEvents CheckBox1 As CheckBox
 End Class

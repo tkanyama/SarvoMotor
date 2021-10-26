@@ -81,7 +81,7 @@ Public Class MotorCtl
 
         ' [加力スケジュールグラフの作成]
         LoadGraph1 = New LoadGraph
-        LoadGraph1.Location = New Point(Chart.Location.X + Chart.Width + 10, Chart.Location.Y)
+        LoadGraph1.Location = New Point(Chart.Location.X + Chart.Width + 15, Chart.Location.Y)
         Me.Controls.Add(LoadGraph1)
 
         ' [荷重制御時のリアルタイム制御のためのタイマー]
@@ -149,6 +149,13 @@ Public Class MotorCtl
 
 
         Timer2.Enabled = False
+
+        CheckBox1.Checked = False
+        Button2.Enabled = False
+        Button3.Enabled = False
+        Button4.Enabled = False
+        Button5.Enabled = False
+
     End Sub
 
 
@@ -837,6 +844,7 @@ Public Class MotorCtl
                         'RadioButton1.Checked = True
                         'RadioButton2.Checked = False
                         'RadioButton3.Checked = False
+                        CheckBox1.Checked = False
 
                     Case Else  ' 電圧制御
                         InitialPulse = lOutPulse
@@ -857,6 +865,7 @@ Public Class MotorCtl
                         'RadioButton1.Checked = False
                         'RadioButton2.Checked = True
                         'RadioButton3.Checked = False
+                        CheckBox1.Checked = True
                 End Select
 
                 TestStartView()
@@ -1185,6 +1194,27 @@ Public Class MotorCtl
                     End If
 
                     'SpeedInputForm1.
+
+                Case "Right"
+                    If CheckBox1.Checked Then
+                        MovePiston(PlusDelta1)
+                    End If
+
+                Case "Left"
+                    If CheckBox1.Checked Then
+                        MovePiston(MinusDelta1)
+                    End If
+
+                Case "Up"
+                    If CheckBox1.Checked Then
+                        MovePiston(PlusDelta2)
+                    End If
+
+                Case "Down"
+                    If CheckBox1.Checked Then
+                        MovePiston(MinusDelta2)
+                    End If
+
             End Select
         End If
 
@@ -1299,7 +1329,7 @@ Public Class MotorCtl
                         RadioButton1.PerformClick()
                         TypeComboBox1.SelectedIndex = 0
                         EventCheckBox.Checked = True
-
+                        CheckBox1.Checked = False
 
                     Case Else  ' 電圧制御
                         PointI2 = 1
@@ -1313,6 +1343,8 @@ Public Class MotorCtl
                         RadioButton2.PerformClick()
                         TypeComboBox1.SelectedIndex = 0
                         EventCheckBox.Checked = False
+                        CheckBox1.Checked = True
+
                 End Select
 
 
@@ -1504,6 +1536,196 @@ Public Class MotorCtl
         'Timer2.Enabled = True
     End Sub
 
+    Function MovePiston(ByVal DeltaPulse As Integer) As Boolean
 
+        If DeltaPulse = 0 Then
+            MovePiston = True
+            Exit Function
+        End If
+
+        Dim bStopSts2 As Short
+        Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts2)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
+            'Exit Sub
+        End If
+        If bStopSts2 = 0 Then
+            MovePiston = True
+            Exit Function
+        End If
+
+        If TestStartFlag And SControlNo = 0 Then
+            MovePiston = True
+            Exit Function
+        End If
+
+
+        Dim lOutPulse2 As Integer
+        Ret = SmcWGetOutPulse(Id, AxisNo, lOutPulse2)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWGetOutPulse = " & Ret & " : " & ErrorString.ToString
+
+        End If
+
+        Dim lDistance2 As Integer = lOutPulse2 + DeltaPulse
+        '
+        '   モーターの動作パラメータの設定
+        '
+
+        '----------------------------------
+        ' Set Resolution to Driver
+        '----------------------------------
+        Ret = SmcWSetResolveSpeed(Id, AxisNo, ResolveSpeed)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetResolveSpeed = " & Ret & " : " & ErrorString.ToString
+            MovePiston = False
+            Exit Function
+        End If
+
+        '----------------------------------
+        ' Set StartSpeed to Driver
+        '----------------------------------
+        Ret = SmcWSetStartSpeed(Id, AxisNo, StartSpeed)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetStartSpeed = " & Ret & " : " & ErrorString.ToString
+            MovePiston = False
+            Exit Function
+        End If
+
+        '----------------------------------
+        ' Set TargetSpeed to Driver
+        '----------------------------------
+        Dim TargetSpeed2 As Double
+        TargetSpeed2 = Int(SpeedPanel1.SetSpeed / CC)
+        Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed2)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetTargetSpeed = " & Ret & " : " & ErrorString.ToString
+            MovePiston = False
+            Exit Function
+        End If
+
+        '----------------------------------
+        ' Set AccelTime to Driver
+        '----------------------------------
+        Ret = SmcWSetAccelTime(Id, AxisNo, AccelTime)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetAccelTime = " & Ret & " : " & ErrorString.ToString
+            MovePiston = False
+            Exit Function
+        End If
+
+        '----------------------------------
+        ' Set DecelTime to Driver
+        '----------------------------------
+        Ret = SmcWSetDecelTime(Id, AxisNo, DecelTime)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetDecelTime = " & Ret & " : " & ErrorString.ToString
+            MovePiston = False
+            Exit Function
+        End If
+
+        '-----------------------------
+        ' Set SSpeed to Driver
+        '-----------------------------
+        'Try
+        '    dblSSpeed = Val(txtSSpeed.Text)
+        'Catch ex As Exception
+        '    dblSSpeed = 0
+        'End Try
+        'dwRet = SmcWSetSSpeed(Id, AxisNo, dblSSpeed)
+        'If dwRet <> 0 Then
+        '    SmcWGetErrorString(dwRet, ErrorString)
+        '    lblComment.Text = "SmcWSetSSpeed = " & dwRet & " : " & ErrorString.ToString
+        '    SetMoveParam = False
+        '    Exit Function
+        'End If
+
+        '-------------------------
+        ' Set Distance to Driver
+        '-------------------------
+        'MotionType = TypeComboBox1.SelectedIndex
+
+        'If MotionType <> CSMC_PTP Then
+        '    MovePiston = True
+        '    Exit Function
+        'End If
+
+        'Try
+        '    lDistance = Int(Val(txtDistance.Text) / CC)
+        'Catch ex As Exception
+        '    lDistance = 0
+        'End Try
+        'If bCoordinate = CSMC_INC Then
+        '    lDistance = System.Math.Abs(lDistance)
+        '    If StartDir = CSMC_CCW Then
+        '        lDistance = -(lDistance)
+        '    End If
+        'End If
+
+        'bCoordinate = TypeComboBox1.SelectedIndex
+        Ret = SmcWSetStopPosition(Id, AxisNo, 0, lDistance2)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetStopPosition = " & Ret & " : " & ErrorString.ToString
+            MovePiston = False
+            Exit Function
+        End If
+        Dim StartDir2 As Short
+        If DeltaPulse > 0 Then
+            StartDir2 = 0
+        Else
+            StartDir2 = 1
+        End If
+        Ret = SmcWSetReady(Id, AxisNo, 1, StartDir2)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
+            MovePiston = False
+            Exit Function
+        End If
+
+        '---------------
+        ' Start Motion
+        '---------------
+        Ret = SmcWMotionStart(Id, AxisNo)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWMotionStart = " & Ret & " : " & ErrorString.ToString
+            MovePiston = False
+            Exit Function
+        End If
+        MovePiston = True
+
+    End Function
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        MovePiston(PlusDelta1)
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        MovePiston(MinusDelta1)
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        MovePiston(PlusDelta2)
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        MovePiston(MinusDelta2)
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged_1(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        Button2.Enabled = CheckBox1.Checked
+        Button3.Enabled = CheckBox1.Checked
+        Button4.Enabled = CheckBox1.Checked
+        Button5.Enabled = CheckBox1.Checked
+    End Sub
 End Class
 

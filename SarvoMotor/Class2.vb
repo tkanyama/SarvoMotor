@@ -43,7 +43,7 @@ Public Class LoadGraph
         PictureBox1 = New PictureBox
         With PictureBox1
             .Location = New Point(10, 51)
-            .Size = New Size(245, 270)
+            .Size = New Size(280, 270)
             .BorderStyle = BorderStyle.Fixed3D
         End With
         MyBase.Controls.Add(PictureBox1)
@@ -115,7 +115,7 @@ Public Class LoadGraph
                     GXsize = PictureBox1.Width
                     GYsize = PictureBox1.Height
 
-                    GXZero = GXsize * 0.1
+                    GXZero = GXsize * 0.15
                     GXmax = GXsize * 0.8
 
                     If Kataburi Then
@@ -216,7 +216,7 @@ Public Class LoadGraph
                             g.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, -Ymax)), fmt)
 
                             If Delta > 0 Then
-                                Dim ygrid As Integer = 0
+                                Dim ygrid As Double = 0
                                 Dim gridLind(1) As PointF
                                 Do
                                     ygrid += Delta
@@ -259,7 +259,7 @@ Public Class LoadGraph
                         g.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, -Ymax)), fmt)
 
                         If Delta > 0 Then
-                            Dim ygrid As Integer = 0
+                            Dim ygrid As Double = 0
                             Dim gridLind(1) As PointF
                             Do
                                 ygrid += Delta
