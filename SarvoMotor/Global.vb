@@ -195,7 +195,7 @@ Module [Global]
 	Public TestMode As Integer      ' 0:準備・片付け　1:試験モード
 	Public Const xSize1 As Integer = 570    ' 準備時の操作パネルの幅
 	Public Const ySize1 As Integer = 360    ' 準備時の操作パネルの高さ
-	Public Const xSize2 As Integer = 1080   ' 試験時の操作パネルの幅
+	Public Const xSize2 As Integer = 880   ' 試験時の操作パネルの幅
 	Public Const ySize2 As Integer = 720    ' 試験時の操作パネルの高さ
 
 	Public SpeedPanel1 As SpeedPanel                   ' ピストンスピード選択パネルコントロール
@@ -239,4 +239,15 @@ Module [Global]
 	Public AIOMean(AIOMaxCh - 1) As Double
 	Public MeanDataNo As Integer
 	Public AiData(256) As Single
+
+	Public Const Timer1_IntTime = 50
+	Public Const Timer2_IntTime = 500
+
+	Public Const DeceleratePoint1 = 0.95
+	Public Const DeceleratePoint2 = 0.97
+	Public Const DeceleratePoint3 = 0.99
+	Public Const DecelerateRate1 = 0.5
+	Public Const DecelerateRate2 = 0.2
+	Public Const DecelerateRate3 = 0.1
+
 End Module

@@ -10,6 +10,7 @@
 Option Strict Off
 Option Explicit On
 Imports System.Text
+Imports System.Math
 Public Class MotorCtl
     Inherits System.Windows.Forms.Form
 
@@ -85,13 +86,13 @@ Public Class MotorCtl
 
         ' [荷重制御時のリアルタイム制御のためのタイマー]
         Timer1 = New Timer
-        Timer1.Interval = 100
+        Timer1.Interval = Timer1_IntTime
         Timer1.Enabled = False
         AddHandler Timer1.Tick, AddressOf Timer1_Tick
 
         ' [キーボード入力を確実に処理するためのタイマー]
         Timer2 = New Timer
-        Timer2.Interval = 500
+        Timer2.Interval = Timer2_IntTime
         Timer2.Enabled = False
         AddHandler Timer2.Tick, AddressOf Timer2_Tick
 
@@ -126,6 +127,7 @@ Public Class MotorCtl
 
         If AIOChNo = 0 Then AIOChNo = AIOMaxCh
         AIOCheckBox.Checked = True
+        SpeedControlCheckBox.Checked = True
 
         For i As Integer = 0 To AIOMaxCh - 1
             If AIOCheck(i) = Nothing Then AIOCheck(i) = True
@@ -609,35 +611,35 @@ Public Class MotorCtl
         End If
     End Sub
 
-    Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
-        '
-        '   目標到達イベントをフォームのイベントに追加する処理
-        '
-        Dim bEventMode As Byte
+    'Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs)
+    '    '
+    '    '   目標到達イベントをフォームのイベントに追加する処理
+    '    '
+    '    Dim bEventMode As Byte
 
-        Try
-            lCountPulse1 = Int(Val(TextBox1.Text) / CC)
-        Catch ex As Exception
-            lCountPulse1 = 0
-        End Try
+    '    Try
+    '        lCountPulse1 = Int(Val(TextBox1.Text) / CC)
+    '    Catch ex As Exception
+    '        lCountPulse1 = 0
+    '    End Try
 
-        If CheckBox2.Checked = True Then
-            bEventMode = CSMC_ENABLE
-        ElseIf CheckBox2.Checked = False Then
-            bEventMode = CSMC_DISABLE
-        End If
+    '    If CheckBox2.Checked = True Then
+    '        bEventMode = CSMC_ENABLE
+    '    ElseIf CheckBox2.Checked = False Then
+    '        bEventMode = CSMC_DISABLE
+    '    End If
 
-        '----------------------------------
-        ' Set Event for Encoder to Driver
-        '----------------------------------
-        Ret = SmcWCountEvent(Id, AxisNo, Me.Handle.ToInt32, bEventMode, CSMC_ENCODER, lCountPulse1)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWCountEvent = " & Ret & " : " & ErrorString.ToString
-            Exit Sub
-        End If
+    '    '----------------------------------
+    '    ' Set Event for Encoder to Driver
+    '    '----------------------------------
+    '    Ret = SmcWCountEvent(Id, AxisNo, Me.Handle.ToInt32, bEventMode, CSMC_ENCODER, lCountPulse1)
+    '    If Ret <> 0 Then
+    '        SmcWGetErrorString(Ret, ErrorString)
+    '        lblComment.Text = "SmcWCountEvent = " & Ret & " : " & ErrorString.ToString
+    '        Exit Sub
+    '    End If
 
-    End Sub
+    'End Sub
 
     Protected Overrides Sub WndProc(ByRef m As Message)
         '
@@ -705,38 +707,38 @@ Public Class MotorCtl
 
     End Sub
 
-    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
-        '
-        '   目標到達イベント用テキストボックスの変更を処理
-        '
-        Dim bEventMode As Byte
-        If CheckBox2.Checked = True Then
-            If IsNumeric(TextBox1.Text) Then
+    'Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs)
+    '    '
+    '    '   目標到達イベント用テキストボックスの変更を処理
+    '    '
+    '    Dim bEventMode As Byte
+    '    If CheckBox2.Checked = True Then
+    '        If IsNumeric(TextBox1.Text) Then
 
-                Try
-                    lCountPulse1 = Int(Val(TextBox1.Text) / CC)
-                Catch ex As Exception
-                    lCountPulse1 = 0
-                End Try
-
-
-                bEventMode = CSMC_ENABLE
-                'ElseIf CheckBox2.Checked = False Then
-                '    bEventMode = CSMC_DISABLE
+    '            Try
+    '                lCountPulse1 = Int(Val(TextBox1.Text) / CC)
+    '            Catch ex As Exception
+    '                lCountPulse1 = 0
+    '            End Try
 
 
-                '----------------------------------
-                ' Set Event for Encoder to Driver
-                '----------------------------------
-                Ret = SmcWCountEvent(Id, AxisNo, Me.Handle.ToInt32, bEventMode, CSMC_ENCODER, lCountPulse1)
-                If Ret <> 0 Then
-                    SmcWGetErrorString(Ret, ErrorString)
-                    lblComment.Text = "SmcWCountEvent = " & Ret & " : " & ErrorString.ToString
-                    Exit Sub
-                End If
-            End If
-        End If
-    End Sub
+    '            bEventMode = CSMC_ENABLE
+    '            'ElseIf CheckBox2.Checked = False Then
+    '            '    bEventMode = CSMC_DISABLE
+
+
+    '            '----------------------------------
+    '            ' Set Event for Encoder to Driver
+    '            '----------------------------------
+    '            Ret = SmcWCountEvent(Id, AxisNo, Me.Handle.ToInt32, bEventMode, CSMC_ENCODER, lCountPulse1)
+    '            If Ret <> 0 Then
+    '                SmcWGetErrorString(Ret, ErrorString)
+    '                lblComment.Text = "SmcWCountEvent = " & Ret & " : " & ErrorString.ToString
+    '                Exit Sub
+    '            End If
+    '        End If
+    '    End If
+    'End Sub
 
     Private Sub RadioButton4_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton4.CheckedChanged
         '
@@ -837,6 +839,8 @@ Public Class MotorCtl
                         'RadioButton3.Checked = False
 
                     Case Else  ' 電圧制御
+                        InitialPulse = lOutPulse
+                        InitialDisp = lOutDisp
                         PointI2 = 1
                         ControlChNo = SControlNo - 1
                         lDistanceDisp = LoadPoint2(PointI2)
@@ -973,15 +977,18 @@ Public Class MotorCtl
                     Dim StopFlag As Boolean = False
                     If StartDir = 0 Then
                         If AIOMean(ControlChNo) >= lDistanceDisp Then
-                            Arrive = True
+                            'Arrive = True
                             StopFlag = True
                         End If
                     Else
                         If AIOMean(ControlChNo) <= lDistanceDisp Then
                             StopFlag = True
-                            Arrive = True
+                            'Arrive = True
                         End If
                     End If
+
+
+
                     If StopFlag Then
                         Ret = SmcWMotionStop(Id, AxisNo)
                         If Ret <> 0 Then
@@ -989,19 +996,44 @@ Public Class MotorCtl
                             lblComment.Text = "SmcWMotionStop = " & Ret & " : " & ErrorString.ToString
                             Exit Sub
                         End If
-                        'Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
-                        'If Ret <> 0 Then
-                        '    SmcWGetErrorString(Ret, ErrorString)
-                        '    lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
-                        '    'Exit Sub
-                        ''End If
-                        ''Arive = True
-                        'NextFlag = True
+
                         NextLoad()
-                    Else
-                        'Arrive = False
-                        'NextLoad()
+
                     End If
+
+                    If SpeedControlCheckBox.Checked = True Then
+                        If Delta1 > 0 Then
+                            Select Case Abs(lDistanceDisp - AIOMean(ControlChNo))
+                                Case <= Delta1 * (1 - DeceleratePoint3)
+
+                                    Dim TargetSpeed1 As Double = Int(SpeedPanel1.SetSpeed * DecelerateRate3 / CC)
+
+                                    Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed1)
+                                    Ret = SmcWSetAccelTime(Id, AxisNo, 0)
+                                    Ret = SmcWSetMotionChangeReady(Id, AxisNo, 4)
+                                    Ret = SmcWMotionChange(Id, AxisNo)
+
+                                Case <= Delta1 * (1 - DeceleratePoint2)
+
+                                    Dim TargetSpeed1 As Double = Int(SpeedPanel1.SetSpeed * DecelerateRate2 / CC)
+
+                                    Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed1)
+                                    Ret = SmcWSetAccelTime(Id, AxisNo, 0)
+                                    Ret = SmcWSetMotionChangeReady(Id, AxisNo, 4)
+                                    Ret = SmcWMotionChange(Id, AxisNo)
+
+                                Case <= Delta1 * (1 - DeceleratePoint1)
+
+                                    Dim TargetSpeed1 As Double = Int(SpeedPanel1.SetSpeed * DecelerateRate1 / CC)
+
+                                    Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed1)
+                                    Ret = SmcWSetAccelTime(Id, AxisNo, 0)
+                                    Ret = SmcWSetMotionChangeReady(Id, AxisNo, 4)
+                                    Ret = SmcWMotionChange(Id, AxisNo)
+                            End Select
+                        End If
+                    End If
+
                 End If
         End Select
 
@@ -1034,10 +1066,10 @@ Public Class MotorCtl
 
         TypeComboBox1.Enabled = False
         EventCheckBox.Enabled = False
-        CheckBox2.Enabled = False
+        SpeedControlCheckBox.Enabled = False
 
         txtDistance.Enabled = False
-        TextBox1.Enabled = False
+        'TextBox1.Enabled = False
 
         Chart.Button_Enabled = False
         LoadGraph1.Button_Enabled = False
@@ -1072,10 +1104,10 @@ Public Class MotorCtl
 
         TypeComboBox1.Enabled = True
         EventCheckBox.Enabled = True
-        CheckBox2.Enabled = True
+        SpeedControlCheckBox.Enabled = True
 
         txtDistance.Enabled = True
-        TextBox1.Enabled = True
+        'TextBox1.Enabled = True
 
         Chart.Button_Enabled = True
         LoadGraph1.Button_Enabled = True
@@ -1254,8 +1286,8 @@ Public Class MotorCtl
 
                 Select Case SControlNo
                     Case 0  ' ストローク制御
-                        InitialPulse = lOutPulse
-                        InitialDisp = lOutDisp
+                        'InitialPulse = lOutPulse
+                        'InitialDisp = lOutDisp
                         'DestinationLabel.Text = Format(InitialDisp)
                         PointI2 = 1
                         lDistanceDisp = InitialDisp + LoadPoint2(PointI2)

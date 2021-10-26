@@ -42,22 +42,22 @@ Public Class LoadGraph
 
         PictureBox1 = New PictureBox
         With PictureBox1
-            .Location = New Point(90, 25)
-            .Size = New Size(300, 300)
+            .Location = New Point(10, 51)
+            .Size = New Size(245, 270)
             .BorderStyle = BorderStyle.Fixed3D
         End With
         MyBase.Controls.Add(PictureBox1)
 
         DrawButton = New Button
         With DrawButton
-            .Location = New Point(10, 25)
+            .Location = New Point(10, 21)
             .Size = New Size(74, 27)
             .Text = "作図"
         End With
         AddHandler DrawButton.Click, AddressOf DrawButton_Click
         MyBase.Controls.Add(DrawButton)
 
-        MyBase.Size = New Size(PictureBox1.Width + 110, PictureBox1.Height + 40)
+        MyBase.Size = New Size(PictureBox1.Width + 20, PictureBox1.Height + 70)
 
 
     End Sub

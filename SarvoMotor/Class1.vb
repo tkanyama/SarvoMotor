@@ -231,12 +231,12 @@ Class LoadScedule
             '列数・行数を指定
             '.ColumnCount = 8
             '.RowCount = 1
-            Const CellW As Integer = 80
+            Const CellW As Integer = 70
 
             .Width = CellW * 5 + 95
             .Height = 270
 
-
+            DataGridView1.ColumnHeadersHeight = 36
 
             '列名を指定
 
@@ -246,7 +246,7 @@ Class LoadScedule
                 .HeaderText = "有効"
                 .HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
                 .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
-                .Width = 50
+                .Width = 40
             End With
             .Columns.Add(Col1)
 
@@ -267,7 +267,7 @@ Class LoadScedule
                 For i As Integer = 0 To AIOMaxCh - 1
                     .Items.Add("Ch" + Format(i))
                 Next
-                .Width = CellW
+                .Width = CellW + 10
                 .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             End With
             .Columns.Add(Col2)

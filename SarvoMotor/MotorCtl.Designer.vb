@@ -23,13 +23,11 @@ Partial Class MotorCtl
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.SpeedControlCheckBox = New System.Windows.Forms.CheckBox()
         Me.SpaceKeyLabel = New System.Windows.Forms.Label()
         Me.EnterKeyLabel = New System.Windows.Forms.Label()
         Me.KeyTextBox = New System.Windows.Forms.TextBox()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.EventCheckBox = New System.Windows.Forms.CheckBox()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.lblComment = New System.Windows.Forms.Label()
         Me.txtDistance = New System.Windows.Forms.TextBox()
@@ -56,7 +54,6 @@ Partial Class MotorCtl
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.FormsPlot1 = New ScottPlot.FormsPlot()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.Text_ErrorString = New System.Windows.Forms.Label()
         Me.AIODataTextBox = New System.Windows.Forms.Label()
@@ -72,13 +69,11 @@ Partial Class MotorCtl
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.SpeedControlCheckBox)
         Me.GroupBox1.Controls.Add(Me.SpaceKeyLabel)
         Me.GroupBox1.Controls.Add(Me.EnterKeyLabel)
         Me.GroupBox1.Controls.Add(Me.KeyTextBox)
-        Me.GroupBox1.Controls.Add(Me.TextBox1)
-        Me.GroupBox1.Controls.Add(Me.CheckBox2)
         Me.GroupBox1.Controls.Add(Me.EventCheckBox)
-        Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.Label3)
         Me.GroupBox1.Controls.Add(Me.lblComment)
         Me.GroupBox1.Controls.Add(Me.txtDistance)
@@ -97,6 +92,16 @@ Partial Class MotorCtl
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "ピストン操作"
+        '
+        'SpeedControlCheckBox
+        '
+        Me.SpeedControlCheckBox.AutoSize = True
+        Me.SpeedControlCheckBox.Location = New System.Drawing.Point(170, 209)
+        Me.SpeedControlCheckBox.Name = "SpeedControlCheckBox"
+        Me.SpeedControlCheckBox.Size = New System.Drawing.Size(110, 19)
+        Me.SpeedControlCheckBox.TabIndex = 14
+        Me.SpeedControlCheckBox.Text = "目標値減速調整"
+        Me.SpeedControlCheckBox.UseVisualStyleBackColor = True
         '
         'SpaceKeyLabel
         '
@@ -124,23 +129,6 @@ Partial Class MotorCtl
         Me.KeyTextBox.Size = New System.Drawing.Size(38, 38)
         Me.KeyTextBox.TabIndex = 12
         '
-        'TextBox1
-        '
-        Me.TextBox1.Location = New System.Drawing.Point(238, 207)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(100, 23)
-        Me.TextBox1.TabIndex = 11
-        '
-        'CheckBox2
-        '
-        Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(124, 209)
-        Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(100, 19)
-        Me.CheckBox2.TabIndex = 10
-        Me.CheckBox2.Text = "Counter Event"
-        Me.CheckBox2.UseVisualStyleBackColor = True
-        '
         'EventCheckBox
         '
         Me.EventCheckBox.AutoSize = True
@@ -150,15 +138,6 @@ Partial Class MotorCtl
         Me.EventCheckBox.TabIndex = 9
         Me.EventCheckBox.Text = "Stop Event"
         Me.EventCheckBox.UseVisualStyleBackColor = True
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(338, 210)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(27, 15)
-        Me.Label4.TabIndex = 8
-        Me.Label4.Text = "mm"
         '
         'Label3
         '
@@ -433,15 +412,6 @@ Partial Class MotorCtl
         Me.Label5.TabIndex = 17
         Me.Label5.Text = "Press 'F1' or 'S' key Then Speed Input Dialog"
         '
-        'FormsPlot1
-        '
-        Me.FormsPlot1.BackColor = System.Drawing.Color.Transparent
-        Me.FormsPlot1.Location = New System.Drawing.Point(860, 12)
-        Me.FormsPlot1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.FormsPlot1.Name = "FormsPlot1"
-        Me.FormsPlot1.Size = New System.Drawing.Size(211, 297)
-        Me.FormsPlot1.TabIndex = 18
-        '
         'GroupBox4
         '
         Me.GroupBox4.Controls.Add(Me.Text_ErrorString)
@@ -450,7 +420,7 @@ Partial Class MotorCtl
         Me.GroupBox4.Controls.Add(Me.ComboBox1)
         Me.GroupBox4.Controls.Add(Me.Button1)
         Me.GroupBox4.Controls.Add(Me.AIOCheckBox)
-        Me.GroupBox4.Location = New System.Drawing.Point(683, 12)
+        Me.GroupBox4.Location = New System.Drawing.Point(685, 12)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(170, 296)
         Me.GroupBox4.TabIndex = 19
@@ -518,7 +488,6 @@ Partial Class MotorCtl
         Me.ClientSize = New System.Drawing.Size(1084, 681)
         Me.ControlBox = False
         Me.Controls.Add(Me.GroupBox4)
-        Me.Controls.Add(Me.FormsPlot1)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
@@ -554,13 +523,10 @@ Partial Class MotorCtl
     Friend WithEvents RadioButton2 As RadioButton
     Friend WithEvents RadioButton1 As RadioButton
     Friend WithEvents Label3 As Label
-    Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents CheckBox2 As CheckBox
     Friend WithEvents EventCheckBox As CheckBox
     Friend WithEvents RadioButton4 As RadioButton
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents RadioButton5 As RadioButton
-    Friend WithEvents Label4 As Label
     Friend WithEvents TestStartButton As Button
     Friend WithEvents DestinationLabel As Label
     Friend WithEvents GroupBox3 As GroupBox
@@ -575,7 +541,6 @@ Partial Class MotorCtl
     Friend WithEvents SpaceKeyLabel As Label
     Friend WithEvents EnterKeyLabel As Label
     Friend WithEvents Label5 As Label
-    Friend WithEvents FormsPlot1 As ScottPlot.FormsPlot
     Friend WithEvents GroupBox4 As GroupBox
     Friend WithEvents AIOCheckBox As CheckBox
     Friend WithEvents Button1 As Button
@@ -583,4 +548,5 @@ Partial Class MotorCtl
     Friend WithEvents AIODataTextBox As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents Text_ErrorString As Label
+    Friend WithEvents SpeedControlCheckBox As CheckBox
 End Class
