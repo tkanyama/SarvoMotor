@@ -241,7 +241,7 @@ Module [Global]
 	Public AiData(256) As Single
 
 	Public Const RealTimeTimer1_IntTime = 50
-	Public Const KBDFocusTimer_IntTime = 500
+	Public Const KBDFocusTimer_IntTime = 1000
 
 	Public Const DeceleratePoint1 = 0.95
 	Public Const DeceleratePoint2 = 0.97

@@ -2,9 +2,15 @@
 Imports System.Math
 
 Public Class LoadGraph
+    '============================================================================================
+    '
+    '   加力スケジュールグラフを表示するクラス 
+    '
+    '============================================================================================
+
     Inherits GroupBox
 
-    Dim g As Graphics
+    Dim graph1 As Graphics
     Dim canvas As Bitmap
 
     Private PictureBox1 As PictureBox
@@ -12,10 +18,10 @@ Public Class LoadGraph
 
     Dim Valid As Boolean
     Dim SControl As String
-    'Dim StartPoint As Double
+
     Dim PeakP As Double
     Dim PeakM As Double
-    'Dim EndPoint As Double
+
     Dim Delta As Double
     Dim RepeatN As Integer
     Dim RowIndex1 As Integer
@@ -109,7 +115,7 @@ Public Class LoadGraph
                     End If
                     canvas = New Bitmap(PictureBox1.Width, PictureBox1.Height)
                     'ImageオブジェクトのGraphicsオブジェクトを作成する
-                    g = Graphics.FromImage(canvas)
+                    graph1 = Graphics.FromImage(canvas)
 
 
                     GXsize = PictureBox1.Width
@@ -146,21 +152,21 @@ Public Class LoadGraph
                     Dim AxisX(1) As PointF
                     AxisX(0) = TransPoint(New PointF(0, 0))
                     AxisX(1) = TransPoint(New PointF(Xmax, 0))
-                    g.DrawLines(blackPen1, AxisX)
+                    graph1.DrawLines(blackPen1, AxisX)
 
                     If Kataburi Then
                         If PeakP > 0 Then
                             Dim AxisY(1) As PointF
                             AxisY(0) = TransPoint(New PointF(0, Ymax))
                             AxisY(1) = TransPoint(New PointF(0, 0))
-                            g.DrawLines(blackPen1, AxisY)
+                            graph1.DrawLines(blackPen1, AxisY)
 
                             Dim GrayPen1 As New Pen(Color.LightGray, 0.5)
                             GrayPen1.DashStyle = Drawing2D.DashStyle.Dash
                             Dim AxisYmax(1) As PointF
                             AxisYmax(0) = TransPoint(New PointF(0, Ymax))
                             AxisYmax(1) = TransPoint(New PointF(Xmax, Ymax))
-                            g.DrawLines(GrayPen1, AxisYmax)
+                            graph1.DrawLines(GrayPen1, AxisYmax)
                             'Dim AxisYmin(1) As Point
                             'AxisYmin(0) = TransPoint(New Point(0, -Ymax))
                             'AxisYmin(1) = TransPoint(New Point(Xmax, -Ymax))
@@ -171,8 +177,8 @@ Public Class LoadGraph
                             fmt.Alignment = StringAlignment.Far
                             fmt.LineAlignment = StringAlignment.Center
                             '文字列を位置(0,0)、黒色で表示
-                            g.DrawString(Format(Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, Ymax)), fmt)
-                            g.DrawString(Format(0), fnt, Brushes.Black, TransPoint(New PointF(0, 0)), fmt)
+                            graph1.DrawString(Format(Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, Ymax)), fmt)
+                            graph1.DrawString(Format(0), fnt, Brushes.Black, TransPoint(New PointF(0, 0)), fmt)
                             'g.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New Point(0, -Ymax)), fmt)
 
                             If Delta > 0 Then
@@ -183,7 +189,7 @@ Public Class LoadGraph
                                     If ygrid >= Ymax Then Exit Do
                                     gridLind(0) = TransPoint(New PointF(0, ygrid))
                                     gridLind(1) = TransPoint(New PointF(Xmax, ygrid))
-                                    g.DrawLines(GrayPen1, gridLind)
+                                    graph1.DrawLines(GrayPen1, gridLind)
                                     'gridLind(0) = TransPoint(New PointF(0, -ygrid))
                                     'gridLind(1) = TransPoint(New PointF(Xmax, -ygrid))
                                     'g.DrawLines(GrayPen1, gridLind)
@@ -193,7 +199,7 @@ Public Class LoadGraph
                             Dim AxisY(1) As PointF
                             AxisY(0) = TransPoint(New PointF(0, -Ymax))
                             AxisY(1) = TransPoint(New PointF(0, 0))
-                            g.DrawLines(blackPen1, AxisY)
+                            graph1.DrawLines(blackPen1, AxisY)
 
                             Dim GrayPen1 As New Pen(Color.LightGray, 0.5)
                             GrayPen1.DashStyle = Drawing2D.DashStyle.Dash
@@ -204,7 +210,7 @@ Public Class LoadGraph
                             Dim AxisYmin(1) As PointF
                             AxisYmin(0) = TransPoint(New PointF(0, -Ymax))
                             AxisYmin(1) = TransPoint(New PointF(Xmax, -Ymax))
-                            g.DrawLines(GrayPen1, AxisYmin)
+                            graph1.DrawLines(GrayPen1, AxisYmin)
 
                             Dim fnt As New Font("MS UI Gothic", 8)
                             Dim fmt As New StringFormat
@@ -212,8 +218,8 @@ Public Class LoadGraph
                             fmt.LineAlignment = StringAlignment.Center
                             '文字列を位置(0,0)、黒色で表示
                             'g.DrawString(Format(Ymax), fnt, Brushes.Black, TransPointF(New Point(0, Ymax)), fmt)
-                            g.DrawString(Format(0), fnt, Brushes.Black, TransPoint(New PointF(0, 0)), fmt)
-                            g.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, -Ymax)), fmt)
+                            graph1.DrawString(Format(0), fnt, Brushes.Black, TransPoint(New PointF(0, 0)), fmt)
+                            graph1.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, -Ymax)), fmt)
 
                             If Delta > 0 Then
                                 Dim ygrid As Double = 0
@@ -226,7 +232,7 @@ Public Class LoadGraph
                                     'g.DrawLines(GrayPen1, gridLind)
                                     gridLind(0) = TransPoint(New PointF(0, -ygrid))
                                     gridLind(1) = TransPoint(New PointF(Xmax, -ygrid))
-                                    g.DrawLines(GrayPen1, gridLind)
+                                    graph1.DrawLines(GrayPen1, gridLind)
                                 Loop
                             End If
 
@@ -236,27 +242,27 @@ Public Class LoadGraph
                         Dim AxisY(1) As PointF
                         AxisY(0) = TransPoint(New PointF(0, Ymax))
                         AxisY(1) = TransPoint(New PointF(0, -Ymax))
-                        g.DrawLines(blackPen1, AxisY)
+                        graph1.DrawLines(blackPen1, AxisY)
 
                         Dim GrayPen1 As New Pen(Color.LightGray, 0.5)
                         GrayPen1.DashStyle = Drawing2D.DashStyle.Dash
                         Dim AxisYmax(1) As PointF
                         AxisYmax(0) = TransPoint(New PointF(0, Ymax))
                         AxisYmax(1) = TransPoint(New PointF(Xmax, Ymax))
-                        g.DrawLines(GrayPen1, AxisYmax)
+                        graph1.DrawLines(GrayPen1, AxisYmax)
                         Dim AxisYmin(1) As PointF
                         AxisYmin(0) = TransPoint(New PointF(0, -Ymax))
                         AxisYmin(1) = TransPoint(New PointF(Xmax, -Ymax))
-                        g.DrawLines(GrayPen1, AxisYmin)
+                        graph1.DrawLines(GrayPen1, AxisYmin)
 
                         Dim fnt As New Font("MS UI Gothic", 8)
                         Dim fmt As New StringFormat
                         fmt.Alignment = StringAlignment.Far
                         fmt.LineAlignment = StringAlignment.Center
                         '文字列を位置(0,0)、黒色で表示
-                        g.DrawString(Format(Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, Ymax)), fmt)
-                        g.DrawString(Format(0), fnt, Brushes.Black, TransPoint(New PointF(0, 0)), fmt)
-                        g.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, -Ymax)), fmt)
+                        graph1.DrawString(Format(Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, Ymax)), fmt)
+                        graph1.DrawString(Format(0), fnt, Brushes.Black, TransPoint(New PointF(0, 0)), fmt)
+                        graph1.DrawString(Format(-Ymax), fnt, Brushes.Black, TransPoint(New PointF(0, -Ymax)), fmt)
 
                         If Delta > 0 Then
                             Dim ygrid As Double = 0
@@ -266,10 +272,10 @@ Public Class LoadGraph
                                 If ygrid >= Ymax Then Exit Do
                                 gridLind(0) = TransPoint(New PointF(0, ygrid))
                                 gridLind(1) = TransPoint(New PointF(Xmax, ygrid))
-                                g.DrawLines(GrayPen1, gridLind)
+                                graph1.DrawLines(GrayPen1, gridLind)
                                 gridLind(0) = TransPoint(New PointF(0, -ygrid))
                                 gridLind(1) = TransPoint(New PointF(Xmax, -ygrid))
-                                g.DrawLines(GrayPen1, gridLind)
+                                graph1.DrawLines(GrayPen1, gridLind)
                             Loop
                         End If
 
@@ -383,7 +389,7 @@ Public Class LoadGraph
                     Next
 
                     Dim GreenPen3 As New Pen(Color.Green, 2)
-                    g.DrawLines(GreenPen3, P)
+                    graph1.DrawLines(GreenPen3, P)
 
                     If PStep > 0 And PointN2 > 0 Then
                         Dim P2(PStep) As PointF
@@ -391,13 +397,13 @@ Public Class LoadGraph
                             P2(i) = TransPoint(New PointF(LoadX(i), LoadPoint2(i)))
                         Next
                         Dim RedPen3 As New Pen(Color.Red, 3)
-                        g.DrawLines(RedPen3, P2)
+                        graph1.DrawLines(RedPen3, P2)
                     End If
 
 
 
                     'リソースを解放する
-                    g.Dispose()
+                    graph1.Dispose()
                     'PictureBox1に表示する
                     PictureBox1.Image = canvas
 
@@ -410,8 +416,8 @@ Public Class LoadGraph
 
     Private Function TransPoint(ByVal P1 As PointF) As PointF
         Dim P2 As PointF
-        P2.X = Int(P1.X * Xc + XOffSet)
-        P2.Y = Int(P1.Y * Yc + YOffSet)
+        P2.X = P1.X * Xc + XOffSet
+        P2.Y = P1.Y * Yc + YOffSet
         Return P2
     End Function
 

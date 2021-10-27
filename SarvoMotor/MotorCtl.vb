@@ -180,17 +180,17 @@ Public Class MotorCtl
         KeyTextBox.Select()     ' 常にKeyTextBoxをフォーカスする
         KeyTextBox.Text = ""
 
-        If TestStartFlag Then
-            Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
-            If Ret = 0 Then
+        'If TestStartFlag Then
+        '    Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
+        '    If Ret = 0 Then
 
-                If bStopSts1 = 0 Then
-                    TestStartButton.Enabled = False
-                Else
-                    TestStartButton.Enabled = True
-                End If
-            End If
-        End If
+        '        If bStopSts1 = 0 Then
+        '            TestStartButton.Enabled = False
+        '        Else
+        '            TestStartButton.Enabled = True
+        '        End If
+        '    End If
+        'End If
 
     End Sub
 
@@ -759,6 +759,7 @@ Public Class MotorCtl
         '
         '   「試験開始」ボタンの処理
         '
+        'KBDFocusTimer.Enabled = False
 
         If PointN > 0 Then
             If TestStartFlag = False Then
@@ -848,19 +849,25 @@ Public Class MotorCtl
 
             Else
                 ' 試験モードを終了
-                If AIOStartFlag = True Then
-                    AIOStartFlag = False
-                    Ret = AioExit(AIOId)
-                    If Ret <> 0 Then
-                        Ret2 = AioGetErrorString(Ret, ErrorString)
-                        Text_ErrorString.Text = "AioExit = " & Ret & " : " & ErrorString.ToString()
-                        Exit Sub
+                Dim result As DialogResult = MessageBox.Show("本当に試験を終了しますか？", "確認", MessageBoxButtons.YesNo)
+                If result = DialogResult.Yes Then
+
+                    If AIOStartFlag = True Then
+                        AIOStartFlag = False
+                        Ret = AioExit(AIOId)
+                        If Ret <> 0 Then
+                            Ret2 = AioGetErrorString(Ret, ErrorString)
+                            Text_ErrorString.Text = "AioExit = " & Ret & " : " & ErrorString.ToString()
+                            Exit Sub
+                        End If
+
+                        Text_ErrorString.Text = "終了処理 : 正常終了"
                     End If
 
-                    Text_ErrorString.Text = "終了処理 : 正常終了"
+                    TestStopView()
                 End If
 
-                TestStopView()
+
 
             End If
 
@@ -874,6 +881,7 @@ Public Class MotorCtl
                 MessageBoxIcon.Error)
         End If
 
+        'KBDFocusTimer.Enabled = True
 
     End Sub
 
@@ -1064,6 +1072,9 @@ Public Class MotorCtl
         Cltio1.Button_Enabled = False
 
         KeyHintLabel.Visible = True
+
+        KBDFocusTimer.Enabled = True
+
     End Sub
 
     Private Sub TestStopView()
@@ -1103,6 +1114,9 @@ Public Class MotorCtl
 
         TestStartButton.Enabled = True
         KeyHintLabel.Visible = False
+
+        KBDFocusTimer.Enabled = False
+
     End Sub
 
     Private Sub KeyTextBox1_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs)  ' Handles TextBox1.KeyDown
@@ -1352,15 +1366,15 @@ Public Class MotorCtl
             If bStopSts2 <> 0 Then
 
                 If TestStartFlag And SControlNo <> 0 Then
-                    Dim lOutPulse2 As Integer
-                    Ret = SmcWGetOutPulse(Id, AxisNo, lOutPulse2)
-                    If Ret <> 0 Then
-                        SmcWGetErrorString(Ret, ErrorString)
-                        lblComment.Text = "SmcWGetOutPulse = " & Ret & " : " & ErrorString.ToString
+                    'Dim lOutPulse2 As Integer
+                    'Ret = SmcWGetOutPulse(Id, AxisNo, lOutPulse2)
+                    'If Ret <> 0 Then
+                    '    SmcWGetErrorString(Ret, ErrorString)
+                    '    lblComment.Text = "SmcWGetOutPulse = " & Ret & " : " & ErrorString.ToString
 
-                    End If
+                    'End If
 
-                    Dim lDistance2 As Integer = lOutPulse2 + DeltaPulse
+                    'Dim lDistance2 As Integer = lOutPulse2 + DeltaPulse
                     '
                     '   モーターの動作パラメータの設定
                     '
@@ -1422,7 +1436,7 @@ Public Class MotorCtl
                         Exit Function
                     End If
 
-                    Ret = SmcWSetStopPosition(Id, AxisNo, 0, lDistance2)
+                    Ret = SmcWSetStopPosition(Id, AxisNo, 1, DeltaPulse)
                     If Ret <> 0 Then
                         SmcWGetErrorString(Ret, ErrorString)
                         lblComment.Text = "SmcWSetStopPosition = " & Ret & " : " & ErrorString.ToString
@@ -1453,6 +1467,16 @@ Public Class MotorCtl
                         MovePiston = False
                         Exit Function
                     End If
+
+                    Do
+                        Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts2)
+                        If Ret <> 0 Then
+                            SmcWGetErrorString(Ret, ErrorString)
+                            lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
+                            'Exit Sub
+                        End If
+                        If bStopSts2 <> 0 Then Exit Do
+                    Loop
                 End If
 
             End If
@@ -1496,11 +1520,15 @@ Public Class MotorCtl
 
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged_1(sender As Object, e As EventArgs) Handles PistonAdjustCheckBox.CheckedChanged
+    Private Sub PistonAdjustCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles PistonAdjustCheckBox.CheckedChanged
+        '
+        '   ピストン微調整チェックボックスの処理
+        '
         MinusAdjustButton1.Enabled = PistonAdjustCheckBox.Checked
         PlusAdjustButton1.Enabled = PistonAdjustCheckBox.Checked
         PlusAdjustButton2.Enabled = PistonAdjustCheckBox.Checked
         MinusAdjustButton2.Enabled = PistonAdjustCheckBox.Checked
+
     End Sub
 End Class
 
