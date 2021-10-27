@@ -1,7 +1,7 @@
 ﻿Public Class AIOSettingForm
     Private Sub AIOSettingForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        If AIOChNo = 0 Then AIOChNo = AIOMaxCh
+        'If AIOChNo = 0 Then AIOChNo = AIOMaxCh
 
         For i As Integer = 0 To AIOMaxCh - 1
             If AIOCheck(i) = Nothing Then AIOCheck(i) = True
@@ -65,7 +65,7 @@
             End With
             .Columns.Add(Col3)
 
-            For i As Integer = 0 To AIOChNo - 1
+            For i As Integer = 0 To AIOMaxCh - 1
                 .Rows.Add()
                 .CurrentCell = .Rows(i).Cells(0)
                 .CurrentRow.Cells(0).Value = AIOCheck(i)

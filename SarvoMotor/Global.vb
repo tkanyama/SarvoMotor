@@ -211,7 +211,7 @@ Module [Global]
 	Public LoadDir2() As Double     ' 加力方向
 	Public LoadX() As Double        ' 分割された加力目標値のX座標
 	Public Delta1 As Double         ' 分割の増分値
-	Public Chart As LoadScedule     ' 加力スケジュールの表
+	Public LoadChart1 As LoadChart     ' 加力スケジュールの表
 	Public LoadGraph1 As LoadGraph  ' 加力スケジュールのグラフ
 	Public TestStartFlag As Boolean ' 試験時フラグ（True:試験時）
 	Public SControlNo As Integer    ' 制御番号(0:変位制御、1:荷重制御)
@@ -231,7 +231,7 @@ Module [Global]
 	Public AIOUnit(AIOMaxCh - 1) As String
 
 	Public ControlChNo As Integer
-	Public AIOChNo As Integer
+	'Public AIOChNo As Integer
 	Public AIOStartFlag As Boolean
 	Public AIOId As Short
 	Public AIOData(AIOMaxCh - 1) As Double
@@ -240,8 +240,8 @@ Module [Global]
 	Public MeanDataNo As Integer
 	Public AiData(256) As Single
 
-	Public Const Timer1_IntTime = 50
-	Public Const Timer2_IntTime = 500
+	Public Const RealTimeTimer1_IntTime = 50
+	Public Const KBDFocusTimer_IntTime = 500
 
 	Public Const DeceleratePoint1 = 0.95
 	Public Const DeceleratePoint2 = 0.97

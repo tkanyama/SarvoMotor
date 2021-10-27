@@ -23,30 +23,30 @@ Partial Class MotorCtl
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Button4 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.PlusAdjustButton2 = New System.Windows.Forms.Button()
+        Me.PlusAdjustButton1 = New System.Windows.Forms.Button()
         Me.SpeedControlCheckBox = New System.Windows.Forms.CheckBox()
-        Me.Button5 = New System.Windows.Forms.Button()
+        Me.MinusAdjustButton2 = New System.Windows.Forms.Button()
         Me.SpaceKeyLabel = New System.Windows.Forms.Label()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.MinusAdjustButton1 = New System.Windows.Forms.Button()
         Me.EnterKeyLabel = New System.Windows.Forms.Label()
         Me.KeyTextBox = New System.Windows.Forms.TextBox()
         Me.EventCheckBox = New System.Windows.Forms.CheckBox()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Unit_Label = New System.Windows.Forms.Label()
         Me.lblComment = New System.Windows.Forms.Label()
         Me.txtDistance = New System.Windows.Forms.TextBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.TypeComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.Coordinate_Label1 = New System.Windows.Forms.Label()
+        Me.Coordinate_Label2 = New System.Windows.Forms.Label()
+        Me.Coordinate_TypeComboBox1 = New System.Windows.Forms.ComboBox()
         Me.STOP_Button = New System.Windows.Forms.Button()
         Me.CCW_Button = New System.Windows.Forms.Button()
         Me.CW_Button = New System.Windows.Forms.Button()
-        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
+        Me.ORG_RadioButton3 = New System.Windows.Forms.RadioButton()
+        Me.JOG_RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.PTP_RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.PreModeRadioButton = New System.Windows.Forms.RadioButton()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.RadioButton5 = New System.Windows.Forms.RadioButton()
+        Me.TestModeRadioButton = New System.Windows.Forms.RadioButton()
         Me.TestStartButton = New System.Windows.Forms.Button()
         Me.DestinationLabel = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
@@ -57,15 +57,15 @@ Partial Class MotorCtl
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
+        Me.KeyHintLabel = New System.Windows.Forms.Label()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.Text_ErrorString = New System.Windows.Forms.Label()
         Me.AIODataTextBox = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.MeanSampleNComboBox = New System.Windows.Forms.ComboBox()
+        Me.AIOSettingButton = New System.Windows.Forms.Button()
         Me.AIOCheckBox = New System.Windows.Forms.CheckBox()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.PistonAdjustCheckBox = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -74,28 +74,28 @@ Partial Class MotorCtl
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.CheckBox1)
-        Me.GroupBox1.Controls.Add(Me.Button4)
-        Me.GroupBox1.Controls.Add(Me.Button3)
+        Me.GroupBox1.Controls.Add(Me.PistonAdjustCheckBox)
+        Me.GroupBox1.Controls.Add(Me.PlusAdjustButton2)
+        Me.GroupBox1.Controls.Add(Me.PlusAdjustButton1)
         Me.GroupBox1.Controls.Add(Me.SpeedControlCheckBox)
-        Me.GroupBox1.Controls.Add(Me.Button5)
+        Me.GroupBox1.Controls.Add(Me.MinusAdjustButton2)
         Me.GroupBox1.Controls.Add(Me.SpaceKeyLabel)
-        Me.GroupBox1.Controls.Add(Me.Button2)
+        Me.GroupBox1.Controls.Add(Me.MinusAdjustButton1)
         Me.GroupBox1.Controls.Add(Me.EnterKeyLabel)
         Me.GroupBox1.Controls.Add(Me.KeyTextBox)
         Me.GroupBox1.Controls.Add(Me.EventCheckBox)
-        Me.GroupBox1.Controls.Add(Me.Label3)
+        Me.GroupBox1.Controls.Add(Me.Unit_Label)
         Me.GroupBox1.Controls.Add(Me.lblComment)
         Me.GroupBox1.Controls.Add(Me.txtDistance)
-        Me.GroupBox1.Controls.Add(Me.Label1)
-        Me.GroupBox1.Controls.Add(Me.Label2)
-        Me.GroupBox1.Controls.Add(Me.TypeComboBox1)
+        Me.GroupBox1.Controls.Add(Me.Coordinate_Label1)
+        Me.GroupBox1.Controls.Add(Me.Coordinate_Label2)
+        Me.GroupBox1.Controls.Add(Me.Coordinate_TypeComboBox1)
         Me.GroupBox1.Controls.Add(Me.STOP_Button)
         Me.GroupBox1.Controls.Add(Me.CCW_Button)
         Me.GroupBox1.Controls.Add(Me.CW_Button)
-        Me.GroupBox1.Controls.Add(Me.RadioButton3)
-        Me.GroupBox1.Controls.Add(Me.RadioButton2)
-        Me.GroupBox1.Controls.Add(Me.RadioButton1)
+        Me.GroupBox1.Controls.Add(Me.ORG_RadioButton3)
+        Me.GroupBox1.Controls.Add(Me.JOG_RadioButton2)
+        Me.GroupBox1.Controls.Add(Me.PTP_RadioButton1)
         Me.GroupBox1.Location = New System.Drawing.Point(160, 12)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(380, 297)
@@ -105,21 +105,21 @@ Partial Class MotorCtl
         '
         'Button4
         '
-        Me.Button4.Location = New System.Drawing.Point(323, 36)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(40, 21)
-        Me.Button4.TabIndex = 20
-        Me.Button4.Text = ">>"
-        Me.Button4.UseVisualStyleBackColor = True
+        Me.PlusAdjustButton2.Location = New System.Drawing.Point(323, 36)
+        Me.PlusAdjustButton2.Name = "Button4"
+        Me.PlusAdjustButton2.Size = New System.Drawing.Size(40, 21)
+        Me.PlusAdjustButton2.TabIndex = 20
+        Me.PlusAdjustButton2.Text = ">>"
+        Me.PlusAdjustButton2.UseVisualStyleBackColor = True
         '
         'Button3
         '
-        Me.Button3.Location = New System.Drawing.Point(271, 36)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(40, 21)
-        Me.Button3.TabIndex = 20
-        Me.Button3.Text = ">"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.PlusAdjustButton1.Location = New System.Drawing.Point(271, 36)
+        Me.PlusAdjustButton1.Name = "Button3"
+        Me.PlusAdjustButton1.Size = New System.Drawing.Size(40, 21)
+        Me.PlusAdjustButton1.TabIndex = 20
+        Me.PlusAdjustButton1.Text = ">"
+        Me.PlusAdjustButton1.UseVisualStyleBackColor = True
         '
         'SpeedControlCheckBox
         '
@@ -133,12 +133,12 @@ Partial Class MotorCtl
         '
         'Button5
         '
-        Me.Button5.Location = New System.Drawing.Point(167, 36)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(40, 21)
-        Me.Button5.TabIndex = 20
-        Me.Button5.Text = "<<"
-        Me.Button5.UseVisualStyleBackColor = True
+        Me.MinusAdjustButton2.Location = New System.Drawing.Point(167, 36)
+        Me.MinusAdjustButton2.Name = "Button5"
+        Me.MinusAdjustButton2.Size = New System.Drawing.Size(40, 21)
+        Me.MinusAdjustButton2.TabIndex = 20
+        Me.MinusAdjustButton2.Text = "<<"
+        Me.MinusAdjustButton2.UseVisualStyleBackColor = True
         '
         'SpaceKeyLabel
         '
@@ -151,12 +151,12 @@ Partial Class MotorCtl
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(219, 36)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(40, 21)
-        Me.Button2.TabIndex = 20
-        Me.Button2.Text = "<"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.MinusAdjustButton1.Location = New System.Drawing.Point(219, 36)
+        Me.MinusAdjustButton1.Name = "Button2"
+        Me.MinusAdjustButton1.Size = New System.Drawing.Size(40, 21)
+        Me.MinusAdjustButton1.TabIndex = 20
+        Me.MinusAdjustButton1.Text = "<"
+        Me.MinusAdjustButton1.UseVisualStyleBackColor = True
         '
         'EnterKeyLabel
         '
@@ -187,12 +187,12 @@ Partial Class MotorCtl
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(336, 194)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(27, 15)
-        Me.Label3.TabIndex = 8
-        Me.Label3.Text = "mm"
+        Me.Unit_Label.AutoSize = True
+        Me.Unit_Label.Location = New System.Drawing.Point(336, 194)
+        Me.Unit_Label.Name = "Label3"
+        Me.Unit_Label.Size = New System.Drawing.Size(27, 15)
+        Me.Unit_Label.TabIndex = 8
+        Me.Unit_Label.Text = "mm"
         '
         'lblComment
         '
@@ -213,32 +213,32 @@ Partial Class MotorCtl
         '
         'Label1
         '
-        Me.Label1.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.Label1.Location = New System.Drawing.Point(139, 182)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(103, 30)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "目標値"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Coordinate_Label1.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.Coordinate_Label1.Location = New System.Drawing.Point(139, 182)
+        Me.Coordinate_Label1.Name = "Label1"
+        Me.Coordinate_Label1.Size = New System.Drawing.Size(103, 30)
+        Me.Coordinate_Label1.TabIndex = 3
+        Me.Coordinate_Label1.Text = "目標値"
+        Me.Coordinate_Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Label2
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.Label2.Location = New System.Drawing.Point(29, 157)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(77, 21)
-        Me.Label2.TabIndex = 6
-        Me.Label2.Text = "座標タイプ"
+        Me.Coordinate_Label2.AutoSize = True
+        Me.Coordinate_Label2.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.Coordinate_Label2.Location = New System.Drawing.Point(29, 157)
+        Me.Coordinate_Label2.Name = "Label2"
+        Me.Coordinate_Label2.Size = New System.Drawing.Size(77, 21)
+        Me.Coordinate_Label2.TabIndex = 6
+        Me.Coordinate_Label2.Text = "座標タイプ"
         '
         'TypeComboBox1
         '
-        Me.TypeComboBox1.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.TypeComboBox1.FormattingEnabled = True
-        Me.TypeComboBox1.Location = New System.Drawing.Point(14, 186)
-        Me.TypeComboBox1.Name = "TypeComboBox1"
-        Me.TypeComboBox1.Size = New System.Drawing.Size(105, 29)
-        Me.TypeComboBox1.TabIndex = 5
+        Me.Coordinate_TypeComboBox1.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.Coordinate_TypeComboBox1.FormattingEnabled = True
+        Me.Coordinate_TypeComboBox1.Location = New System.Drawing.Point(14, 186)
+        Me.Coordinate_TypeComboBox1.Name = "TypeComboBox1"
+        Me.Coordinate_TypeComboBox1.Size = New System.Drawing.Size(105, 29)
+        Me.Coordinate_TypeComboBox1.TabIndex = 5
         '
         'STOP_Button
         '
@@ -272,56 +272,56 @@ Partial Class MotorCtl
         '
         'RadioButton3
         '
-        Me.RadioButton3.AutoSize = True
-        Me.RadioButton3.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.RadioButton3.Location = New System.Drawing.Point(16, 92)
-        Me.RadioButton3.Name = "RadioButton3"
-        Me.RadioButton3.Size = New System.Drawing.Size(92, 25)
-        Me.RadioButton3.TabIndex = 0
-        Me.RadioButton3.TabStop = True
-        Me.RadioButton3.Text = "原点復帰"
-        Me.RadioButton3.UseVisualStyleBackColor = True
+        Me.ORG_RadioButton3.AutoSize = True
+        Me.ORG_RadioButton3.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.ORG_RadioButton3.Location = New System.Drawing.Point(16, 92)
+        Me.ORG_RadioButton3.Name = "RadioButton3"
+        Me.ORG_RadioButton3.Size = New System.Drawing.Size(92, 25)
+        Me.ORG_RadioButton3.TabIndex = 0
+        Me.ORG_RadioButton3.TabStop = True
+        Me.ORG_RadioButton3.Text = "原点復帰"
+        Me.ORG_RadioButton3.UseVisualStyleBackColor = True
         '
         'RadioButton2
         '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.RadioButton2.Location = New System.Drawing.Point(16, 62)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(92, 25)
-        Me.RadioButton2.TabIndex = 0
-        Me.RadioButton2.TabStop = True
-        Me.RadioButton2.Text = "連続運転"
-        Me.RadioButton2.UseVisualStyleBackColor = True
+        Me.JOG_RadioButton2.AutoSize = True
+        Me.JOG_RadioButton2.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.JOG_RadioButton2.Location = New System.Drawing.Point(16, 62)
+        Me.JOG_RadioButton2.Name = "RadioButton2"
+        Me.JOG_RadioButton2.Size = New System.Drawing.Size(92, 25)
+        Me.JOG_RadioButton2.TabIndex = 0
+        Me.JOG_RadioButton2.TabStop = True
+        Me.JOG_RadioButton2.Text = "連続運転"
+        Me.JOG_RadioButton2.UseVisualStyleBackColor = True
         '
         'RadioButton1
         '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.RadioButton1.Location = New System.Drawing.Point(16, 32)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(108, 25)
-        Me.RadioButton1.TabIndex = 0
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "目標値移動"
-        Me.RadioButton1.UseVisualStyleBackColor = True
+        Me.PTP_RadioButton1.AutoSize = True
+        Me.PTP_RadioButton1.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.PTP_RadioButton1.Location = New System.Drawing.Point(16, 32)
+        Me.PTP_RadioButton1.Name = "RadioButton1"
+        Me.PTP_RadioButton1.Size = New System.Drawing.Size(108, 25)
+        Me.PTP_RadioButton1.TabIndex = 0
+        Me.PTP_RadioButton1.TabStop = True
+        Me.PTP_RadioButton1.Text = "目標値移動"
+        Me.PTP_RadioButton1.UseVisualStyleBackColor = True
         '
         'RadioButton4
         '
-        Me.RadioButton4.AutoSize = True
-        Me.RadioButton4.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.RadioButton4.Location = New System.Drawing.Point(6, 22)
-        Me.RadioButton4.Name = "RadioButton4"
-        Me.RadioButton4.Size = New System.Drawing.Size(113, 25)
-        Me.RadioButton4.TabIndex = 12
-        Me.RadioButton4.TabStop = True
-        Me.RadioButton4.Text = "準備・片付け"
-        Me.RadioButton4.UseVisualStyleBackColor = True
+        Me.PreModeRadioButton.AutoSize = True
+        Me.PreModeRadioButton.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.PreModeRadioButton.Location = New System.Drawing.Point(6, 22)
+        Me.PreModeRadioButton.Name = "RadioButton4"
+        Me.PreModeRadioButton.Size = New System.Drawing.Size(113, 25)
+        Me.PreModeRadioButton.TabIndex = 12
+        Me.PreModeRadioButton.TabStop = True
+        Me.PreModeRadioButton.Text = "準備・片付け"
+        Me.PreModeRadioButton.UseVisualStyleBackColor = True
         '
         'GroupBox2
         '
-        Me.GroupBox2.Controls.Add(Me.RadioButton5)
-        Me.GroupBox2.Controls.Add(Me.RadioButton4)
+        Me.GroupBox2.Controls.Add(Me.TestModeRadioButton)
+        Me.GroupBox2.Controls.Add(Me.PreModeRadioButton)
         Me.GroupBox2.Location = New System.Drawing.Point(15, 12)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(125, 85)
@@ -331,15 +331,15 @@ Partial Class MotorCtl
         '
         'RadioButton5
         '
-        Me.RadioButton5.AutoSize = True
-        Me.RadioButton5.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.RadioButton5.Location = New System.Drawing.Point(6, 53)
-        Me.RadioButton5.Name = "RadioButton5"
-        Me.RadioButton5.Size = New System.Drawing.Size(60, 25)
-        Me.RadioButton5.TabIndex = 12
-        Me.RadioButton5.TabStop = True
-        Me.RadioButton5.Text = "試験"
-        Me.RadioButton5.UseVisualStyleBackColor = True
+        Me.TestModeRadioButton.AutoSize = True
+        Me.TestModeRadioButton.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
+        Me.TestModeRadioButton.Location = New System.Drawing.Point(6, 53)
+        Me.TestModeRadioButton.Name = "RadioButton5"
+        Me.TestModeRadioButton.Size = New System.Drawing.Size(60, 25)
+        Me.TestModeRadioButton.TabIndex = 12
+        Me.TestModeRadioButton.TabStop = True
+        Me.TestModeRadioButton.Text = "試験"
+        Me.TestModeRadioButton.UseVisualStyleBackColor = True
         '
         'TestStartButton
         '
@@ -451,20 +451,20 @@ Partial Class MotorCtl
         '
         'Label5
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(130, 312)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(237, 15)
-        Me.Label5.TabIndex = 17
-        Me.Label5.Text = "Press 'F1' or 'S' key Then Speed Input Dialog"
+        Me.KeyHintLabel.AutoSize = True
+        Me.KeyHintLabel.Location = New System.Drawing.Point(130, 312)
+        Me.KeyHintLabel.Name = "Label5"
+        Me.KeyHintLabel.Size = New System.Drawing.Size(237, 15)
+        Me.KeyHintLabel.TabIndex = 17
+        Me.KeyHintLabel.Text = "Press 'F1' or 'S' key Then Speed Input Dialog"
         '
         'GroupBox4
         '
         Me.GroupBox4.Controls.Add(Me.Text_ErrorString)
         Me.GroupBox4.Controls.Add(Me.AIODataTextBox)
         Me.GroupBox4.Controls.Add(Me.Label7)
-        Me.GroupBox4.Controls.Add(Me.ComboBox1)
-        Me.GroupBox4.Controls.Add(Me.Button1)
+        Me.GroupBox4.Controls.Add(Me.MeanSampleNComboBox)
+        Me.GroupBox4.Controls.Add(Me.AIOSettingButton)
         Me.GroupBox4.Controls.Add(Me.AIOCheckBox)
         Me.GroupBox4.Location = New System.Drawing.Point(685, 12)
         Me.GroupBox4.Name = "GroupBox4"
@@ -502,20 +502,20 @@ Partial Class MotorCtl
         '
         'ComboBox1
         '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(117, 44)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(39, 23)
-        Me.ComboBox1.TabIndex = 5
+        Me.MeanSampleNComboBox.FormattingEnabled = True
+        Me.MeanSampleNComboBox.Location = New System.Drawing.Point(117, 44)
+        Me.MeanSampleNComboBox.Name = "ComboBox1"
+        Me.MeanSampleNComboBox.Size = New System.Drawing.Size(39, 23)
+        Me.MeanSampleNComboBox.TabIndex = 5
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(16, 42)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(89, 26)
-        Me.Button1.TabIndex = 4
-        Me.Button1.Text = "電圧入力設定"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.AIOSettingButton.Location = New System.Drawing.Point(16, 42)
+        Me.AIOSettingButton.Name = "Button1"
+        Me.AIOSettingButton.Size = New System.Drawing.Size(89, 26)
+        Me.AIOSettingButton.TabIndex = 4
+        Me.AIOSettingButton.Text = "電圧入力設定"
+        Me.AIOSettingButton.UseVisualStyleBackColor = True
         '
         'AIOCheckBox
         '
@@ -529,13 +529,13 @@ Partial Class MotorCtl
         '
         'CheckBox1
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(168, 11)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(97, 19)
-        Me.CheckBox1.TabIndex = 21
-        Me.CheckBox1.Text = "ピストン微調整"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.PistonAdjustCheckBox.AutoSize = True
+        Me.PistonAdjustCheckBox.Location = New System.Drawing.Point(168, 11)
+        Me.PistonAdjustCheckBox.Name = "CheckBox1"
+        Me.PistonAdjustCheckBox.Size = New System.Drawing.Size(97, 19)
+        Me.PistonAdjustCheckBox.TabIndex = 21
+        Me.PistonAdjustCheckBox.Text = "ピストン微調整"
+        Me.PistonAdjustCheckBox.UseVisualStyleBackColor = True
         '
         'MotorCtl
         '
@@ -544,7 +544,7 @@ Partial Class MotorCtl
         Me.ClientSize = New System.Drawing.Size(1084, 681)
         Me.ControlBox = False
         Me.Controls.Add(Me.GroupBox4)
-        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.KeyHintLabel)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
@@ -568,21 +568,21 @@ Partial Class MotorCtl
 
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents lblComment As Label
-    Friend WithEvents Label2 As Label
-    Friend WithEvents TypeComboBox1 As ComboBox
+    Friend WithEvents Coordinate_Label2 As Label
+    Friend WithEvents Coordinate_TypeComboBox1 As ComboBox
     Friend WithEvents txtDistance As TextBox
-    Friend WithEvents Label1 As Label
+    Friend WithEvents Coordinate_Label1 As Label
     Friend WithEvents STOP_Button As Button
     Friend WithEvents CCW_Button As Button
     Friend WithEvents CW_Button As Button
-    Friend WithEvents RadioButton3 As RadioButton
-    Friend WithEvents RadioButton2 As RadioButton
-    Friend WithEvents RadioButton1 As RadioButton
-    Friend WithEvents Label3 As Label
+    Friend WithEvents ORG_RadioButton3 As RadioButton
+    Friend WithEvents JOG_RadioButton2 As RadioButton
+    Friend WithEvents PTP_RadioButton1 As RadioButton
+    Friend WithEvents Unit_Label As Label
     Friend WithEvents EventCheckBox As CheckBox
-    Friend WithEvents RadioButton4 As RadioButton
+    Friend WithEvents PreModeRadioButton As RadioButton
     Friend WithEvents GroupBox2 As GroupBox
-    Friend WithEvents RadioButton5 As RadioButton
+    Friend WithEvents TestModeRadioButton As RadioButton
     Friend WithEvents TestStartButton As Button
     Friend WithEvents DestinationLabel As Label
     Friend WithEvents GroupBox3 As GroupBox
@@ -596,18 +596,18 @@ Partial Class MotorCtl
     Friend WithEvents KeyTextBox As TextBox
     Friend WithEvents SpaceKeyLabel As Label
     Friend WithEvents EnterKeyLabel As Label
-    Friend WithEvents Label5 As Label
+    Friend WithEvents KeyHintLabel As Label
     Friend WithEvents GroupBox4 As GroupBox
     Friend WithEvents AIOCheckBox As CheckBox
-    Friend WithEvents Button1 As Button
-    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents AIOSettingButton As Button
+    Friend WithEvents MeanSampleNComboBox As ComboBox
     Friend WithEvents AIODataTextBox As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents Text_ErrorString As Label
     Friend WithEvents SpeedControlCheckBox As CheckBox
-    Friend WithEvents Button2 As Button
-    Friend WithEvents Button3 As Button
-    Friend WithEvents Button4 As Button
-    Friend WithEvents Button5 As Button
-    Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents MinusAdjustButton1 As Button
+    Friend WithEvents PlusAdjustButton1 As Button
+    Friend WithEvents PlusAdjustButton2 As Button
+    Friend WithEvents MinusAdjustButton2 As Button
+    Friend WithEvents PistonAdjustCheckBox As CheckBox
 End Class

@@ -33,10 +33,10 @@ Public Class Testing
 
 
     Private Sub Testing_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Chart = New LoadScedule
-        Chart.Location = New Point(20, 300)
+        LoadChart1 = New LoadChart
+        LoadChart1.Location = New Point(20, 300)
         'Chart.Size = New Size(1057, 342)
-        Me.Controls.Add(Chart)
+        Me.Controls.Add(LoadChart1)
 
         Dim LoadGraph1 As New LoadGraph
         LoadGraph1.Location = New Point(30, 12)

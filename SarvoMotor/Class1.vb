@@ -192,7 +192,7 @@ End Class
 
 
 
-Class LoadScedule
+Class LoadChart
     Inherits GroupBox
     Public DataGridView1 As DataGridView
     Dim AddButton As Button

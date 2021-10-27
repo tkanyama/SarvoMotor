@@ -18,8 +18,8 @@ Public Class MotorCtl
     'Dim SpeedPanel1 As SpeedPanel                   ' ピストンスピード選択パネルコントロール
     Dim ErrorString As New StringBuilder("", 256)   ' Error String
     Dim lCountPulse1 As Integer                     ' エンコーダーからのパルス
-    Dim Timer1 As Timer                             ' リアルタイム制御のためのタイマー
-    Dim Timer2 As Timer                             ' キーボードの割り込みを優先するためのタイマー
+    Dim RealTimeTimer As Timer                             ' リアルタイム制御のためのタイマー
+    Dim KBDFocusTimer As Timer                             ' キーボードの割り込みを優先するためのタイマー
     Dim ToolTip1 As ToolTip
 
     Private Sub MotorCtl_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -36,98 +36,89 @@ Public Class MotorCtl
         '［準備・片付けモードの選択]
         If TestMode = 0 Then
             Me.Size = New Size(xSize1, ySize1)
-            RadioButton4.Checked = True
-            RadioButton5.Checked = False
-        ElseIf TestMode = 1 Then
+            PreModeRadioButton.Checked = True
+            TestModeRadioButton.Checked = False
+
+        ElseIf TestMode = 1 Then '[試験モード]
             Me.Size = New Size(xSize2, ySize2)
-            RadioButton4.Checked = False
-            RadioButton5.Checked = True
+            PreModeRadioButton.Checked = False
+            TestModeRadioButton.Checked = True
         End If
 
         ' [モーションタイプの選択（開始時は目標値移動）とイベント処理の設定]
         If MotionType = 0 Then
-            Me.RadioButton1.Checked = True      ' 目標値移動    MotionType = 1
-            Me.RadioButton2.Checked = False     ' 連続運転      MotionType = 2
-            Me.RadioButton3.Checked = False     ' 原点復帰      MotionType = 3
+            Me.PTP_RadioButton1.Checked = True      ' 目標値移動    MotionType = 1
+            Me.JOG_RadioButton2.Checked = False     ' 連続運転      MotionType = 2
+            Me.ORG_RadioButton3.Checked = False     ' 原点復帰      MotionType = 3
             MotionType = 1
         End If
-        AddHandler RadioButton1.CheckedChanged, AddressOf RadioButton1_CheckedChanged
-        AddHandler RadioButton2.CheckedChanged, AddressOf RadioButton2_CheckedChanged
-        AddHandler RadioButton3.CheckedChanged, AddressOf RadioButton3_CheckedChanged
+        AddHandler PTP_RadioButton1.CheckedChanged, AddressOf PTP_RadioButton_CheckedChanged
+        AddHandler JOG_RadioButton2.CheckedChanged, AddressOf JOG_RadioButton_CheckedChanged
+        AddHandler ORG_RadioButton3.CheckedChanged, AddressOf ORG_RadioButton_CheckedChanged
 
 
         ' [目標値座標の種類の選択]
-        TypeComboBox1.Items.Add("絶対座標")
-        TypeComboBox1.Items.Add("相対座標")
-        TypeComboBox1.SelectedIndex = 0
+        Coordinate_TypeComboBox1.Items.Add("絶対座標")
+        Coordinate_TypeComboBox1.Items.Add("相対座標")
+        Coordinate_TypeComboBox1.SelectedIndex = 0
         Me.txtDistance.Text = Format(0, "F3")
 
 
         lblComment.Text = "ok"
 
-        Label1.Text = "目標値"
+        Coordinate_Label1.Text = "目標値"
 
         ' [ラベル等の表示]
-        Me.Label1.Visible = True            ' [目標値] or [増分値]ラベル
-        Me.Label2.Visible = True            ' [座標タイプ]ラベル
+        Me.Coordinate_Label1.Visible = True            ' [目標値] or [増分値]ラベル
+        Me.Coordinate_Label2.Visible = True            ' [座標タイプ]ラベル
         Me.txtDistance.Visible = True       ' [目標値] or [増分値]テキストボックス
-        Me.TypeComboBox1.Visible = True     ' [座標タイプ]コンボボックス
-        Me.Label3.Visible = True            ' [mm]ラベル
+        Me.Coordinate_TypeComboBox1.Visible = True     ' [座標タイプ]コンボボックス
+        Me.Unit_Label.Visible = True            ' [mm]ラベル
 
         ' [加力スケジュール表の作成]
-        Chart = New LoadScedule
-        Chart.Location = New Point(15, 327)
-        Me.Controls.Add(Chart)
+        LoadChart1 = New LoadChart
+        LoadChart1.Location = New Point(15, 327)
+        Me.Controls.Add(LoadChart1)
 
         ' [加力スケジュールグラフの作成]
         LoadGraph1 = New LoadGraph
-        LoadGraph1.Location = New Point(Chart.Location.X + Chart.Width + 15, Chart.Location.Y)
+        LoadGraph1.Location = New Point(LoadChart1.Location.X + LoadChart1.Width + 15, LoadChart1.Location.Y)
         Me.Controls.Add(LoadGraph1)
 
         ' [荷重制御時のリアルタイム制御のためのタイマー]
-        Timer1 = New Timer
-        Timer1.Interval = Timer1_IntTime
-        Timer1.Enabled = False
-        AddHandler Timer1.Tick, AddressOf Timer1_Tick
+        RealTimeTimer = New Timer
+        RealTimeTimer.Interval = RealTimeTimer1_IntTime
+        RealTimeTimer.Enabled = False
+        AddHandler RealTimeTimer.Tick, AddressOf RealTimeTimer1_Tick
 
         ' [キーボード入力を確実に処理するためのタイマー]
-        Timer2 = New Timer
-        Timer2.Interval = Timer2_IntTime
-        Timer2.Enabled = False
-        AddHandler Timer2.Tick, AddressOf Timer2_Tick
+        KBDFocusTimer = New Timer
+        KBDFocusTimer.Interval = KBDFocusTimer_IntTime
+        KBDFocusTimer.Enabled = False
+        AddHandler KBDFocusTimer.Tick, AddressOf KBDFocusTimer_Tick
 
         EnterKeyLabel.Visible = False   ' [EnterKey]ラベル
         SpaceKeyLabel.Visible = False   ' [SpaceKey]ラベル
 
         'ToolTipを作成する
-        'ToolTip1 = New ToolTip(Me.components)
-        'フォームにcomponentsがない場合
         ToolTip1 = New ToolTip()
-        'ToolTipの設定を行う
-        'ToolTipが表示されるまでの時間
-        ToolTip1.InitialDelay = 1000
-        'ToolTipが表示されている時に、別のToolTipを表示するまでの時間
-        ToolTip1.ReshowDelay = 1000
-        'ToolTipを表示する時間
-        ToolTip1.AutoPopDelay = 5000
-        'フォームがアクティブでない時でもToolTipを表示する
-        ToolTip1.ShowAlways = True
+        ToolTip1.InitialDelay = 1000    'ToolTipが表示されるまでの時間
+        ToolTip1.ReshowDelay = 1000     'ToolTipが表示されている時に、別のToolTipを表示するまでの時間
+        ToolTip1.AutoPopDelay = 5000    'ToolTipを表示する時間
+        ToolTip1.ShowAlways = True      'フォームがアクティブでない時でもToolTipを表示する
 
-        'Button1とButton2にToolTipが表示されるようにする
+        'ButtonにToolTipが表示されるようにする
         ToolTip1.SetToolTip(CW_Button, "アクチュエータのピストンを引きます")
         ToolTip1.SetToolTip(CCW_Button, "アクチュエータのピストンを押します")
         ToolTip1.SetToolTip(STOP_Button, "アクチュエータを停止します")
         ToolTip1.SetToolTip(SpeedPanel1, "ピストンの速度を切り替えます" + vbCrLf + "動作中でも切り替え可能です")
 
-        Label5.Visible = False
+        KeyHintLabel.Visible = False
 
-        RadioButton3.Visible = False
+        ORG_RadioButton3.Visible = False    ' 原点復帰のボタンは非表示とする（将来復帰可能とする）
 
-        'FormsPlot1.Plot.PlotPoint(0.0, 0.0)
-
-        If AIOChNo = 0 Then AIOChNo = AIOMaxCh
-        AIOCheckBox.Checked = True
-        SpeedControlCheckBox.Checked = True
+        AIOCheckBox.Checked = True              ' 電圧入力チェックボックスをON
+        SpeedControlCheckBox.Checked = True     ' 目標値減速調整チャックボックスをON
 
         For i As Integer = 0 To AIOMaxCh - 1
             If AIOCheck(i) = Nothing Then AIOCheck(i) = True
@@ -136,25 +127,24 @@ Public Class MotorCtl
             If AIOUnit(i) = "" Then AIOUnit(i) = "V"
         Next
 
-        ComboBox1.Items.Add("5")
-        ComboBox1.Items.Add("7")
-        ComboBox1.Items.Add("10")
-        ComboBox1.Items.Add("15")
-        ComboBox1.Items.Add("20")
-        ComboBox1.Items.Add("30")
-        ComboBox1.SelectedIndex = 0
-        MeanSampleN = Val(ComboBox1.SelectedItem)
+        ' 電圧の平均値表示のためのデータ数の設定
+        MeanSampleNComboBox.Items.Add("5")
+        MeanSampleNComboBox.Items.Add("7")
+        MeanSampleNComboBox.Items.Add("10")
+        MeanSampleNComboBox.Items.Add("15")
+        MeanSampleNComboBox.Items.Add("20")
+        MeanSampleNComboBox.Items.Add("30")
+        MeanSampleNComboBox.SelectedIndex = 0
+        MeanSampleN = Val(MeanSampleNComboBox.SelectedItem)
         ReDim AIOMeanData(AIOMaxCh - 1, MeanSampleN - 1)
-        AddHandler ComboBox1.Click, AddressOf ComboBox1_Click
+        AddHandler MeanSampleNComboBox.Click, AddressOf MeanSampleNComboBox_Click
 
-
-        Timer2.Enabled = False
-
-        CheckBox1.Checked = False
-        Button2.Enabled = False
-        Button3.Enabled = False
-        Button4.Enabled = False
-        Button5.Enabled = False
+        ' ピストン微調整用ボタンはイネーブル
+        PistonAdjustCheckBox.Checked = False
+        PlusAdjustButton1.Enabled = False
+        PlusAdjustButton2.Enabled = False
+        MinusAdjustButton1.Enabled = False
+        MinusAdjustButton2.Enabled = False
 
     End Sub
 
@@ -183,7 +173,7 @@ Public Class MotorCtl
     End Sub
 
 
-    Private Sub Timer2_Tick(sender As Object, e As EventArgs)
+    Private Sub KBDFocusTimer_Tick(sender As Object, e As EventArgs)
         '
         '   タイマー２の処理
         '
@@ -204,45 +194,45 @@ Public Class MotorCtl
 
     End Sub
 
-    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs)
+    Private Sub PTP_RadioButton_CheckedChanged(sender As Object, e As EventArgs)
         '
         '   目標値移動選択時の処理
         '
-        If RadioButton1.Checked = True Then
+        If PTP_RadioButton1.Checked = True Then
             MotionType = CSMC_PTP
-            Me.Label1.Visible = True
-            Me.Label2.Visible = True
+            Me.Coordinate_Label1.Visible = True
+            Me.Coordinate_Label2.Visible = True
             Me.txtDistance.Visible = True
-            Me.TypeComboBox1.Visible = True
-            Me.Label3.Visible = True
+            Me.Coordinate_TypeComboBox1.Visible = True
+            Me.Unit_Label.Visible = True
         End If
     End Sub
 
-    Private Sub RadioButton2_CheckedChanged(sender As Object, e As EventArgs)
+    Private Sub JOG_RadioButton_CheckedChanged(sender As Object, e As EventArgs)
         '
         '   連続運転選択時の処理
         '
-        If RadioButton2.Checked = True Then
+        If JOG_RadioButton2.Checked = True Then
             MotionType = CSMC_JOG
-            Me.Label1.Visible = False
-            Me.Label2.Visible = False
+            Me.Coordinate_Label1.Visible = False
+            Me.Coordinate_Label2.Visible = False
             Me.txtDistance.Visible = False
-            Me.TypeComboBox1.Visible = False
-            Me.Label3.Visible = False
+            Me.Coordinate_TypeComboBox1.Visible = False
+            Me.Unit_Label.Visible = False
         End If
     End Sub
 
-    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs)
+    Private Sub ORG_RadioButton_CheckedChanged(sender As Object, e As EventArgs)
         '
         '   原点復帰選択時の処理
         '
-        If RadioButton3.Checked = True Then
+        If ORG_RadioButton3.Checked = True Then
             MotionType = CSMC_ORG
-            Me.Label1.Visible = False
-            Me.Label2.Visible = False
+            Me.Coordinate_Label1.Visible = False
+            Me.Coordinate_Label2.Visible = False
             Me.txtDistance.Visible = False
-            Me.TypeComboBox1.Visible = False
-            Me.Label3.Visible = False
+            Me.Coordinate_TypeComboBox1.Visible = False
+            Me.Unit_Label.Visible = False
         End If
 
     End Sub
@@ -348,7 +338,7 @@ Public Class MotorCtl
             End If
         End If
 
-        bCoordinate = TypeComboBox1.SelectedIndex
+        bCoordinate = Coordinate_TypeComboBox1.SelectedIndex
         Ret = SmcWSetStopPosition(Id, AxisNo, bCoordinate, lDistance)
         If Ret <> 0 Then
             SmcWGetErrorString(Ret, ErrorString)
@@ -456,7 +446,7 @@ Public Class MotorCtl
         End If
 
         txtDistance.Text = Format(lDistance * CC, "F3")
-        TypeComboBox1.SelectedIndex = bCoordinate
+        Coordinate_TypeComboBox1.SelectedIndex = bCoordinate
 
         GetMoveParam = True
 
@@ -584,14 +574,14 @@ Public Class MotorCtl
         lblComment.Text = "OK "
     End Sub
 
-    Private Sub TypeComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TypeComboBox1.SelectedIndexChanged
+    Private Sub TypeComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles Coordinate_TypeComboBox1.SelectedIndexChanged
         '
         '   「座標タイプ」コンボボックス変更時の処理
         '
-        If TypeComboBox1.SelectedIndex = 0 Then
-            Label1.Text = "目標座標"
-        ElseIf TypeComboBox1.SelectedIndex = 1 Then
-            Label1.Text = "増分値"
+        If Coordinate_TypeComboBox1.SelectedIndex = 0 Then
+            Coordinate_Label1.Text = "目標座標"
+        ElseIf Coordinate_TypeComboBox1.SelectedIndex = 1 Then
+            Coordinate_Label1.Text = "増分値"
         End If
     End Sub
 
@@ -691,20 +681,12 @@ Public Class MotorCtl
                 If Ret <> 0 Then
                     SmcWGetErrorString(Ret, ErrorString)
                     lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
-                    'Exit Sub
+
                 End If
                 If SControlNo = 0 Then
-                    If bStopSts1 = 255 Then
-                        'NextFlag = True
+                    If bStopSts1 = 255 Then     ' 目標値到達の場合のみ次の目標を設定
                         NextLoad()
-                        'Else
-                        'NextFlag = False
                     End If
-                    'Else
-                    '    If Arrive Then
-                    '        NextFlag = True
-                    '        NextLoad()
-                    '    End If
                 End If
 
             End If
@@ -747,28 +729,28 @@ Public Class MotorCtl
     '    End If
     'End Sub
 
-    Private Sub RadioButton4_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton4.CheckedChanged
+    Private Sub PreModeRadioButton_CheckedChanged(sender As Object, e As EventArgs) Handles PreModeRadioButton.CheckedChanged
         '
         '   「準備・片付け」選択時の処理
         '
 
-        If RadioButton4.Checked = True Then
+        If PreModeRadioButton.Checked = True Then
             TestMode = 0
             Me.Size = New Size(xSize1, ySize1)
         End If
 
     End Sub
 
-    Private Sub RadioButton5_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton5.CheckedChanged
+    Private Sub TestModeRadioButton_CheckedChanged(sender As Object, e As EventArgs) Handles TestModeRadioButton.CheckedChanged
         '
         '   「試験」選択時の処理
         '
-        If RadioButton5.Checked = True Then
+        If TestModeRadioButton.Checked = True Then
             TestMode = 1
             Me.Size = New Size(xSize2, ySize2)
             'RadioButton1.Select()
             'RadioButton1.PerformClick()
-            TypeComboBox1.SelectedIndex = 0
+            Coordinate_TypeComboBox1.SelectedIndex = 0
             'CheckBox1.Checked = True
         End If
     End Sub
@@ -782,8 +764,8 @@ Public Class MotorCtl
             If TestStartFlag = False Then
                 RowsIndex1 = 0
                 Do
-                    If Chart.DataGridView1.Rows(RowsIndex1).Cells(0).Value = True Then
-                        Dim s As String = Chart.DataGridView1.Rows(RowsIndex1).Cells(1).Value
+                    If LoadChart1.DataGridView1.Rows(RowsIndex1).Cells(0).Value = True Then
+                        Dim s As String = LoadChart1.DataGridView1.Rows(RowsIndex1).Cells(1).Value
                         Select Case s
                             Case "ストローク"
                                 SControlNo = 0
@@ -793,7 +775,7 @@ Public Class MotorCtl
                         Exit Do
                     End If
                     RowsIndex1 += 1
-                    If RowsIndex1 > Chart.DataGridView1.RowCount - 1 Then
+                    If RowsIndex1 > LoadChart1.DataGridView1.RowCount - 1 Then
                         MessageBox.Show("有効データがありません。。",
                             "エラー",
                             MessageBoxButtons.OK,
@@ -802,7 +784,7 @@ Public Class MotorCtl
                     End If
                 Loop
 
-                Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
+                LoadChart1.DataGridView1.CurrentCell = LoadChart1.DataGridView1.Rows(RowsIndex1).Cells(0)
                 LoadGraph1.DrawGraph(0)
 
                 If AIOCheckBox.Checked = True Then
@@ -836,15 +818,12 @@ Public Class MotorCtl
                         'txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
                         ControlModeLabel.Text = "ストローク"
                         RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
-                        RadioButton1.PerformClick()
-                        TypeComboBox1.SelectedIndex = 0
+                        PTP_RadioButton1.PerformClick()
+                        Coordinate_TypeComboBox1.SelectedIndex = 0
                         EventCheckBox.Checked = True
                         MotionType = CSMC_PTP
                         EventCheckBox.Checked = True
-                        'RadioButton1.Checked = True
-                        'RadioButton2.Checked = False
-                        'RadioButton3.Checked = False
-                        CheckBox1.Checked = False
+                        PistonAdjustCheckBox.Checked = False
 
                     Case Else  ' 電圧制御
                         InitialPulse = lOutPulse
@@ -857,20 +836,18 @@ Public Class MotorCtl
                         'txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
                         ControlModeLabel.Text = "Ch" + Format(ControlChNo)
                         RecentValueLabel.Text = Format(AIOMean(ControlChNo), "F3")
-                        RadioButton2.PerformClick()
-                        TypeComboBox1.SelectedIndex = 0
+                        JOG_RadioButton2.PerformClick()
+                        Coordinate_TypeComboBox1.SelectedIndex = 0
                         EventCheckBox.Checked = True
                         MotionType = CSMC_JOG
                         EventCheckBox.Checked = False
-                        'RadioButton1.Checked = False
-                        'RadioButton2.Checked = True
-                        'RadioButton3.Checked = False
-                        CheckBox1.Checked = True
+                        PistonAdjustCheckBox.Checked = True
                 End Select
 
                 TestStartView()
 
             Else
+                ' 試験モードを終了
                 If AIOStartFlag = True Then
                     AIOStartFlag = False
                     Ret = AioExit(AIOId)
@@ -889,6 +866,8 @@ Public Class MotorCtl
 
 
         Else
+            ' 加力スケジュールが未入力の場合はエラーメッセージを表示
+
             MessageBox.Show("加力スケジュールを入力してください。",
                 "エラー",
                 MessageBoxButtons.OK,
@@ -899,16 +878,14 @@ Public Class MotorCtl
     End Sub
 
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs)
+    Private Sub RealTimeTimer1_Tick(sender As Object, e As EventArgs)
         '
         '   荷重制御時のリアルタイム処理
         '
-        RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
-
         If AIOStartFlag Then
             'アナログ入力
 
-            Ret = AioMultiAiEx(AIOId, CShort(AIOChNo), AiData)
+            Ret = AioMultiAiEx(AIOId, CShort(AIOMaxCh), AiData)
             If Ret <> 0 Then
                 Ret2 = AioGetErrorString(Ret, ErrorString)
                 Text_ErrorString.Text = "AioMultiAiEx = " & Ret & " : " & ErrorString.ToString()
@@ -919,14 +896,10 @@ Public Class MotorCtl
                 Text_ErrorString.Text = "アナログ入力 : 正常終了"
             End If
 
-            'For i As Integer = 0 To AIOChNo - 1
-            '    AIOMeanData(i, MeanDataNo) = AiData(i)
-            'Next
-
             '変換データの表示
             Dim fm1 As String
             AIODataTextBox.Text = ""
-            For i As Integer = 0 To AIOChNo - 1
+            For i As Integer = 0 To AIOMaxCh - 1
                 If AIOCheck(i) Then
                     AIOData(i) = AiData(i) * AIOCoef(i)
                     AIOMeanData(i, MeanDataNo) = AIOData(i)
@@ -965,10 +938,16 @@ Public Class MotorCtl
 
         Select Case SControlNo
             Case 0
+
+                ' ストローク制御の場合、相対変位を表示
                 RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
+
             Case Else
+
+                ' 電圧制御の場合、制御CHの絶対値を表示
                 RecentValueLabel.Text = Format(AIOMean(ControlChNo), "F3")
 
+                ' モータの停止状態を取得
                 Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
                 If Ret <> 0 Then
                     SmcWGetErrorString(Ret, ErrorString)
@@ -976,29 +955,28 @@ Public Class MotorCtl
                     'Exit Sub
                 End If
 
-                If bStopSts1 = 0 Then
-                    Ret = SmcWGetReady(Id, AxisNo, MotionType, StartDir)
+                If bStopSts1 = 0 Then   ' モータが動いている場合に以下を実施
+
+                    Ret = SmcWGetReady(Id, AxisNo, MotionType, StartDir)    ' モータの回転方向を取得
                     If Ret <> 0 Then
                         SmcWGetErrorString(Ret, ErrorString)
                         lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
                         Exit Sub
                     End If
+
                     Dim StopFlag As Boolean = False
-                    If StartDir = 0 Then
+                    ' 目標値に到達しているかをチェック
+                    If StartDir = 0 Then    ' 正回転の場合
                         If AIOMean(ControlChNo) >= lDistanceDisp Then
-                            'Arrive = True
                             StopFlag = True
                         End If
-                    Else
+                    Else                    ' 負回転の場合
                         If AIOMean(ControlChNo) <= lDistanceDisp Then
                             StopFlag = True
-                            'Arrive = True
                         End If
                     End If
 
-
-
-                    If StopFlag Then
+                    If StopFlag Then    ' 目標値に到達した場合はモータを停止して次の目標を設定
                         Ret = SmcWMotionStop(Id, AxisNo)
                         If Ret <> 0 Then
                             SmcWGetErrorString(Ret, ErrorString)
@@ -1007,39 +985,38 @@ Public Class MotorCtl
                         End If
 
                         NextLoad()
+                        Exit Sub
 
                     End If
 
+                    ' 目標値減速調整
                     If SpeedControlCheckBox.Checked = True Then
-                        If Delta1 > 0 Then
+
+                        If Delta1 > 0 Then  ' 増分値が設定されている場合のみ速度調整を行う。
+
+                            Dim TargetSpeed1 As Double = 0.0
+
                             Select Case Abs(lDistanceDisp - AIOMean(ControlChNo))
-                                Case <= Delta1 * (1 - DeceleratePoint3)
+                                Case <= Delta1 * (1.0# - DeceleratePoint3)
 
-                                    Dim TargetSpeed1 As Double = Int(SpeedPanel1.SetSpeed * DecelerateRate3 / CC)
+                                    TargetSpeed1 = Int(SpeedPanel1.SetSpeed * DecelerateRate3 / CC)
 
-                                    Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed1)
-                                    Ret = SmcWSetAccelTime(Id, AxisNo, 0)
-                                    Ret = SmcWSetMotionChangeReady(Id, AxisNo, 4)
-                                    Ret = SmcWMotionChange(Id, AxisNo)
+                                Case <= Delta1 * (1.0# - DeceleratePoint2)
 
-                                Case <= Delta1 * (1 - DeceleratePoint2)
+                                    TargetSpeed1 = Int(SpeedPanel1.SetSpeed * DecelerateRate2 / CC)
 
-                                    Dim TargetSpeed1 As Double = Int(SpeedPanel1.SetSpeed * DecelerateRate2 / CC)
+                                Case <= Delta1 * (1.0# - DeceleratePoint1)
 
-                                    Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed1)
-                                    Ret = SmcWSetAccelTime(Id, AxisNo, 0)
-                                    Ret = SmcWSetMotionChangeReady(Id, AxisNo, 4)
-                                    Ret = SmcWMotionChange(Id, AxisNo)
+                                    TargetSpeed1 = Int(SpeedPanel1.SetSpeed * DecelerateRate1 / CC)
 
-                                Case <= Delta1 * (1 - DeceleratePoint1)
-
-                                    Dim TargetSpeed1 As Double = Int(SpeedPanel1.SetSpeed * DecelerateRate1 / CC)
-
-                                    Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed1)
-                                    Ret = SmcWSetAccelTime(Id, AxisNo, 0)
-                                    Ret = SmcWSetMotionChangeReady(Id, AxisNo, 4)
-                                    Ret = SmcWMotionChange(Id, AxisNo)
                             End Select
+
+                            If TargetSpeed1 >= 0.29296875 Then
+                                Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed1)
+                                Ret = SmcWSetAccelTime(Id, AxisNo, 0)
+                                Ret = SmcWSetMotionChangeReady(Id, AxisNo, 4)
+                                Ret = SmcWMotionChange(Id, AxisNo)
+                            End If
                         End If
                     End If
 
@@ -1059,34 +1036,34 @@ Public Class MotorCtl
         testModeLabel.Text = "試験中"
         testModeLabel.ForeColor = Color.Red
         TestStartFlag = True
-        Timer1.Enabled = True
-        Timer2.Enabled = True
+        RealTimeTimer.Enabled = True
+        KBDFocusTimer.Enabled = True
 
         AddHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
         'Me.TopMost = True
         EnterKeyLabel.Visible = True
         SpaceKeyLabel.Visible = True
 
-        RadioButton1.Enabled = False
-        RadioButton2.Enabled = False
-        RadioButton3.Enabled = False
-        RadioButton4.Enabled = False
-        RadioButton5.Enabled = False
+        PTP_RadioButton1.Enabled = False
+        JOG_RadioButton2.Enabled = False
+        ORG_RadioButton3.Enabled = False
+        PreModeRadioButton.Enabled = False
+        TestModeRadioButton.Enabled = False
 
-        TypeComboBox1.Enabled = False
+        Coordinate_TypeComboBox1.Enabled = False
         EventCheckBox.Enabled = False
         SpeedControlCheckBox.Enabled = False
 
         txtDistance.Enabled = False
         'TextBox1.Enabled = False
 
-        Chart.Button_Enabled = False
+        LoadChart1.Button_Enabled = False
         LoadGraph1.Button_Enabled = False
 
         Status1.Button_Enabled = False
         Cltio1.Button_Enabled = False
 
-        Label5.Visible = True
+        KeyHintLabel.Visible = True
     End Sub
 
     Private Sub TestStopView()
@@ -1097,35 +1074,35 @@ Public Class MotorCtl
         testModeLabel.Text = "準備中"
         testModeLabel.ForeColor = Color.Black
         TestStartFlag = False
-        Timer1.Enabled = False
-        Timer2.Enabled = False
+        RealTimeTimer.Enabled = False
+        KBDFocusTimer.Enabled = False
 
         RemoveHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
         'Me.TopMost = False
         EnterKeyLabel.Visible = False
         SpaceKeyLabel.Visible = False
 
-        RadioButton1.Enabled = True
-        RadioButton2.Enabled = True
-        RadioButton3.Enabled = True
-        RadioButton4.Enabled = True
-        RadioButton5.Enabled = True
+        PTP_RadioButton1.Enabled = True
+        JOG_RadioButton2.Enabled = True
+        ORG_RadioButton3.Enabled = True
+        PreModeRadioButton.Enabled = True
+        TestModeRadioButton.Enabled = True
 
-        TypeComboBox1.Enabled = True
+        Coordinate_TypeComboBox1.Enabled = True
         EventCheckBox.Enabled = True
         SpeedControlCheckBox.Enabled = True
 
         txtDistance.Enabled = True
         'TextBox1.Enabled = True
 
-        Chart.Button_Enabled = True
+        LoadChart1.Button_Enabled = True
         LoadGraph1.Button_Enabled = True
 
         Status1.Button_Enabled = True
         Cltio1.Button_Enabled = True
 
         TestStartButton.Enabled = True
-        Label5.Visible = False
+        KeyHintLabel.Visible = False
     End Sub
 
     Private Sub KeyTextBox1_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs)  ' Handles TextBox1.KeyDown
@@ -1149,9 +1126,9 @@ Public Class MotorCtl
                     'lblComment.Text += key1
                     If bStopSts1 <> 0 Then  ' モーターが止まっているときは動作開始
                         If SControlNo = 0 Then
-                            RadioButton1.PerformClick()
+                            PTP_RadioButton1.PerformClick()
                         Else
-                            RadioButton2.PerformClick()
+                            JOG_RadioButton2.PerformClick()
                         End If
                         If SControlNo = 0 Then
                             If (lDistanceDisp - lOutDisp) > 0 Then
@@ -1171,19 +1148,19 @@ Public Class MotorCtl
                                 CCW_Button.PerformClick()
                             End If
                         End If
-                        Label5.Visible = False
+                        KeyHintLabel.Visible = False
                         Arrive = True
                     Else                    ' モーターが動いている場合は停止
                         STOP_Button.PerformClick()
                         Arrive = False
-                        Label5.Visible = True
+                        KeyHintLabel.Visible = True
                     End If
 
 
                 Case "Space"
                     'lblComment.Text += key1
                     STOP_Button.PerformClick()
-                    Label5.Visible = True
+                    KeyHintLabel.Visible = True
                     Arrive = False
 
                 Case "F1", "S"
@@ -1195,85 +1172,70 @@ Public Class MotorCtl
 
                     'SpeedInputForm1.
 
-                Case "Right"
-                    If CheckBox1.Checked Then
+                Case "Right"    ' 右矢印キー　少しプラス
+                    If PistonAdjustCheckBox.Checked Then
                         MovePiston(PlusDelta1)
                     End If
 
-                Case "Left"
-                    If CheckBox1.Checked Then
+                Case "Left"    ' 左矢印キー　少しマイナス
+                    If PistonAdjustCheckBox.Checked Then
                         MovePiston(MinusDelta1)
                     End If
 
-                Case "Up"
-                    If CheckBox1.Checked Then
+                Case "Up"      ' 上矢印キー  大きくプラス
+                    If PistonAdjustCheckBox.Checked Then
                         MovePiston(PlusDelta2)
                     End If
 
-                Case "Down"
-                    If CheckBox1.Checked Then
+                Case "Down"    ' 下矢印キー　大きくマイナス
+                    If PistonAdjustCheckBox.Checked Then
                         MovePiston(MinusDelta2)
                     End If
 
             End Select
         End If
 
-        'Label1.Text += e.KeyCode.ToString
-        'If e.KeyCode = Keys.F1 Then
-        '    Console.WriteLine("F1キーが押されました。")
-        'End If
     End Sub
     Private Sub NextLoad()
         '
         '   次の目標値の設定
         '
-        'Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
-        'If Ret <> 0 Then
-        '    SmcWGetErrorString(Ret, ErrorString)
-        '    lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
-        '    'Exit Sub
-        'End If
 
-        'If NextFlag Then
-        PointI2 += 1
+        PointI2 += 1    ' 目標値カウンタをプラス
 
         If PointI2 < PointN2 Then           ' その加力スケジュールの行で目標値が残っている場合
-            If SControlNo = 0 Then
+
+            If SControlNo = 0 Then      ' ストローク制御
                 lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
                 txtDistance.Text = Format(lDistanceDisp, "F3")
                 DestinationLabel.Text = Format(lDistanceDisp, "F3")
 
                 If PointN2 > 0 Then
                     LoadGraph1.DrawGraph(PointI2 - 1)
-
-                    'ControlModeLabel.Text = "ストローク"
                     RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
-
                 End If
-            Else
+
+            Else      ' 電圧制御
                 lDistanceDisp = LoadPoint2(PointI2)
                 txtDistance.Text = Format(lDistanceDisp, "F3")
                 DestinationLabel.Text = Format(lDistanceDisp, "F3")
 
                 If PointN2 > 0 Then
                     LoadGraph1.DrawGraph(PointI2 - 1)
-
-                    'ControlModeLabel.Text = "ストローク"
                     RecentValueLabel.Text = Format(AIOMean(ControlChNo), "F3")
-
                 End If
             End If
 
 
         Else           ' その加力スケジュールの行で目標値が残っていない場合は次の行へ
 
-            RowsIndex1 += 1
+            RowsIndex1 += 1     ' 行カウンタをプラス
 
-            If RowsIndex1 <= Chart.DataGridView1.RowCount - 1 Then  ' 次の行がある場合
+            If RowsIndex1 <= LoadChart1.DataGridView1.RowCount - 1 Then  ' 次の行がある場合
 
                 Do
-                    If Chart.DataGridView1.Rows(RowsIndex1).Cells(0).Value = True Then
-                        Dim s As String = Chart.DataGridView1.Rows(RowsIndex1).Cells(1).Value
+                    If LoadChart1.DataGridView1.Rows(RowsIndex1).Cells(0).Value = True Then
+                        Dim s As String = LoadChart1.DataGridView1.Rows(RowsIndex1).Cells(1).Value
                         Select Case s
                             Case "ストローク"
                                 SControlNo = 0
@@ -1283,7 +1245,7 @@ Public Class MotorCtl
                         Exit Do
                     End If
                     RowsIndex1 += 1
-                    If RowsIndex1 > Chart.DataGridView1.RowCount - 1 Then
+                    If RowsIndex1 > LoadChart1.DataGridView1.RowCount - 1 Then
                         MessageBox.Show("有効データがありません。。",
                         "エラー",
                         MessageBoxButtons.OK,
@@ -1292,44 +1254,23 @@ Public Class MotorCtl
                     End If
                 Loop
 
-                Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
+                ' 加力スケジュール表の該当する行の先頭項目に移動
+                LoadChart1.DataGridView1.CurrentCell = LoadChart1.DataGridView1.Rows(RowsIndex1).Cells(0)
+                ' 加力スケジュールグラフを描画
                 LoadGraph1.DrawGraph(0)
-
-                'If AIOCheckBox.Checked = True Then
-                '    AIOStartFlag = True
-                '    Ret = AioInit(AIODevice, AIOId)
-                '    If Ret <> 0 Then
-                '        Dim Ret2 As Integer = AioGetErrorString(Ret, ErrorString)
-                '        Text_ErrorString.Text = "AioInit = " & Ret & " : " & ErrorString.ToString()
-                '        Exit Sub
-                '    End If
-
-                '    Text_ErrorString.Text = "初期化処理 : 正常終了"
-                '    MeanDataNo = 0
-                '    For i As Integer = 0 To AIOMaxCh - 1
-                '        AIOMean(i) = 0.0
-                '        For j As Integer = 0 To MeanSampleN - 1
-                '            AIOMeanData(i, j) = 0.0
-                '        Next
-                '    Next
-                'End If
 
                 Select Case SControlNo
                     Case 0  ' ストローク制御
-                        'InitialPulse = lOutPulse
-                        'InitialDisp = lOutDisp
-                        'DestinationLabel.Text = Format(InitialDisp)
                         PointI2 = 1
                         lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
                         txtDistance.Text = Format(lDistanceDisp, "F3")
                         DestinationLabel.Text = Format(lDistanceDisp, "F3")
-                        'txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
                         ControlModeLabel.Text = "ストローク"
                         RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
-                        RadioButton1.PerformClick()
-                        TypeComboBox1.SelectedIndex = 0
+                        PTP_RadioButton1.PerformClick()
+                        Coordinate_TypeComboBox1.SelectedIndex = 0
                         EventCheckBox.Checked = True
-                        CheckBox1.Checked = False
+                        PistonAdjustCheckBox.Checked = False
 
                     Case Else  ' 電圧制御
                         PointI2 = 1
@@ -1337,17 +1278,14 @@ Public Class MotorCtl
                         lDistanceDisp = LoadPoint2(PointI2)
                         txtDistance.Text = Format(lDistanceDisp, "F3")
                         DestinationLabel.Text = Format(lDistanceDisp, "F3")
-                        'txtDistance.Text = Format(InitialDisp + LoadPoint2(PointI2), "F3")
                         ControlModeLabel.Text = "Ch" + Format(ControlChNo)
                         RecentValueLabel.Text = Format(AIOMean(ControlChNo), "F3")
-                        RadioButton2.PerformClick()
-                        TypeComboBox1.SelectedIndex = 0
+                        JOG_RadioButton2.PerformClick()
+                        Coordinate_TypeComboBox1.SelectedIndex = 0
                         EventCheckBox.Checked = False
-                        CheckBox1.Checked = True
+                        PistonAdjustCheckBox.Checked = True
 
                 End Select
-
-
 
             Else        ' 次の行がない場合は試験終了
                 If PointN2 > 0 Then
@@ -1356,158 +1294,26 @@ Public Class MotorCtl
 
                 TestStopView()
 
-
             End If
         End If
-        'End If
-
-
-        'Select Case SControlNo
-
-        '    Case 0      ' ストローク制御
-
-        '        If Ret = 0 And bStopSts1 = 255 Then     ' 目標値到達による通常停止の場合
-
-        '            PointI2 += 1
-
-        '            If PointI2 < PointN2 Then           ' その加力スケジュールの行で目標値が残っている場合
-
-        '                lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
-        '                txtDistance.Text = Format(lDistanceDisp, "F3")
-        '                DestinationLabel.Text = Format(lDistanceDisp, "F3")
-
-        '                If PointN2 > 0 Then
-        '                    LoadGraph1.DrawGraph(PointI2 - 1)
-
-        '                    ControlModeLabel.Text = "ストローク"
-        '                    RecentValueLabel.Text = Format(lOutDisp - InitialDisp, "F3")
-
-        '                End If
-
-        '            Else           ' その加力スケジュールの行で目標値が残っていない場合は次の行へ
-
-        '                RowsIndex1 += 1
-
-        '                If RowsIndex1 <= Chart.DataGridView1.RowCount - 1 Then  ' 次の行がある場合
-        '                    Do
-        '                        If Chart.DataGridView1.Rows(RowsIndex1).Cells(0).Value = True Then
-        '                            Exit Do
-        '                        End If
-        '                        RowsIndex1 += 1
-        '                        If RowsIndex1 > Chart.DataGridView1.RowCount - 1 Then
-        '                            If PointN2 > 0 Then
-        '                                LoadGraph1.DrawGraph(PointI2 - 1)
-        '                            End If
-
-        '                            TestStopView()
-
-        '                            Exit Sub
-        '                        End If
-        '                    Loop
-        '                    Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
-        '                    LoadGraph1.DrawGraph(0)
-        '                    PointI2 = 1
-        '                    lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
-        '                    txtDistance.Text = Format(lDistanceDisp, "F3")
-        '                    DestinationLabel.Text = Format(lDistanceDisp, "F3")
-
-        '                Else        ' 次の行がない場合は試験終了
-        '                    If PointN2 > 0 Then
-        '                        LoadGraph1.DrawGraph(PointI2 - 1)
-        '                    End If
-
-        '                    TestStopView()
-
-
-        '                End If
-        '            End If
-        '        End If
-
-        '    Case 1      ' 電圧制御
-        '        If Ret = 0 And bStopSts1 = 1 Then     ' 目標値到達による通常停止の場合
-
-        '            PointI2 += 1
-
-        '            If PointI2 < PointN2 Then           ' その加力スケジュールの行で目標値が残っている場合
-
-        '                lDistanceDisp = LoadPoint2(PointI2)
-        '                txtDistance.Text = Format(lDistanceDisp, "F3")
-        '                DestinationLabel.Text = Format(lDistanceDisp, "F3")
-
-        '                If PointN2 > 0 Then
-        '                    LoadGraph1.DrawGraph(PointI2 - 1)
-
-        '                    ControlModeLabel.Text = "Ch" + Format(ControlChNo)
-        '                    RecentValueLabel.Text = Format(AIOMean(ControlChNo), "F3")
-
-        '                End If
-
-        '            Else           ' その加力スケジュールの行で目標値が残っていない場合は次の行へ
-
-        '                RowsIndex1 += 1
-
-        '                If RowsIndex1 <= Chart.DataGridView1.RowCount - 1 Then  ' 次の行がある場合
-        '                    Do
-        '                        If Chart.DataGridView1.Rows(RowsIndex1).Cells(0).Value = True Then
-        '                            Exit Do
-        '                        End If
-        '                        RowsIndex1 += 1
-        '                        If RowsIndex1 > Chart.DataGridView1.RowCount - 1 Then
-        '                            If PointN2 > 0 Then
-        '                                LoadGraph1.DrawGraph(PointI2 - 1)
-        '                            End If
-
-        '                            TestStopView()
-
-        '                            Exit Sub
-        '                        End If
-        '                    Loop
-        '                    Chart.DataGridView1.CurrentCell = Chart.DataGridView1.Rows(RowsIndex1).Cells(0)
-        '                    LoadGraph1.DrawGraph(0)
-        '                    PointI2 = 1
-        '                    lDistanceDisp = InitialDisp + LoadPoint2(PointI2)
-        '                    txtDistance.Text = Format(lDistanceDisp, "F3")
-        '                    DestinationLabel.Text = Format(lDistanceDisp, "F3")
-
-        '                Else        ' 次の行がない場合は試験終了
-        '                    If PointN2 > 0 Then
-        '                        LoadGraph1.DrawGraph(PointI2 - 1)
-        '                    End If
-
-        '                    TestStopView()
-
-
-        '                End If
-        '            End If
-        '        End If
-
-
-
-
-
-
-        'End Select
-
-
-
-
-
 
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub AIOSettingButton_Click(sender As Object, e As EventArgs) Handles AIOSettingButton.Click
+        '
+        '   電圧入力の係数設定表を表示
+        '
         Dim fm1 As New AIOSettingForm
         fm1.StartPosition = FormStartPosition.CenterScreen
         Dim Ret = fm1.ShowDialog
-        If Ret = DialogResult.OK Then
 
-        End If
     End Sub
 
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
-        'Timer2.Enabled = False
-
-        MeanSampleN = Val(ComboBox1.SelectedItem)
+    Private Sub MeanSampleNComboBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles MeanSampleNComboBox.SelectedIndexChanged
+        '
+        '   平均値計算のデータ数の変更処理
+        '
+        MeanSampleN = Val(MeanSampleNComboBox.SelectedItem)
         ReDim AIOMeanData(AIOMaxCh - 1, MeanSampleN - 1)
         MeanDataNo = 0
         For i As Integer = 0 To AIOMaxCh - 1
@@ -1517,215 +1323,184 @@ Public Class MotorCtl
             Next
         Next
 
-        Timer2.Enabled = True
+        ' キーボードフォーカスを再開する。
+        KBDFocusTimer.Enabled = True
     End Sub
 
-    Private Sub ComboBox1_Click(sender As Object, e As EventArgs)
-        Timer2.Enabled = False
+    Private Sub MeanSampleNComboBox_Click(sender As Object, e As EventArgs)
+        '
+        '   データ数選択コンボボックスをクリックしたときにキーボードフォーカスを停止する。
+        '
+        KBDFocusTimer.Enabled = False
 
-        'MeanSampleN = Val(ComboBox1.SelectedItem)
-        'ReDim AIOMeanData(AIOMaxCh - 1, MeanSampleN - 1)
-        'MeanDataNo = 0
-        'For i As Integer = 0 To AIOMaxCh - 1
-        '    AIOMean(i) = 0.0
-        '    For j As Integer = 0 To MeanSampleN - 1
-        '        AIOMeanData(i, j) = 0.0
-        '    Next
-        'Next
-
-        'Timer2.Enabled = True
     End Sub
 
     Function MovePiston(ByVal DeltaPulse As Integer) As Boolean
-
-        If DeltaPulse = 0 Then
-            MovePiston = True
-            Exit Function
-        End If
-
-        Dim bStopSts2 As Short
-        Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts2)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
-            'Exit Sub
-        End If
-        If bStopSts2 = 0 Then
-            MovePiston = True
-            Exit Function
-        End If
-
-        If TestStartFlag And SControlNo = 0 Then
-            MovePiston = True
-            Exit Function
-        End If
-
-
-        Dim lOutPulse2 As Integer
-        Ret = SmcWGetOutPulse(Id, AxisNo, lOutPulse2)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWGetOutPulse = " & Ret & " : " & ErrorString.ToString
-
-        End If
-
-        Dim lDistance2 As Integer = lOutPulse2 + DeltaPulse
         '
-        '   モーターの動作パラメータの設定
+        '   ピストン微調整関数
         '
+        RealTimeTimer.Enabled = False   ' リアルタイム制御を停止
 
-        '----------------------------------
-        ' Set Resolution to Driver
-        '----------------------------------
-        Ret = SmcWSetResolveSpeed(Id, AxisNo, ResolveSpeed)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWSetResolveSpeed = " & Ret & " : " & ErrorString.ToString
-            MovePiston = False
-            Exit Function
+        If DeltaPulse <> 0 Then
+            Dim bStopSts2 As Short
+            Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts2)
+            If Ret <> 0 Then
+                SmcWGetErrorString(Ret, ErrorString)
+                lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
+                'Exit Sub
+            End If
+            If bStopSts2 <> 0 Then
+
+                If TestStartFlag And SControlNo <> 0 Then
+                    Dim lOutPulse2 As Integer
+                    Ret = SmcWGetOutPulse(Id, AxisNo, lOutPulse2)
+                    If Ret <> 0 Then
+                        SmcWGetErrorString(Ret, ErrorString)
+                        lblComment.Text = "SmcWGetOutPulse = " & Ret & " : " & ErrorString.ToString
+
+                    End If
+
+                    Dim lDistance2 As Integer = lOutPulse2 + DeltaPulse
+                    '
+                    '   モーターの動作パラメータの設定
+                    '
+
+                    '----------------------------------
+                    ' Set Resolution to Driver
+                    '----------------------------------
+                    Ret = SmcWSetResolveSpeed(Id, AxisNo, ResolveSpeed)
+                    If Ret <> 0 Then
+                        SmcWGetErrorString(Ret, ErrorString)
+                        lblComment.Text = "SmcWSetResolveSpeed = " & Ret & " : " & ErrorString.ToString
+                        MovePiston = False
+                        Exit Function
+                    End If
+
+                    '----------------------------------
+                    ' Set StartSpeed to Driver
+                    '----------------------------------
+                    Ret = SmcWSetStartSpeed(Id, AxisNo, StartSpeed)
+                    If Ret <> 0 Then
+                        SmcWGetErrorString(Ret, ErrorString)
+                        lblComment.Text = "SmcWSetStartSpeed = " & Ret & " : " & ErrorString.ToString
+                        MovePiston = False
+                        Exit Function
+                    End If
+
+                    '----------------------------------
+                    ' Set TargetSpeed to Driver
+                    '----------------------------------
+                    Dim TargetSpeed2 As Double
+                    TargetSpeed2 = Int(SpeedPanel1.SetSpeed / CC)
+                    Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed2)
+                    If Ret <> 0 Then
+                        SmcWGetErrorString(Ret, ErrorString)
+                        lblComment.Text = "SmcWSetTargetSpeed = " & Ret & " : " & ErrorString.ToString
+                        MovePiston = False
+                        Exit Function
+                    End If
+
+                    '----------------------------------
+                    ' Set AccelTime to Driver
+                    '----------------------------------
+                    Ret = SmcWSetAccelTime(Id, AxisNo, AccelTime)
+                    If Ret <> 0 Then
+                        SmcWGetErrorString(Ret, ErrorString)
+                        lblComment.Text = "SmcWSetAccelTime = " & Ret & " : " & ErrorString.ToString
+                        MovePiston = False
+                        Exit Function
+                    End If
+
+                    '----------------------------------
+                    ' Set DecelTime to Driver
+                    '----------------------------------
+                    Ret = SmcWSetDecelTime(Id, AxisNo, DecelTime)
+                    If Ret <> 0 Then
+                        SmcWGetErrorString(Ret, ErrorString)
+                        lblComment.Text = "SmcWSetDecelTime = " & Ret & " : " & ErrorString.ToString
+                        MovePiston = False
+                        Exit Function
+                    End If
+
+                    Ret = SmcWSetStopPosition(Id, AxisNo, 0, lDistance2)
+                    If Ret <> 0 Then
+                        SmcWGetErrorString(Ret, ErrorString)
+                        lblComment.Text = "SmcWSetStopPosition = " & Ret & " : " & ErrorString.ToString
+                        MovePiston = False
+                        Exit Function
+                    End If
+                    Dim StartDir2 As Short
+                    If DeltaPulse > 0 Then
+                        StartDir2 = 0
+                    Else
+                        StartDir2 = 1
+                    End If
+                    Ret = SmcWSetReady(Id, AxisNo, 1, StartDir2)
+                    If Ret <> 0 Then
+                        SmcWGetErrorString(Ret, ErrorString)
+                        lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
+                        MovePiston = False
+                        Exit Function
+                    End If
+
+                    '---------------
+                    ' Start Motion
+                    '---------------
+                    Ret = SmcWMotionStart(Id, AxisNo)
+                    If Ret <> 0 Then
+                        SmcWGetErrorString(Ret, ErrorString)
+                        lblComment.Text = "SmcWMotionStart = " & Ret & " : " & ErrorString.ToString
+                        MovePiston = False
+                        Exit Function
+                    End If
+                End If
+
+            End If
+
         End If
 
-        '----------------------------------
-        ' Set StartSpeed to Driver
-        '----------------------------------
-        Ret = SmcWSetStartSpeed(Id, AxisNo, StartSpeed)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWSetStartSpeed = " & Ret & " : " & ErrorString.ToString
-            MovePiston = False
-            Exit Function
-        End If
-
-        '----------------------------------
-        ' Set TargetSpeed to Driver
-        '----------------------------------
-        Dim TargetSpeed2 As Double
-        TargetSpeed2 = Int(SpeedPanel1.SetSpeed / CC)
-        Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed2)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWSetTargetSpeed = " & Ret & " : " & ErrorString.ToString
-            MovePiston = False
-            Exit Function
-        End If
-
-        '----------------------------------
-        ' Set AccelTime to Driver
-        '----------------------------------
-        Ret = SmcWSetAccelTime(Id, AxisNo, AccelTime)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWSetAccelTime = " & Ret & " : " & ErrorString.ToString
-            MovePiston = False
-            Exit Function
-        End If
-
-        '----------------------------------
-        ' Set DecelTime to Driver
-        '----------------------------------
-        Ret = SmcWSetDecelTime(Id, AxisNo, DecelTime)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWSetDecelTime = " & Ret & " : " & ErrorString.ToString
-            MovePiston = False
-            Exit Function
-        End If
-
-        '-----------------------------
-        ' Set SSpeed to Driver
-        '-----------------------------
-        'Try
-        '    dblSSpeed = Val(txtSSpeed.Text)
-        'Catch ex As Exception
-        '    dblSSpeed = 0
-        'End Try
-        'dwRet = SmcWSetSSpeed(Id, AxisNo, dblSSpeed)
-        'If dwRet <> 0 Then
-        '    SmcWGetErrorString(dwRet, ErrorString)
-        '    lblComment.Text = "SmcWSetSSpeed = " & dwRet & " : " & ErrorString.ToString
-        '    SetMoveParam = False
-        '    Exit Function
-        'End If
-
-        '-------------------------
-        ' Set Distance to Driver
-        '-------------------------
-        'MotionType = TypeComboBox1.SelectedIndex
-
-        'If MotionType <> CSMC_PTP Then
-        '    MovePiston = True
-        '    Exit Function
-        'End If
-
-        'Try
-        '    lDistance = Int(Val(txtDistance.Text) / CC)
-        'Catch ex As Exception
-        '    lDistance = 0
-        'End Try
-        'If bCoordinate = CSMC_INC Then
-        '    lDistance = System.Math.Abs(lDistance)
-        '    If StartDir = CSMC_CCW Then
-        '        lDistance = -(lDistance)
-        '    End If
-        'End If
-
-        'bCoordinate = TypeComboBox1.SelectedIndex
-        Ret = SmcWSetStopPosition(Id, AxisNo, 0, lDistance2)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWSetStopPosition = " & Ret & " : " & ErrorString.ToString
-            MovePiston = False
-            Exit Function
-        End If
-        Dim StartDir2 As Short
-        If DeltaPulse > 0 Then
-            StartDir2 = 0
-        Else
-            StartDir2 = 1
-        End If
-        Ret = SmcWSetReady(Id, AxisNo, 1, StartDir2)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
-            MovePiston = False
-            Exit Function
-        End If
-
-        '---------------
-        ' Start Motion
-        '---------------
-        Ret = SmcWMotionStart(Id, AxisNo)
-        If Ret <> 0 Then
-            SmcWGetErrorString(Ret, ErrorString)
-            lblComment.Text = "SmcWMotionStart = " & Ret & " : " & ErrorString.ToString
-            MovePiston = False
-            Exit Function
-        End If
         MovePiston = True
+        RealTimeTimer.Enabled = True   ' リアルタイム制御を再開
 
     End Function
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+    Private Sub PlusAdjustButton1_Click(sender As Object, e As EventArgs) Handles PlusAdjustButton1.Click
+        '
+        '   ピストンを少しだけプラス側へ移動
+        '
         MovePiston(PlusDelta1)
+
     End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+    Private Sub MinusAdjustButton1_Click(sender As Object, e As EventArgs) Handles MinusAdjustButton1.Click
+        '
+        '   ピストンを少しだけマイナス側へ移動
+        '
         MovePiston(MinusDelta1)
+
     End Sub
 
-    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+    Private Sub PlusAdjustButton2_Click(sender As Object, e As EventArgs) Handles PlusAdjustButton2.Click
+        '
+        '   ピストンを大きくプラス側へ移動
+        '
         MovePiston(PlusDelta2)
+
     End Sub
 
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+    Private Sub MinusAdjustButton2_Click(sender As Object, e As EventArgs) Handles MinusAdjustButton2.Click
+        '
+        '   ピストンを大きくマイナス側へ移動
+        '
         MovePiston(MinusDelta2)
+
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged_1(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
-        Button2.Enabled = CheckBox1.Checked
-        Button3.Enabled = CheckBox1.Checked
-        Button4.Enabled = CheckBox1.Checked
-        Button5.Enabled = CheckBox1.Checked
+    Private Sub CheckBox1_CheckedChanged_1(sender As Object, e As EventArgs) Handles PistonAdjustCheckBox.CheckedChanged
+        MinusAdjustButton1.Enabled = PistonAdjustCheckBox.Checked
+        PlusAdjustButton1.Enabled = PistonAdjustCheckBox.Checked
+        PlusAdjustButton2.Enabled = PistonAdjustCheckBox.Checked
+        MinusAdjustButton2.Enabled = PistonAdjustCheckBox.Checked
     End Sub
 End Class
 

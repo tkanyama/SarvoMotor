@@ -73,7 +73,7 @@ Public Class LoadGraph
 
     Public Sub DrawGraph(ByVal PStep As Integer)
         'RowIndex1 = 0
-        With Chart
+        With LoadChart1
             If .RowCount > 0 Then
                 '.RowIndex = RowIndex1
                 Valid = .Valid
