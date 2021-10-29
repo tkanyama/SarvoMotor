@@ -26,10 +26,78 @@ Public Class MotorCtl
         '
         ' パネルが最初に表示された時の初期設定サブルーチン
         '
+
+        PulseType = 4       ' 2パルス方式：負論理
+        DirTimer = 1        ' ウエイト
+        EncType = 0         ' エンコーダ：A/B （90度位相差）1逓倍
+        CtrlOut1 = 0        ' 汎用出力
+        CtrlOut2 = 1        ' アラームクリア信号
+        CtrlOut3 = 2        ' 偏差カウンタクリア信号
+        CtrlIn = 3          ' 制御信号の信号
+        OrgLog = 0          ' 原点入力論理
+        CtrlInOutLog = &H85 ' 入出力論理［0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 1 ］
+        ErcMode = 0         ' ERC信号自動出力の設定
+        ErcTime = 0         ' 偏差カウンタクリア信号幅
+        ErcOffTimer = 0     ' 偏差カウンタクリア信号OFFタイマ時間
+        AlmTime = 0         ' アラームクリア信号幅
+        LimitTurn = 1       ' リミット反転有効
+        OrgType = 0         ' Z相の使用有無
+        EndDir = 0          ' 原点復帰時の原点突入方向
+        ZCount = 0          ' 原点復帰時のZ相の数
+        SAccelType = 0      ' S字加減速の使用
+        FilterType = 0      ' 入力フィルターの特性
+        SDMode = 0          ' SD信号時の動作
+        ClearCntLtc = 0     ' LTC信号が変化したときのクリア動作
+        LtcMode = 0         ' LTC信号入力時にラッチするカウンタの種類
+        ClearCntClr = 0     ' CLR信号が変化したときのカウンダの種類
+        ClrMode = 0         ' 0で固定
+        CC = 0.001          ' １パルス当たりのピストンの変位量（mm）
+
+        StartSpeed = 100
+        AccelTime = 50
+        DecelTime = 50
+        ResolveSpeed = 1
+
+        AxisNo = 1
+
+        Dim ErrorString As New StringBuilder("", 256)
+
+
+        device = "SMC001"
+        Ret = SmcWInit(device, Id)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWInit = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        lblComment.Text = "OK "
+
+        Call Setting()      ' モーターコントロールボードの初期設定
+
+        ' このパネルの表示位置
+        Me.StartPosition = FormStartPosition.Manual
+        Me.Location = New Point(465, 40)
+        Me.FormBorderStyle = FormBorderStyle.FixedSingle
+
+        ' ステータス表示パネルの表示位置
+        Status1 = New Status
+        Status1.Visible = True
+        Status1.StartPosition = FormStartPosition.Manual
+        Status1.Location = New Point(20, 40)
+
+        ' コントロールIOパネルの表示位置
+        Cltio1 = New Ctlio
+        Cltio1.Visible = True
+        Cltio1.StartPosition = FormStartPosition.Manual
+        Cltio1.Location = New Point(20, 448)
+
+
+
         ' [スピード選択パネルの作成とメインパネルへの貼り付け]
         SpeedPanel1 = New SpeedPanel
         SpeedPanel1.Speed = Speed
-        SpeedPanel1.Location = New Point(15, 100)
+        SpeedPanel1.Location = New Point(15, 124)
         AddHandler SpeedPanel1.SpeedChange, AddressOf SpeedChange_Event
         Me.Controls.Add(SpeedPanel1)
 
@@ -77,7 +145,7 @@ Public Class MotorCtl
 
         ' [加力スケジュール表の作成]
         LoadChart1 = New LoadChart
-        LoadChart1.Location = New Point(15, 327)
+        LoadChart1.Location = New Point(15, 351)
         Me.Controls.Add(LoadChart1)
 
         ' [加力スケジュールグラフの作成]
@@ -88,14 +156,14 @@ Public Class MotorCtl
         ' [荷重制御時のリアルタイム制御のためのタイマー]
         RealTimeTimer = New Timer
         RealTimeTimer.Interval = RealTimeTimer1_IntTime
+        'AddHandler RealTimeTimer.Tick, AddressOf RealTimeTimer1_Tick
         RealTimeTimer.Enabled = False
-        AddHandler RealTimeTimer.Tick, AddressOf RealTimeTimer1_Tick
 
         ' [キーボード入力を確実に処理するためのタイマー]
         KBDFocusTimer = New Timer
         KBDFocusTimer.Interval = KBDFocusTimer_IntTime
+        'AddHandler KBDFocusTimer.Tick, AddressOf KBDFocusTimer_Tick
         KBDFocusTimer.Enabled = False
-        AddHandler KBDFocusTimer.Tick, AddressOf KBDFocusTimer_Tick
 
         EnterKeyLabel.Visible = False   ' [EnterKey]ラベル
         SpaceKeyLabel.Visible = False   ' [SpaceKey]ラベル
@@ -150,7 +218,9 @@ Public Class MotorCtl
 
 
     Private Sub SpeedChange_Event(sender As Object, e As EventArgs)
-        'If TestStartFlag Then
+        '
+        '   スピード変更処理
+        '
         Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
         If Ret = 0 Then
             If bStopSts1 = 0 Then
@@ -169,7 +239,7 @@ Public Class MotorCtl
                 End If
             End If
         End If
-        'End If
+
     End Sub
 
 
@@ -179,19 +249,6 @@ Public Class MotorCtl
         '
         KeyTextBox.Select()     ' 常にKeyTextBoxをフォーカスする
         KeyTextBox.Text = ""
-
-        'If TestStartFlag Then
-        '    Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
-        '    If Ret = 0 Then
-
-        '        If bStopSts1 = 0 Then
-        '            TestStartButton.Enabled = False
-        '        Else
-        '            TestStartButton.Enabled = True
-        '        End If
-        '    End If
-        'End If
-
     End Sub
 
     Private Sub PTP_RadioButton_CheckedChanged(sender As Object, e As EventArgs)
@@ -748,10 +805,8 @@ Public Class MotorCtl
         If TestModeRadioButton.Checked = True Then
             TestMode = 1
             Me.Size = New Size(xSize2, ySize2)
-            'RadioButton1.Select()
-            'RadioButton1.PerformClick()
             Coordinate_TypeComboBox1.SelectedIndex = 0
-            'CheckBox1.Checked = True
+
         End If
     End Sub
 
@@ -1046,6 +1101,8 @@ Public Class MotorCtl
         TestStartFlag = True
         RealTimeTimer.Enabled = True
         KBDFocusTimer.Enabled = True
+        AddHandler RealTimeTimer.Tick, AddressOf RealTimeTimer1_Tick
+        AddHandler KBDFocusTimer.Tick, AddressOf KBDFocusTimer_Tick
 
         AddHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
         'Me.TopMost = True
@@ -1151,11 +1208,7 @@ Public Class MotorCtl
                                 CCW_Button.PerformClick()
                             End If
                         Else
-                            'If (lDistanceDisp - AIOMean(ControlChNo)) > 0 Then
-                            '    CW_Button.PerformClick()
-                            'Else
-                            '    CCW_Button.PerformClick()
-                            'End If
+
                             If LoadDir2(PointI2) > 0 Then
                                 CW_Button.PerformClick()
                             Else
@@ -1366,15 +1419,7 @@ Public Class MotorCtl
             If bStopSts2 <> 0 Then
 
                 If TestStartFlag And SControlNo <> 0 Then
-                    'Dim lOutPulse2 As Integer
-                    'Ret = SmcWGetOutPulse(Id, AxisNo, lOutPulse2)
-                    'If Ret <> 0 Then
-                    '    SmcWGetErrorString(Ret, ErrorString)
-                    '    lblComment.Text = "SmcWGetOutPulse = " & Ret & " : " & ErrorString.ToString
 
-                    'End If
-
-                    'Dim lDistance2 As Integer = lOutPulse2 + DeltaPulse
                     '
                     '   モーターの動作パラメータの設定
                     '
@@ -1449,7 +1494,7 @@ Public Class MotorCtl
                     Else
                         StartDir2 = 1
                     End If
-                    Ret = SmcWSetReady(Id, AxisNo, 1, StartDir2)
+                    Ret = SmcWSetReady(Id, AxisNo, CSMC_INC, StartDir2)
                     If Ret <> 0 Then
                         SmcWGetErrorString(Ret, ErrorString)
                         lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
@@ -1530,5 +1575,171 @@ Public Class MotorCtl
         MinusAdjustButton2.Enabled = PistonAdjustCheckBox.Checked
 
     End Sub
+
+    Private Sub 終了ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 終了ToolStripMenuItem.Click
+        '
+        '   終了メニューの処理
+        '
+        If Not TestStartFlag Then
+            Dim result As DialogResult = MessageBox.Show("プログラムを終了しますか？", "確認", MessageBoxButtons.YesNo)
+            If result = DialogResult.Yes Then
+
+                End
+            Else
+                Dim result2 As DialogResult = MessageBox.Show("試験モードを終了してください", "エラー", MessageBoxButtons.OK)
+            End If
+
+        End If
+    End Sub
+
+    Private Sub frmClose_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        '
+        '   クローズボタンの処理
+        '
+        If Not TestStartFlag Then
+            If e.CloseReason = CloseReason.UserClosing Then
+                'ボタンでのクローズかチェック
+                Dim result As DialogResult = MessageBox.Show("プログラムを終了しますか？", "確認", MessageBoxButtons.YesNo)
+                If result = DialogResult.No Then
+                    e.Cancel = True
+                End If
+            End If
+        Else
+            If e.CloseReason = CloseReason.UserClosing Then
+                'Dim result As DialogResult = MessageBox.Show("試験モードを終了してください", "エラー", MessageBoxButtons.OK)
+                e.Cancel = True
+            End If
+
+        End If
+
+    End Sub
+
+    Private Sub 電圧入力設定ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles 電圧入力設定ToolStripMenuItem.Click
+        '
+        '   電圧入力設定メニューの処理
+        '
+        Dim fm1 As New AIOSettingForm
+        fm1.StartPosition = FormStartPosition.CenterScreen
+        Dim Ret = fm1.ShowDialog
+        If Ret = DialogResult.OK Then
+
+        End If
+    End Sub
+
+    Private Sub Setting（）
+        '
+        '   モータコントロールボードの初期化
+        '
+        Dim ErrorString As New StringBuilder("", 256)
+
+        Ret = SmcWSetPulseType(Id, AxisNo, PulseType, DirTimer)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetPulseType = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetEncType(Id, AxisNo, EncType)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetEncType = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetCtrlTypeOut(Id, AxisNo, CtrlOut1, CtrlOut2, CtrlOut3)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetCtrlTypeOut = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetCtrlTypeIn(Id, AxisNo, CtrlIn)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetCtrlTypeIn = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetOrgLog(Id, AxisNo, OrgLog)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetOrgLog = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetCtrlInOutLog(Id, AxisNo, CtrlInOutLog)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetCtrlInOutLog = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetErcMode(Id, AxisNo, ErcMode)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetErcMode = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetErcAlmClearTime(Id, AxisNo, ErcTime, ErcOffTimer, AlmTime)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetErcAlmClearTime = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetOrgMode(Id, AxisNo, LimitTurn, OrgType, EndDir, ZCount)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetOrgMode = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetErcMode(Id, AxisNo, ErcMode)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetErcMode = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetSAccelType(Id, AxisNo, SAccelType)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetSAccelType = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetInFilterType(Id, AxisNo, FilterType)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetInFilterType = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetSDMode(Id, AxisNo, SDMode)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetSDMode = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetCounterMode(Id, AxisNo, ClearCntLtc, LtcMode, ClearCntClr, ClrMode)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetCounterMode = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        Ret = SmcWSetInitParam(Id, AxisNo)
+        If Ret <> 0 Then
+            SmcWGetErrorString(Ret, ErrorString)
+            lblComment.Text = "SmcWSetInitParam = " & Ret & " : " & ErrorString.ToString
+            Exit Sub
+        End If
+
+        lblComment.Text = "OK "
+    End Sub
+
+
 End Class
 

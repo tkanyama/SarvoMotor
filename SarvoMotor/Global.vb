@@ -194,9 +194,9 @@ Module [Global]
 
 	Public TestMode As Integer      ' 0:準備・片付け　1:試験モード
 	Public Const xSize1 As Integer = 570    ' 準備時の操作パネルの幅
-	Public Const ySize1 As Integer = 360    ' 準備時の操作パネルの高さ
+	Public Const ySize1 As Integer = 384    ' 準備時の操作パネルの高さ
 	Public Const xSize2 As Integer = 883   ' 試験時の操作パネルの幅
-	Public Const ySize2 As Integer = 720    ' 試験時の操作パネルの高さ
+	Public Const ySize2 As Integer = 744    ' 試験時の操作パネルの高さ
 
 	Public SpeedPanel1 As SpeedPanel                   ' ピストンスピード選択パネルコントロール
 

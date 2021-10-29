@@ -23,6 +23,7 @@ Partial Class MotorCtl
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.PistonAdjustCheckBox = New System.Windows.Forms.CheckBox()
         Me.PlusAdjustButton2 = New System.Windows.Forms.Button()
         Me.PlusAdjustButton1 = New System.Windows.Forms.Button()
         Me.SpeedControlCheckBox = New System.Windows.Forms.CheckBox()
@@ -57,6 +58,7 @@ Partial Class MotorCtl
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.KeyHintLabel = New System.Windows.Forms.Label()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.Text_ErrorString = New System.Windows.Forms.Label()
@@ -65,11 +67,16 @@ Partial Class MotorCtl
         Me.MeanSampleNComboBox = New System.Windows.Forms.ComboBox()
         Me.AIOSettingButton = New System.Windows.Forms.Button()
         Me.AIOCheckBox = New System.Windows.Forms.CheckBox()
-        Me.PistonAdjustCheckBox = New System.Windows.Forms.CheckBox()
+        Me.MenuStrip2 = New System.Windows.Forms.MenuStrip()
+        Me.ファイルToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.終了ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.電圧入力設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
+        Me.MenuStrip2.SuspendLayout()
         Me.SuspendLayout()
         '
         'GroupBox1
@@ -96,26 +103,36 @@ Partial Class MotorCtl
         Me.GroupBox1.Controls.Add(Me.ORG_RadioButton3)
         Me.GroupBox1.Controls.Add(Me.JOG_RadioButton2)
         Me.GroupBox1.Controls.Add(Me.PTP_RadioButton1)
-        Me.GroupBox1.Location = New System.Drawing.Point(160, 12)
+        Me.GroupBox1.Location = New System.Drawing.Point(160, 36)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(380, 297)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "ピストン操作"
         '
-        'Button4
+        'PistonAdjustCheckBox
+        '
+        Me.PistonAdjustCheckBox.AutoSize = True
+        Me.PistonAdjustCheckBox.Location = New System.Drawing.Point(168, 11)
+        Me.PistonAdjustCheckBox.Name = "PistonAdjustCheckBox"
+        Me.PistonAdjustCheckBox.Size = New System.Drawing.Size(97, 19)
+        Me.PistonAdjustCheckBox.TabIndex = 21
+        Me.PistonAdjustCheckBox.Text = "ピストン微調整"
+        Me.PistonAdjustCheckBox.UseVisualStyleBackColor = True
+        '
+        'PlusAdjustButton2
         '
         Me.PlusAdjustButton2.Location = New System.Drawing.Point(323, 36)
-        Me.PlusAdjustButton2.Name = "Button4"
+        Me.PlusAdjustButton2.Name = "PlusAdjustButton2"
         Me.PlusAdjustButton2.Size = New System.Drawing.Size(40, 21)
         Me.PlusAdjustButton2.TabIndex = 20
         Me.PlusAdjustButton2.Text = ">>"
         Me.PlusAdjustButton2.UseVisualStyleBackColor = True
         '
-        'Button3
+        'PlusAdjustButton1
         '
         Me.PlusAdjustButton1.Location = New System.Drawing.Point(271, 36)
-        Me.PlusAdjustButton1.Name = "Button3"
+        Me.PlusAdjustButton1.Name = "PlusAdjustButton1"
         Me.PlusAdjustButton1.Size = New System.Drawing.Size(40, 21)
         Me.PlusAdjustButton1.TabIndex = 20
         Me.PlusAdjustButton1.Text = ">"
@@ -131,10 +148,10 @@ Partial Class MotorCtl
         Me.SpeedControlCheckBox.Text = "目標値減速調整"
         Me.SpeedControlCheckBox.UseVisualStyleBackColor = True
         '
-        'Button5
+        'MinusAdjustButton2
         '
         Me.MinusAdjustButton2.Location = New System.Drawing.Point(167, 36)
-        Me.MinusAdjustButton2.Name = "Button5"
+        Me.MinusAdjustButton2.Name = "MinusAdjustButton2"
         Me.MinusAdjustButton2.Size = New System.Drawing.Size(40, 21)
         Me.MinusAdjustButton2.TabIndex = 20
         Me.MinusAdjustButton2.Text = "<<"
@@ -149,10 +166,10 @@ Partial Class MotorCtl
         Me.SpaceKeyLabel.TabIndex = 13
         Me.SpaceKeyLabel.Text = "[Space Key]"
         '
-        'Button2
+        'MinusAdjustButton1
         '
         Me.MinusAdjustButton1.Location = New System.Drawing.Point(219, 36)
-        Me.MinusAdjustButton1.Name = "Button2"
+        Me.MinusAdjustButton1.Name = "MinusAdjustButton1"
         Me.MinusAdjustButton1.Size = New System.Drawing.Size(40, 21)
         Me.MinusAdjustButton1.TabIndex = 20
         Me.MinusAdjustButton1.Text = "<"
@@ -185,11 +202,11 @@ Partial Class MotorCtl
         Me.EventCheckBox.Text = "Stop Event"
         Me.EventCheckBox.UseVisualStyleBackColor = True
         '
-        'Label3
+        'Unit_Label
         '
         Me.Unit_Label.AutoSize = True
         Me.Unit_Label.Location = New System.Drawing.Point(336, 194)
-        Me.Unit_Label.Name = "Label3"
+        Me.Unit_Label.Name = "Unit_Label"
         Me.Unit_Label.Size = New System.Drawing.Size(27, 15)
         Me.Unit_Label.TabIndex = 8
         Me.Unit_Label.Text = "mm"
@@ -211,32 +228,32 @@ Partial Class MotorCtl
         Me.txtDistance.TabIndex = 4
         Me.txtDistance.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
-        'Label1
+        'Coordinate_Label1
         '
         Me.Coordinate_Label1.Font = New System.Drawing.Font("Yu Gothic UI", 16.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.Coordinate_Label1.Location = New System.Drawing.Point(139, 182)
-        Me.Coordinate_Label1.Name = "Label1"
+        Me.Coordinate_Label1.Name = "Coordinate_Label1"
         Me.Coordinate_Label1.Size = New System.Drawing.Size(103, 30)
         Me.Coordinate_Label1.TabIndex = 3
         Me.Coordinate_Label1.Text = "目標値"
         Me.Coordinate_Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'Label2
+        'Coordinate_Label2
         '
         Me.Coordinate_Label2.AutoSize = True
         Me.Coordinate_Label2.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.Coordinate_Label2.Location = New System.Drawing.Point(29, 157)
-        Me.Coordinate_Label2.Name = "Label2"
+        Me.Coordinate_Label2.Name = "Coordinate_Label2"
         Me.Coordinate_Label2.Size = New System.Drawing.Size(77, 21)
         Me.Coordinate_Label2.TabIndex = 6
         Me.Coordinate_Label2.Text = "座標タイプ"
         '
-        'TypeComboBox1
+        'Coordinate_TypeComboBox1
         '
         Me.Coordinate_TypeComboBox1.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.Coordinate_TypeComboBox1.FormattingEnabled = True
         Me.Coordinate_TypeComboBox1.Location = New System.Drawing.Point(14, 186)
-        Me.Coordinate_TypeComboBox1.Name = "TypeComboBox1"
+        Me.Coordinate_TypeComboBox1.Name = "Coordinate_TypeComboBox1"
         Me.Coordinate_TypeComboBox1.Size = New System.Drawing.Size(105, 29)
         Me.Coordinate_TypeComboBox1.TabIndex = 5
         '
@@ -270,48 +287,48 @@ Partial Class MotorCtl
         Me.CW_Button.Text = "引き"
         Me.CW_Button.UseVisualStyleBackColor = True
         '
-        'RadioButton3
+        'ORG_RadioButton3
         '
         Me.ORG_RadioButton3.AutoSize = True
         Me.ORG_RadioButton3.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.ORG_RadioButton3.Location = New System.Drawing.Point(16, 92)
-        Me.ORG_RadioButton3.Name = "RadioButton3"
+        Me.ORG_RadioButton3.Name = "ORG_RadioButton3"
         Me.ORG_RadioButton3.Size = New System.Drawing.Size(92, 25)
         Me.ORG_RadioButton3.TabIndex = 0
         Me.ORG_RadioButton3.TabStop = True
         Me.ORG_RadioButton3.Text = "原点復帰"
         Me.ORG_RadioButton3.UseVisualStyleBackColor = True
         '
-        'RadioButton2
+        'JOG_RadioButton2
         '
         Me.JOG_RadioButton2.AutoSize = True
         Me.JOG_RadioButton2.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.JOG_RadioButton2.Location = New System.Drawing.Point(16, 62)
-        Me.JOG_RadioButton2.Name = "RadioButton2"
+        Me.JOG_RadioButton2.Name = "JOG_RadioButton2"
         Me.JOG_RadioButton2.Size = New System.Drawing.Size(92, 25)
         Me.JOG_RadioButton2.TabIndex = 0
         Me.JOG_RadioButton2.TabStop = True
         Me.JOG_RadioButton2.Text = "連続運転"
         Me.JOG_RadioButton2.UseVisualStyleBackColor = True
         '
-        'RadioButton1
+        'PTP_RadioButton1
         '
         Me.PTP_RadioButton1.AutoSize = True
         Me.PTP_RadioButton1.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.PTP_RadioButton1.Location = New System.Drawing.Point(16, 32)
-        Me.PTP_RadioButton1.Name = "RadioButton1"
+        Me.PTP_RadioButton1.Name = "PTP_RadioButton1"
         Me.PTP_RadioButton1.Size = New System.Drawing.Size(108, 25)
         Me.PTP_RadioButton1.TabIndex = 0
         Me.PTP_RadioButton1.TabStop = True
         Me.PTP_RadioButton1.Text = "目標値移動"
         Me.PTP_RadioButton1.UseVisualStyleBackColor = True
         '
-        'RadioButton4
+        'PreModeRadioButton
         '
         Me.PreModeRadioButton.AutoSize = True
         Me.PreModeRadioButton.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.PreModeRadioButton.Location = New System.Drawing.Point(6, 22)
-        Me.PreModeRadioButton.Name = "RadioButton4"
+        Me.PreModeRadioButton.Name = "PreModeRadioButton"
         Me.PreModeRadioButton.Size = New System.Drawing.Size(113, 25)
         Me.PreModeRadioButton.TabIndex = 12
         Me.PreModeRadioButton.TabStop = True
@@ -322,19 +339,19 @@ Partial Class MotorCtl
         '
         Me.GroupBox2.Controls.Add(Me.TestModeRadioButton)
         Me.GroupBox2.Controls.Add(Me.PreModeRadioButton)
-        Me.GroupBox2.Location = New System.Drawing.Point(15, 12)
+        Me.GroupBox2.Location = New System.Drawing.Point(15, 36)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(125, 85)
         Me.GroupBox2.TabIndex = 13
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "操作モード"
         '
-        'RadioButton5
+        'TestModeRadioButton
         '
         Me.TestModeRadioButton.AutoSize = True
         Me.TestModeRadioButton.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me.TestModeRadioButton.Location = New System.Drawing.Point(6, 53)
-        Me.TestModeRadioButton.Name = "RadioButton5"
+        Me.TestModeRadioButton.Name = "TestModeRadioButton"
         Me.TestModeRadioButton.Size = New System.Drawing.Size(60, 25)
         Me.TestModeRadioButton.TabIndex = 12
         Me.TestModeRadioButton.TabStop = True
@@ -373,7 +390,8 @@ Partial Class MotorCtl
         Me.GroupBox3.Controls.Add(Me.Label9)
         Me.GroupBox3.Controls.Add(Me.Label6)
         Me.GroupBox3.Controls.Add(Me.TestStartButton)
-        Me.GroupBox3.Location = New System.Drawing.Point(555, 12)
+        Me.GroupBox3.Controls.Add(Me.MenuStrip1)
+        Me.GroupBox3.Location = New System.Drawing.Point(555, 36)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(113, 297)
         Me.GroupBox3.TabIndex = 16
@@ -388,7 +406,7 @@ Partial Class MotorCtl
         Me.ControlModeLabel.Name = "ControlModeLabel"
         Me.ControlModeLabel.Size = New System.Drawing.Size(86, 27)
         Me.ControlModeLabel.TabIndex = 15
-        Me.ControlModeLabel.Text = "変位制御"
+        Me.ControlModeLabel.Text = "ストローク"
         Me.ControlModeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'testModeLabel
@@ -449,11 +467,19 @@ Partial Class MotorCtl
         Me.Label6.TabIndex = 16
         Me.Label6.Text = "目標値"
         '
-        'Label5
+        'MenuStrip1
+        '
+        Me.MenuStrip1.Location = New System.Drawing.Point(3, 19)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(107, 24)
+        Me.MenuStrip1.TabIndex = 17
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'KeyHintLabel
         '
         Me.KeyHintLabel.AutoSize = True
         Me.KeyHintLabel.Location = New System.Drawing.Point(130, 312)
-        Me.KeyHintLabel.Name = "Label5"
+        Me.KeyHintLabel.Name = "KeyHintLabel"
         Me.KeyHintLabel.Size = New System.Drawing.Size(237, 15)
         Me.KeyHintLabel.TabIndex = 17
         Me.KeyHintLabel.Text = "Press 'F1' or 'S' key Then Speed Input Dialog"
@@ -466,7 +492,7 @@ Partial Class MotorCtl
         Me.GroupBox4.Controls.Add(Me.MeanSampleNComboBox)
         Me.GroupBox4.Controls.Add(Me.AIOSettingButton)
         Me.GroupBox4.Controls.Add(Me.AIOCheckBox)
-        Me.GroupBox4.Location = New System.Drawing.Point(685, 12)
+        Me.GroupBox4.Location = New System.Drawing.Point(685, 36)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(170, 296)
         Me.GroupBox4.TabIndex = 19
@@ -500,18 +526,18 @@ Partial Class MotorCtl
         Me.Label7.TabIndex = 6
         Me.Label7.Text = "平均個数"
         '
-        'ComboBox1
+        'MeanSampleNComboBox
         '
         Me.MeanSampleNComboBox.FormattingEnabled = True
         Me.MeanSampleNComboBox.Location = New System.Drawing.Point(117, 44)
-        Me.MeanSampleNComboBox.Name = "ComboBox1"
+        Me.MeanSampleNComboBox.Name = "MeanSampleNComboBox"
         Me.MeanSampleNComboBox.Size = New System.Drawing.Size(39, 23)
         Me.MeanSampleNComboBox.TabIndex = 5
         '
-        'Button1
+        'AIOSettingButton
         '
         Me.AIOSettingButton.Location = New System.Drawing.Point(16, 42)
-        Me.AIOSettingButton.Name = "Button1"
+        Me.AIOSettingButton.Name = "AIOSettingButton"
         Me.AIOSettingButton.Size = New System.Drawing.Size(89, 26)
         Me.AIOSettingButton.TabIndex = 4
         Me.AIOSettingButton.Text = "電圧入力設定"
@@ -527,32 +553,58 @@ Partial Class MotorCtl
         Me.AIOCheckBox.Text = "電圧入力有効"
         Me.AIOCheckBox.UseVisualStyleBackColor = True
         '
-        'CheckBox1
+        'MenuStrip2
         '
-        Me.PistonAdjustCheckBox.AutoSize = True
-        Me.PistonAdjustCheckBox.Location = New System.Drawing.Point(168, 11)
-        Me.PistonAdjustCheckBox.Name = "CheckBox1"
-        Me.PistonAdjustCheckBox.Size = New System.Drawing.Size(97, 19)
-        Me.PistonAdjustCheckBox.TabIndex = 21
-        Me.PistonAdjustCheckBox.Text = "ピストン微調整"
-        Me.PistonAdjustCheckBox.UseVisualStyleBackColor = True
+        Me.MenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ファイルToolStripMenuItem, Me.編集ToolStripMenuItem})
+        Me.MenuStrip2.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip2.Name = "MenuStrip2"
+        Me.MenuStrip2.Size = New System.Drawing.Size(1084, 24)
+        Me.MenuStrip2.TabIndex = 20
+        Me.MenuStrip2.Text = "MenuStrip2"
+        '
+        'ファイルToolStripMenuItem
+        '
+        Me.ファイルToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.終了ToolStripMenuItem})
+        Me.ファイルToolStripMenuItem.Name = "ファイルToolStripMenuItem"
+        Me.ファイルToolStripMenuItem.Size = New System.Drawing.Size(53, 20)
+        Me.ファイルToolStripMenuItem.Text = "ファイル"
+        '
+        '終了ToolStripMenuItem
+        '
+        Me.終了ToolStripMenuItem.Name = "終了ToolStripMenuItem"
+        Me.終了ToolStripMenuItem.Size = New System.Drawing.Size(98, 22)
+        Me.終了ToolStripMenuItem.Text = "終了"
+        '
+        '編集ToolStripMenuItem
+        '
+        Me.編集ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.電圧入力設定ToolStripMenuItem})
+        Me.編集ToolStripMenuItem.Name = "編集ToolStripMenuItem"
+        Me.編集ToolStripMenuItem.Size = New System.Drawing.Size(43, 20)
+        Me.編集ToolStripMenuItem.Text = "編集"
+        '
+        '電圧入力設定ToolStripMenuItem
+        '
+        Me.電圧入力設定ToolStripMenuItem.Name = "電圧入力設定ToolStripMenuItem"
+        Me.電圧入力設定ToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
+        Me.電圧入力設定ToolStripMenuItem.Text = "電圧入力設定"
         '
         'MotorCtl
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1084, 681)
-        Me.ControlBox = False
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.KeyHintLabel)
         Me.Controls.Add(Me.GroupBox3)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.MenuStrip2)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "MotorCtl"
-        Me.Text = "モーターコントロール"
+        Me.Text = "加力制御パネル"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
@@ -561,6 +613,8 @@ Partial Class MotorCtl
         Me.GroupBox3.PerformLayout()
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
+        Me.MenuStrip2.ResumeLayout(False)
+        Me.MenuStrip2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -610,4 +664,10 @@ Partial Class MotorCtl
     Friend WithEvents PlusAdjustButton2 As Button
     Friend WithEvents MinusAdjustButton2 As Button
     Friend WithEvents PistonAdjustCheckBox As CheckBox
+    Friend WithEvents MenuStrip1 As MenuStrip
+    Friend WithEvents MenuStrip2 As MenuStrip
+    Friend WithEvents ファイルToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 終了ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 編集ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents 電圧入力設定ToolStripMenuItem As ToolStripMenuItem
 End Class
