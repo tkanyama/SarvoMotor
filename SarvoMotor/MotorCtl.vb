@@ -1046,7 +1046,7 @@ Public Class MotorCtl
                             lblComment.Text = "SmcWMotionStop = " & Ret & " : " & ErrorString.ToString
                             Exit Sub
                         End If
-
+                        System.Threading.Thread.Sleep(100)
                         NextLoad()
                         Exit Sub
 
