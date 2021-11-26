@@ -1406,7 +1406,9 @@ Public Class MotorCtl
         '
         '   ピストン微調整関数
         '
-        RealTimeTimer.Enabled = False   ' リアルタイム制御を停止
+        If TestStartFlag And SControlNo <> 0 Then
+            RealTimeTimer.Enabled = False   ' リアルタイム制御を停止
+        End If
 
         If DeltaPulse <> 0 Then
             Dim bStopSts2 As Short
@@ -1418,119 +1420,120 @@ Public Class MotorCtl
             End If
             If bStopSts2 <> 0 Then
 
-                If TestStartFlag And SControlNo <> 0 Then
+                'If TestStartFlag And SControlNo <> 0 Then
 
-                    '
-                    '   モーターの動作パラメータの設定
-                    '
+                '
+                '   モーターの動作パラメータの設定
+                '
 
-                    '----------------------------------
-                    ' Set Resolution to Driver
-                    '----------------------------------
-                    Ret = SmcWSetResolveSpeed(Id, AxisNo, ResolveSpeed)
-                    If Ret <> 0 Then
-                        SmcWGetErrorString(Ret, ErrorString)
-                        lblComment.Text = "SmcWSetResolveSpeed = " & Ret & " : " & ErrorString.ToString
-                        MovePiston = False
-                        Exit Function
-                    End If
-
-                    '----------------------------------
-                    ' Set StartSpeed to Driver
-                    '----------------------------------
-                    Ret = SmcWSetStartSpeed(Id, AxisNo, StartSpeed)
-                    If Ret <> 0 Then
-                        SmcWGetErrorString(Ret, ErrorString)
-                        lblComment.Text = "SmcWSetStartSpeed = " & Ret & " : " & ErrorString.ToString
-                        MovePiston = False
-                        Exit Function
-                    End If
-
-                    '----------------------------------
-                    ' Set TargetSpeed to Driver
-                    '----------------------------------
-                    Dim TargetSpeed2 As Double
-                    TargetSpeed2 = Int(SpeedPanel1.SetSpeed / CC)
-                    Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed2)
-                    If Ret <> 0 Then
-                        SmcWGetErrorString(Ret, ErrorString)
-                        lblComment.Text = "SmcWSetTargetSpeed = " & Ret & " : " & ErrorString.ToString
-                        MovePiston = False
-                        Exit Function
-                    End If
-
-                    '----------------------------------
-                    ' Set AccelTime to Driver
-                    '----------------------------------
-                    Ret = SmcWSetAccelTime(Id, AxisNo, AccelTime)
-                    If Ret <> 0 Then
-                        SmcWGetErrorString(Ret, ErrorString)
-                        lblComment.Text = "SmcWSetAccelTime = " & Ret & " : " & ErrorString.ToString
-                        MovePiston = False
-                        Exit Function
-                    End If
-
-                    '----------------------------------
-                    ' Set DecelTime to Driver
-                    '----------------------------------
-                    Ret = SmcWSetDecelTime(Id, AxisNo, DecelTime)
-                    If Ret <> 0 Then
-                        SmcWGetErrorString(Ret, ErrorString)
-                        lblComment.Text = "SmcWSetDecelTime = " & Ret & " : " & ErrorString.ToString
-                        MovePiston = False
-                        Exit Function
-                    End If
-
-                    Ret = SmcWSetStopPosition(Id, AxisNo, 1, DeltaPulse)
-                    If Ret <> 0 Then
-                        SmcWGetErrorString(Ret, ErrorString)
-                        lblComment.Text = "SmcWSetStopPosition = " & Ret & " : " & ErrorString.ToString
-                        MovePiston = False
-                        Exit Function
-                    End If
-                    Dim StartDir2 As Short
-                    If DeltaPulse > 0 Then
-                        StartDir2 = 0
-                    Else
-                        StartDir2 = 1
-                    End If
-                    Ret = SmcWSetReady(Id, AxisNo, CSMC_INC, StartDir2)
-                    If Ret <> 0 Then
-                        SmcWGetErrorString(Ret, ErrorString)
-                        lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
-                        MovePiston = False
-                        Exit Function
-                    End If
-
-                    '---------------
-                    ' Start Motion
-                    '---------------
-                    Ret = SmcWMotionStart(Id, AxisNo)
-                    If Ret <> 0 Then
-                        SmcWGetErrorString(Ret, ErrorString)
-                        lblComment.Text = "SmcWMotionStart = " & Ret & " : " & ErrorString.ToString
-                        MovePiston = False
-                        Exit Function
-                    End If
-
-                    Do
-                        Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts2)
-                        If Ret <> 0 Then
-                            SmcWGetErrorString(Ret, ErrorString)
-                            lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
-                            'Exit Sub
-                        End If
-                        If bStopSts2 <> 0 Then Exit Do
-                    Loop
+                '----------------------------------
+                ' Set Resolution to Driver
+                '----------------------------------
+                Ret = SmcWSetResolveSpeed(Id, AxisNo, ResolveSpeed)
+                If Ret <> 0 Then
+                    SmcWGetErrorString(Ret, ErrorString)
+                    lblComment.Text = "SmcWSetResolveSpeed = " & Ret & " : " & ErrorString.ToString
+                    MovePiston = False
+                    Exit Function
                 End If
+
+                '----------------------------------
+                ' Set StartSpeed to Driver
+                '----------------------------------
+                Ret = SmcWSetStartSpeed(Id, AxisNo, StartSpeed)
+                If Ret <> 0 Then
+                    SmcWGetErrorString(Ret, ErrorString)
+                    lblComment.Text = "SmcWSetStartSpeed = " & Ret & " : " & ErrorString.ToString
+                    MovePiston = False
+                    Exit Function
+                End If
+
+                '----------------------------------
+                ' Set TargetSpeed to Driver
+                '----------------------------------
+                Dim TargetSpeed2 As Double
+                TargetSpeed2 = Int(SpeedPanel1.SetSpeed / CC)
+                Ret = SmcWSetTargetSpeed(Id, AxisNo, TargetSpeed2)
+                If Ret <> 0 Then
+                    SmcWGetErrorString(Ret, ErrorString)
+                    lblComment.Text = "SmcWSetTargetSpeed = " & Ret & " : " & ErrorString.ToString
+                    MovePiston = False
+                    Exit Function
+                End If
+
+                '----------------------------------
+                ' Set AccelTime to Driver
+                '----------------------------------
+                Ret = SmcWSetAccelTime(Id, AxisNo, AccelTime)
+                If Ret <> 0 Then
+                    SmcWGetErrorString(Ret, ErrorString)
+                    lblComment.Text = "SmcWSetAccelTime = " & Ret & " : " & ErrorString.ToString
+                    MovePiston = False
+                    Exit Function
+                End If
+
+                '----------------------------------
+                ' Set DecelTime to Driver
+                '----------------------------------
+                Ret = SmcWSetDecelTime(Id, AxisNo, DecelTime)
+                If Ret <> 0 Then
+                    SmcWGetErrorString(Ret, ErrorString)
+                    lblComment.Text = "SmcWSetDecelTime = " & Ret & " : " & ErrorString.ToString
+                    MovePiston = False
+                    Exit Function
+                End If
+
+                Ret = SmcWSetStopPosition(Id, AxisNo, 1, DeltaPulse)
+                If Ret <> 0 Then
+                    SmcWGetErrorString(Ret, ErrorString)
+                    lblComment.Text = "SmcWSetStopPosition = " & Ret & " : " & ErrorString.ToString
+                    MovePiston = False
+                    Exit Function
+                End If
+                Dim StartDir2 As Short
+                If DeltaPulse > 0 Then
+                    StartDir2 = 0
+                Else
+                    StartDir2 = 1
+                End If
+                Ret = SmcWSetReady(Id, AxisNo, CSMC_INC, StartDir2)
+                If Ret <> 0 Then
+                    SmcWGetErrorString(Ret, ErrorString)
+                    lblComment.Text = "SmcWSetReady = " & Ret & " : " & ErrorString.ToString
+                    MovePiston = False
+                    Exit Function
+                End If
+
+                '---------------
+                ' Start Motion
+                '---------------
+                Ret = SmcWMotionStart(Id, AxisNo)
+                If Ret <> 0 Then
+                    SmcWGetErrorString(Ret, ErrorString)
+                    lblComment.Text = "SmcWMotionStart = " & Ret & " : " & ErrorString.ToString
+                    MovePiston = False
+                    Exit Function
+                End If
+
+                Do
+                    Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts2)
+                    If Ret <> 0 Then
+                        SmcWGetErrorString(Ret, ErrorString)
+                        lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
+                        'Exit Sub
+                    End If
+                    If bStopSts2 <> 0 Then Exit Do
+                Loop
+                'End If
 
             End If
 
         End If
 
         MovePiston = True
-        RealTimeTimer.Enabled = True   ' リアルタイム制御を再開
-
+        If TestStartFlag And SControlNo <> 0 Then
+            RealTimeTimer.Enabled = True   ' リアルタイム制御を再開
+        End If
     End Function
 
     Private Sub PlusAdjustButton1_Click(sender As Object, e As EventArgs) Handles PlusAdjustButton1.Click
