@@ -72,6 +72,8 @@ Partial Class MotorCtl
         Me.終了ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.電圧入力設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ピストンスピード設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.KBDControlCheckBox = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -81,6 +83,7 @@ Partial Class MotorCtl
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.KBDControlCheckBox)
         Me.GroupBox1.Controls.Add(Me.PistonAdjustCheckBox)
         Me.GroupBox1.Controls.Add(Me.PlusAdjustButton2)
         Me.GroupBox1.Controls.Add(Me.PlusAdjustButton1)
@@ -577,7 +580,7 @@ Partial Class MotorCtl
         '
         '編集ToolStripMenuItem
         '
-        Me.編集ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.電圧入力設定ToolStripMenuItem})
+        Me.編集ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.電圧入力設定ToolStripMenuItem, Me.ピストンスピード設定ToolStripMenuItem})
         Me.編集ToolStripMenuItem.Name = "編集ToolStripMenuItem"
         Me.編集ToolStripMenuItem.Size = New System.Drawing.Size(43, 20)
         Me.編集ToolStripMenuItem.Text = "編集"
@@ -585,8 +588,24 @@ Partial Class MotorCtl
         '電圧入力設定ToolStripMenuItem
         '
         Me.電圧入力設定ToolStripMenuItem.Name = "電圧入力設定ToolStripMenuItem"
-        Me.電圧入力設定ToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
+        Me.電圧入力設定ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.電圧入力設定ToolStripMenuItem.Text = "電圧入力設定"
+        '
+        'ピストンスピード設定ToolStripMenuItem
+        '
+        Me.ピストンスピード設定ToolStripMenuItem.Name = "ピストンスピード設定ToolStripMenuItem"
+        Me.ピストンスピード設定ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ピストンスピード設定ToolStripMenuItem.Text = "ピストンスピード設定"
+        '
+        'KBDControlCheckBox
+        '
+        Me.KBDControlCheckBox.AutoSize = True
+        Me.KBDControlCheckBox.Location = New System.Drawing.Point(16, 123)
+        Me.KBDControlCheckBox.Name = "KBDControlCheckBox"
+        Me.KBDControlCheckBox.Size = New System.Drawing.Size(90, 19)
+        Me.KBDControlCheckBox.TabIndex = 22
+        Me.KBDControlCheckBox.Text = "KBD Control"
+        Me.KBDControlCheckBox.UseVisualStyleBackColor = True
         '
         'MotorCtl
         '
@@ -670,4 +689,6 @@ Partial Class MotorCtl
     Friend WithEvents 終了ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents 編集ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents 電圧入力設定ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ピストンスピード設定ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents KBDControlCheckBox As CheckBox
 End Class

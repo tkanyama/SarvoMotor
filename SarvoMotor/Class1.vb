@@ -113,7 +113,7 @@ Public Class SpeedPanel
                 rbutton(i) = New RadioButton
                 With rbutton(i)
                     .Location = New Point(15, 26 + 25 * i)
-                    .Text = Format(_Speed(i), "F1") + "mm/s"
+                    .Text = Format(_Speed(i), "F2") + "mm/s"
                     If _SetSpeed = _Speed(i) Then
                         .Checked = True
                     Else
@@ -149,6 +149,9 @@ Public Class SpeedPanel
         End Set
     End Property
 
+    Public Sub b1Clic()
+        rbutton(0).PerformClick()
+    End Sub
     Public Property OtherSpeed() As Double
         Get
             Return _OtherSpeed

@@ -255,5 +255,7 @@ Module [Global]
 	Public Const MinusDelta1 = -5
 	Public Const MinusDelta2 = -25
 
-
+	Public basePath As String
+	Public filePath As String
+	Public SpeedFileName As String
 End Module

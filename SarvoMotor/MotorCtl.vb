@@ -15,6 +15,7 @@ Public Class MotorCtl
     Inherits System.Windows.Forms.Form
 
     Dim Speed = {0.5, 1.0, 2.0, 5.0, 10.0}          ' ピストンスピードの種類(mm/Sec)
+    Dim OtherSpeed As Double
     'Dim SpeedPanel1 As SpeedPanel                   ' ピストンスピード選択パネルコントロール
     Dim ErrorString As New StringBuilder("", 256)   ' Error String
     Dim lCountPulse1 As Integer                     ' エンコーダーからのパルス
@@ -95,11 +96,21 @@ Public Class MotorCtl
 
 
         ' [スピード選択パネルの作成とメインパネルへの貼り付け]
+
+        basePath = "C:\PistonSpeed"
+        filePath = "speed.csv"
+
+        '2つのパスを結合する
+        SpeedFileName = System.IO.Path.Combine(basePath, filePath)
+        CsvFileLoad(SpeedFileName)
+
         SpeedPanel1 = New SpeedPanel
         SpeedPanel1.Speed = Speed
+        SpeedPanel1.OtherSpeed = OtherSpeed
         SpeedPanel1.Location = New Point(15, 124)
         AddHandler SpeedPanel1.SpeedChange, AddressOf SpeedChange_Event
         Me.Controls.Add(SpeedPanel1)
+        SpeedPanel1.b1Clic()
 
         '［準備・片付けモードの選択]
         If TestMode = 0 Then
@@ -794,6 +805,7 @@ Public Class MotorCtl
         If PreModeRadioButton.Checked = True Then
             TestMode = 0
             Me.Size = New Size(xSize1, ySize1)
+            KBDControlCheckBox.Visible = True
         End If
 
     End Sub
@@ -806,7 +818,7 @@ Public Class MotorCtl
             TestMode = 1
             Me.Size = New Size(xSize2, ySize2)
             Coordinate_TypeComboBox1.SelectedIndex = 0
-
+            KBDControlCheckBox.Visible = False
         End If
     End Sub
 
@@ -1743,6 +1755,65 @@ Public Class MotorCtl
         lblComment.Text = "OK "
     End Sub
 
+    Private Sub ピストンスピード設定ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ピストンスピード設定ToolStripMenuItem.Click
+        Dim SpeedSetForm1 As New SpeedSetForm
+        SpeedSetForm1.StartPosition = FormStartPosition.CenterScreen
+        Dim Ret = SpeedSetForm1.ShowDialog
+        If Ret = DialogResult.OK Then
+            SpeedPanel1.Dispose()
 
+            CsvFileLoad(SpeedFileName)
+            SpeedPanel1 = New SpeedPanel
+            SpeedPanel1.Speed = Speed
+            SpeedPanel1.OtherSpeed = OtherSpeed
+            SpeedPanel1.Location = New Point(15, 124)
+            AddHandler SpeedPanel1.SpeedChange, AddressOf SpeedChange_Event
+            Me.Controls.Add(SpeedPanel1)
+            SpeedPanel1.b1Clic()
+        End If
+
+    End Sub
+
+
+    Private Sub CsvFileLoad(ByVal LoadFileName As String)
+        ''初期化のSub プロシージャを Call
+
+        'Dim dbFileName As String = "..\..\..\data\dgvtest1.csv"     '表示するCSVファイルを指定
+        Dim n As Integer
+
+            'CSVファイルをSHIFT_JISのコードページのエンコーディングで読込み
+            Using sr1 As New System.IO.StreamReader(LoadFileName, System.Text.Encoding.Default)
+                ' Dim sr1 As New System.IO.StreamReader(filePath, System.Text.Encoding.Default)
+
+
+                'ファイルの最後までループ
+                'Dim row1 As DataGridViewRow
+                Do Until sr1.Peek = -1
+                    n = n + 1
+                    If n = 1 Then
+                        '先頭行を項目として表示する場合
+                        Dim cmDat() As String = Split(sr1.ReadLine, ",")
+
+                    Else
+                    '２行目以降のデータの設定
+                    '.Rows.Add()
+                    '.CurrentCell = .Rows(n - 2).Cells(0)
+
+                    Dim cmDat() As String = Split(sr1.ReadLine, ",")
+                    ' "" で囲まれているデータは、"" を取り除く
+                    For i = 0 To 4
+                        cmDat(i) = cmDat(i).Trim(Chr(34))
+                        Speed(i) = Val(cmDat(i))
+
+
+                    Next
+                    cmDat(5) = cmDat(5).Trim(Chr(34))
+                    OtherSpeed = Val(cmDat(5))
+                    'TB.Rows.Add(cmDat)
+                End If
+                Loop
+            End Using
+
+    End Sub
 End Class
 
