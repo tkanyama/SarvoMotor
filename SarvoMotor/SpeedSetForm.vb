@@ -17,7 +17,7 @@
         Me.Controls.Add(DataGridView1)
 
         MyBase.Width = DataGridView1.Width + DataGridView1.Location.X + 20
-        Me.Text = "ピストンスピード設定"
+        Me.Text = "ピストン速度設定"
         With DataGridView1
             .AllowUserToAddRows = False
 

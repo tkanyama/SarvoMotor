@@ -606,14 +606,14 @@ Partial Class MotorCtl
         '電圧入力設定ToolStripMenuItem
         '
         Me.電圧入力設定ToolStripMenuItem.Name = "電圧入力設定ToolStripMenuItem"
-        Me.電圧入力設定ToolStripMenuItem.Size = New System.Drawing.Size(167, 22)
+        Me.電圧入力設定ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.電圧入力設定ToolStripMenuItem.Text = "電圧入力設定"
         '
         'ピストンスピード設定ToolStripMenuItem
         '
         Me.ピストンスピード設定ToolStripMenuItem.Name = "ピストンスピード設定ToolStripMenuItem"
-        Me.ピストンスピード設定ToolStripMenuItem.Size = New System.Drawing.Size(167, 22)
-        Me.ピストンスピード設定ToolStripMenuItem.Text = "ピストンスピード設定"
+        Me.ピストンスピード設定ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ピストンスピード設定ToolStripMenuItem.Text = "ピストン速度設定"
         '
         'MotorCtl
         '
