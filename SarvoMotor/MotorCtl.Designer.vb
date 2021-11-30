@@ -23,6 +23,8 @@ Partial Class MotorCtl
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.LoadDirLabel = New System.Windows.Forms.Label()
+        Me.KBDControlCheckBox = New System.Windows.Forms.CheckBox()
         Me.PistonAdjustCheckBox = New System.Windows.Forms.CheckBox()
         Me.PlusAdjustButton2 = New System.Windows.Forms.Button()
         Me.PlusAdjustButton1 = New System.Windows.Forms.Button()
@@ -42,7 +44,6 @@ Partial Class MotorCtl
         Me.STOP_Button = New System.Windows.Forms.Button()
         Me.CCW_Button = New System.Windows.Forms.Button()
         Me.CW_Button = New System.Windows.Forms.Button()
-        Me.ORG_RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.JOG_RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.PTP_RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.PreModeRadioButton = New System.Windows.Forms.RadioButton()
@@ -52,6 +53,7 @@ Partial Class MotorCtl
         Me.DestinationLabel = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.ControlModeLabel = New System.Windows.Forms.Label()
+        Me.NextStepLabel = New System.Windows.Forms.Label()
         Me.testModeLabel = New System.Windows.Forms.Label()
         Me.RecentValueLabel = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -73,7 +75,6 @@ Partial Class MotorCtl
         Me.編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.電圧入力設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ピストンスピード設定ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.KBDControlCheckBox = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -83,6 +84,7 @@ Partial Class MotorCtl
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.LoadDirLabel)
         Me.GroupBox1.Controls.Add(Me.KBDControlCheckBox)
         Me.GroupBox1.Controls.Add(Me.PistonAdjustCheckBox)
         Me.GroupBox1.Controls.Add(Me.PlusAdjustButton2)
@@ -103,7 +105,6 @@ Partial Class MotorCtl
         Me.GroupBox1.Controls.Add(Me.STOP_Button)
         Me.GroupBox1.Controls.Add(Me.CCW_Button)
         Me.GroupBox1.Controls.Add(Me.CW_Button)
-        Me.GroupBox1.Controls.Add(Me.ORG_RadioButton3)
         Me.GroupBox1.Controls.Add(Me.JOG_RadioButton2)
         Me.GroupBox1.Controls.Add(Me.PTP_RadioButton1)
         Me.GroupBox1.Location = New System.Drawing.Point(160, 36)
@@ -112,6 +113,25 @@ Partial Class MotorCtl
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "ピストン操作"
+        '
+        'LoadDirLabel
+        '
+        Me.LoadDirLabel.AutoSize = True
+        Me.LoadDirLabel.Location = New System.Drawing.Point(29, 126)
+        Me.LoadDirLabel.Name = "LoadDirLabel"
+        Me.LoadDirLabel.Size = New System.Drawing.Size(85, 15)
+        Me.LoadDirLabel.TabIndex = 23
+        Me.LoadDirLabel.Text = "加力方向：なし"
+        '
+        'KBDControlCheckBox
+        '
+        Me.KBDControlCheckBox.AutoSize = True
+        Me.KBDControlCheckBox.Location = New System.Drawing.Point(16, 104)
+        Me.KBDControlCheckBox.Name = "KBDControlCheckBox"
+        Me.KBDControlCheckBox.Size = New System.Drawing.Size(90, 19)
+        Me.KBDControlCheckBox.TabIndex = 22
+        Me.KBDControlCheckBox.Text = "KBD Control"
+        Me.KBDControlCheckBox.UseVisualStyleBackColor = True
         '
         'PistonAdjustCheckBox
         '
@@ -290,18 +310,6 @@ Partial Class MotorCtl
         Me.CW_Button.Text = "引き"
         Me.CW_Button.UseVisualStyleBackColor = True
         '
-        'ORG_RadioButton3
-        '
-        Me.ORG_RadioButton3.AutoSize = True
-        Me.ORG_RadioButton3.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.ORG_RadioButton3.Location = New System.Drawing.Point(16, 92)
-        Me.ORG_RadioButton3.Name = "ORG_RadioButton3"
-        Me.ORG_RadioButton3.Size = New System.Drawing.Size(92, 25)
-        Me.ORG_RadioButton3.TabIndex = 0
-        Me.ORG_RadioButton3.TabStop = True
-        Me.ORG_RadioButton3.Text = "原点復帰"
-        Me.ORG_RadioButton3.UseVisualStyleBackColor = True
-        '
         'JOG_RadioButton2
         '
         Me.JOG_RadioButton2.AutoSize = True
@@ -375,9 +383,9 @@ Partial Class MotorCtl
         '
         Me.DestinationLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.DestinationLabel.Font = New System.Drawing.Font("Yu Gothic UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.DestinationLabel.Location = New System.Drawing.Point(13, 200)
+        Me.DestinationLabel.Location = New System.Drawing.Point(22, 200)
         Me.DestinationLabel.Name = "DestinationLabel"
-        Me.DestinationLabel.Size = New System.Drawing.Size(86, 27)
+        Me.DestinationLabel.Size = New System.Drawing.Size(77, 27)
         Me.DestinationLabel.TabIndex = 15
         Me.DestinationLabel.Text = "0.0"
         Me.DestinationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -385,6 +393,7 @@ Partial Class MotorCtl
         'GroupBox3
         '
         Me.GroupBox3.Controls.Add(Me.ControlModeLabel)
+        Me.GroupBox3.Controls.Add(Me.NextStepLabel)
         Me.GroupBox3.Controls.Add(Me.testModeLabel)
         Me.GroupBox3.Controls.Add(Me.RecentValueLabel)
         Me.GroupBox3.Controls.Add(Me.DestinationLabel)
@@ -411,6 +420,15 @@ Partial Class MotorCtl
         Me.ControlModeLabel.TabIndex = 15
         Me.ControlModeLabel.Text = "ストローク"
         Me.ControlModeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'NextStepLabel
+        '
+        Me.NextStepLabel.AutoSize = True
+        Me.NextStepLabel.Location = New System.Drawing.Point(3, 200)
+        Me.NextStepLabel.Name = "NextStepLabel"
+        Me.NextStepLabel.Size = New System.Drawing.Size(19, 15)
+        Me.NextStepLabel.TabIndex = 21
+        Me.NextStepLabel.Text = "△"
         '
         'testModeLabel
         '
@@ -588,24 +606,14 @@ Partial Class MotorCtl
         '電圧入力設定ToolStripMenuItem
         '
         Me.電圧入力設定ToolStripMenuItem.Name = "電圧入力設定ToolStripMenuItem"
-        Me.電圧入力設定ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.電圧入力設定ToolStripMenuItem.Size = New System.Drawing.Size(167, 22)
         Me.電圧入力設定ToolStripMenuItem.Text = "電圧入力設定"
         '
         'ピストンスピード設定ToolStripMenuItem
         '
         Me.ピストンスピード設定ToolStripMenuItem.Name = "ピストンスピード設定ToolStripMenuItem"
-        Me.ピストンスピード設定ToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ピストンスピード設定ToolStripMenuItem.Size = New System.Drawing.Size(167, 22)
         Me.ピストンスピード設定ToolStripMenuItem.Text = "ピストンスピード設定"
-        '
-        'KBDControlCheckBox
-        '
-        Me.KBDControlCheckBox.AutoSize = True
-        Me.KBDControlCheckBox.Location = New System.Drawing.Point(16, 123)
-        Me.KBDControlCheckBox.Name = "KBDControlCheckBox"
-        Me.KBDControlCheckBox.Size = New System.Drawing.Size(90, 19)
-        Me.KBDControlCheckBox.TabIndex = 22
-        Me.KBDControlCheckBox.Text = "KBD Control"
-        Me.KBDControlCheckBox.UseVisualStyleBackColor = True
         '
         'MotorCtl
         '
@@ -623,7 +631,6 @@ Partial Class MotorCtl
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "MotorCtl"
-        Me.Text = "加力制御パネル"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
@@ -648,7 +655,6 @@ Partial Class MotorCtl
     Friend WithEvents STOP_Button As Button
     Friend WithEvents CCW_Button As Button
     Friend WithEvents CW_Button As Button
-    Friend WithEvents ORG_RadioButton3 As RadioButton
     Friend WithEvents JOG_RadioButton2 As RadioButton
     Friend WithEvents PTP_RadioButton1 As RadioButton
     Friend WithEvents Unit_Label As Label
@@ -691,4 +697,6 @@ Partial Class MotorCtl
     Friend WithEvents 電圧入力設定ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ピストンスピード設定ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents KBDControlCheckBox As CheckBox
+    Friend WithEvents LoadDirLabel As Label
+    Friend WithEvents NextStepLabel As Label
 End Class

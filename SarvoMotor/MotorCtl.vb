@@ -21,6 +21,7 @@ Public Class MotorCtl
     Dim lCountPulse1 As Integer                     ' エンコーダーからのパルス
     Dim RealTimeTimer As Timer                             ' リアルタイム制御のためのタイマー
     Dim KBDFocusTimer As Timer                             ' キーボードの割り込みを優先するためのタイマー
+    Dim KBDFocusTimer2 As Timer                             ' キーボードの割り込みを優先するためのタイマー
     Dim ToolTip1 As ToolTip
 
     Private Sub MotorCtl_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -128,12 +129,12 @@ Public Class MotorCtl
         If MotionType = 0 Then
             Me.PTP_RadioButton1.Checked = True      ' 目標値移動    MotionType = 1
             Me.JOG_RadioButton2.Checked = False     ' 連続運転      MotionType = 2
-            Me.ORG_RadioButton3.Checked = False     ' 原点復帰      MotionType = 3
+            'Me.ORG_RadioButton3.Checked = False     ' 原点復帰      MotionType = 3
             MotionType = 1
         End If
         AddHandler PTP_RadioButton1.CheckedChanged, AddressOf PTP_RadioButton_CheckedChanged
         AddHandler JOG_RadioButton2.CheckedChanged, AddressOf JOG_RadioButton_CheckedChanged
-        AddHandler ORG_RadioButton3.CheckedChanged, AddressOf ORG_RadioButton_CheckedChanged
+        'AddHandler ORG_RadioButton3.CheckedChanged, AddressOf ORG_RadioButton_CheckedChanged
 
 
         ' [目標値座標の種類の選択]
@@ -191,10 +192,11 @@ Public Class MotorCtl
         ToolTip1.SetToolTip(CCW_Button, "アクチュエータのピストンを押します")
         ToolTip1.SetToolTip(STOP_Button, "アクチュエータを停止します")
         ToolTip1.SetToolTip(SpeedPanel1, "ピストンの速度を切り替えます" + vbCrLf + "動作中でも切り替え可能です")
+        ToolTip1.SetToolTip(NextStepLabel, "次の目標ステップに進みます" + vbCrLf + "ステップが進まない場合に使用してください")
 
         KeyHintLabel.Visible = False
 
-        ORG_RadioButton3.Visible = False    ' 原点復帰のボタンは非表示とする（将来復帰可能とする）
+        'ORG_RadioButton3.Visible = False    ' 原点復帰のボタンは非表示とする（将来復帰可能とする）
 
         AIOCheckBox.Checked = True              ' 電圧入力チェックボックスをON
         SpeedControlCheckBox.Checked = True     ' 目標値減速調整チャックボックスをON
@@ -224,6 +226,8 @@ Public Class MotorCtl
         PlusAdjustButton2.Enabled = False
         MinusAdjustButton1.Enabled = False
         MinusAdjustButton2.Enabled = False
+
+        BeforeLoadDir = 0     ' 加力方向は未定
 
     End Sub
 
@@ -290,20 +294,20 @@ Public Class MotorCtl
         End If
     End Sub
 
-    Private Sub ORG_RadioButton_CheckedChanged(sender As Object, e As EventArgs)
-        '
-        '   原点復帰選択時の処理
-        '
-        If ORG_RadioButton3.Checked = True Then
-            MotionType = CSMC_ORG
-            Me.Coordinate_Label1.Visible = False
-            Me.Coordinate_Label2.Visible = False
-            Me.txtDistance.Visible = False
-            Me.Coordinate_TypeComboBox1.Visible = False
-            Me.Unit_Label.Visible = False
-        End If
+    'Private Sub ORG_RadioButton_CheckedChanged(sender As Object, e As EventArgs)
+    '    '
+    '    '   原点復帰選択時の処理
+    '    '
+    '    If ORG_RadioButton3.Checked = True Then
+    '        MotionType = CSMC_ORG
+    '        Me.Coordinate_Label1.Visible = False
+    '        Me.Coordinate_Label2.Visible = False
+    '        Me.txtDistance.Visible = False
+    '        Me.Coordinate_TypeComboBox1.Visible = False
+    '        Me.Unit_Label.Visible = False
+    '    End If
 
-    End Sub
+    'End Sub
 
 
 
@@ -571,6 +575,8 @@ Public Class MotorCtl
         'End If
 
         lblComment.Text = "OK "
+        BeforeLoadDir = 1
+        LoadDirLabel.Text = "加力方向：引き"
         'lblComment.Text = ""
     End Sub
 
@@ -624,6 +630,8 @@ Public Class MotorCtl
         'End If
 
         lblComment.Text = "OK "
+        BeforeLoadDir = -1
+        LoadDirLabel.Text = "加力方向：押し"
         'lblComment.Text = ""
     End Sub
 
@@ -806,6 +814,8 @@ Public Class MotorCtl
             TestMode = 0
             Me.Size = New Size(xSize1, ySize1)
             KBDControlCheckBox.Visible = True
+            LoadDirLabel.Visible = True
+            BeforeLoadDir = 0
         End If
 
     End Sub
@@ -819,11 +829,13 @@ Public Class MotorCtl
             Me.Size = New Size(xSize2, ySize2)
             Coordinate_TypeComboBox1.SelectedIndex = 0
             KBDControlCheckBox.Visible = False
+            LoadDirLabel.Visible = False
+            BeforeLoadDir = 0
         End If
     End Sub
 
     Private Sub TestStartButton_Click(sender As Object, e As EventArgs) Handles TestStartButton.Click
-        '
+        's^ur/i
         '   「試験開始」ボタンの処理
         '
         'KBDFocusTimer.Enabled = False
@@ -1111,6 +1123,7 @@ Public Class MotorCtl
         testModeLabel.Text = "試験中"
         testModeLabel.ForeColor = Color.Red
         TestStartFlag = True
+
         RealTimeTimer.Enabled = True
         KBDFocusTimer.Enabled = True
         AddHandler RealTimeTimer.Tick, AddressOf RealTimeTimer1_Tick
@@ -1123,7 +1136,7 @@ Public Class MotorCtl
 
         PTP_RadioButton1.Enabled = False
         JOG_RadioButton2.Enabled = False
-        ORG_RadioButton3.Enabled = False
+        'ORG_RadioButton3.Enabled = False
         PreModeRadioButton.Enabled = False
         TestModeRadioButton.Enabled = False
 
@@ -1141,8 +1154,6 @@ Public Class MotorCtl
         Cltio1.Button_Enabled = False
 
         KeyHintLabel.Visible = True
-
-        KBDFocusTimer.Enabled = True
 
     End Sub
 
@@ -1164,7 +1175,7 @@ Public Class MotorCtl
 
         PTP_RadioButton1.Enabled = True
         JOG_RadioButton2.Enabled = True
-        ORG_RadioButton3.Enabled = True
+        'ORG_RadioButton3.Enabled = True
         PreModeRadioButton.Enabled = True
         TestModeRadioButton.Enabled = True
 
@@ -1190,7 +1201,7 @@ Public Class MotorCtl
 
     Private Sub KeyTextBox1_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs)  ' Handles TextBox1.KeyDown
         '
-        '   キーボードの処理
+        '   キーボードの処理h
         '
         'キーが押されたか調べる
         If TestStartFlag = True Then
@@ -1272,6 +1283,97 @@ Public Class MotorCtl
                     End If
 
             End Select
+
+        Else
+            Dim key1 As String = e.KeyCode.ToString
+
+            Ret = SmcWGetStopStatus(Id, AxisNo, bStopSts1)
+            If Ret <> 0 Then
+                SmcWGetErrorString(Ret, ErrorString)
+                lblComment.Text = "SmcWGetStopStatus = " & Ret & " : " & ErrorString.ToString
+                'Exit Sub
+            End If
+
+            Select Case key1
+                Case "Return", "Enter"
+
+                    'lblComment.Text += key1
+                    If bStopSts1 <> 0 Then  ' モーターが止まっているときは動作開始
+                        'If SControlNo = 0 Then
+                        '    PTP_RadioButton1.PerformClick()
+                        'Else
+                        '    JOG_RadioButton2.PerformClick()
+                        'End If
+                        'If SControlNo = 0 Then
+                        '    If (lDistanceDisp - lOutDisp) > 0 Then
+                        '        CW_Button.PerformClick()
+                        '    Else
+                        '        CCW_Button.PerformClick()
+                        '    End If
+                        'Else
+
+                        '    If LoadDir2(PointI2) > 0 Then
+                        '        CW_Button.PerformClick()
+                        '    Else
+                        '        CCW_Button.PerformClick()
+                        '    End If
+                        'End If
+                        Select Case BeforeLoadDir
+                            Case = 0
+                                ' 何もしない
+                            Case > 0
+                                CW_Button.PerformClick()
+                            Case < 0
+                                CCW_Button.PerformClick()
+                        End Select
+                        KeyHintLabel.Visible = False
+                        Arrive = True
+                    Else                    ' モーターが動いている場合は停止
+                        STOP_Button.PerformClick()
+                        Arrive = False
+                        KeyHintLabel.Visible = True
+                    End If
+
+
+                Case "Space"
+                    'lblComment.Text += key1
+                    STOP_Button.PerformClick()
+                    KeyHintLabel.Visible = True
+                    Arrive = False
+
+                Case "F1", "S"
+                    If bStopSts1 <> 0 Then  ' モーターが止まっているときは動作開始
+                        Dim SpeedInputForm1 = New SpeedInputForm
+                        SpeedInputForm1.StartPosition = FormStartPosition.CenterScreen
+                        SpeedInputForm1.Show()
+                    End If
+
+                    'SpeedInputForm1.
+
+                Case "Right"    ' 右矢印キー　少しプラス
+                    If PistonAdjustCheckBox.Checked Then
+                        MovePiston(PlusDelta1)
+                    End If
+
+                Case "Left"    ' 左矢印キー　少しマイナス
+                    If PistonAdjustCheckBox.Checked Then
+                        MovePiston(MinusDelta1)
+                    End If
+
+                Case "Up"      ' 上矢印キー  大きくプラス
+                    If PistonAdjustCheckBox.Checked Then
+                        MovePiston(PlusDelta2)
+                    End If
+
+                Case "Down"    ' 下矢印キー　大きくマイナス
+                    If PistonAdjustCheckBox.Checked Then
+                        MovePiston(MinusDelta2)
+                    End If
+
+            End Select
+
+
+
         End If
 
     End Sub
@@ -1776,28 +1878,30 @@ Public Class MotorCtl
 
 
     Private Sub CsvFileLoad(ByVal LoadFileName As String)
-        ''初期化のSub プロシージャを Call
+
+        Dim DirName As String = System.IO.Path.GetDirectoryName(LoadFileName)
+
+        If System.IO.Directory.Exists(DirName) = False Then
+            '   ピストンスピード設定ファイルがない場合、新たにcsvファイルを作成する。
+            System.IO.Directory.CreateDirectory(DirName)
+            CsvFileCreate(LoadFileName)
+        End If
 
         'Dim dbFileName As String = "..\..\..\data\dgvtest1.csv"     '表示するCSVファイルを指定
         Dim n As Integer
 
-            'CSVファイルをSHIFT_JISのコードページのエンコーディングで読込み
-            Using sr1 As New System.IO.StreamReader(LoadFileName, System.Text.Encoding.Default)
-                ' Dim sr1 As New System.IO.StreamReader(filePath, System.Text.Encoding.Default)
+        'CSVファイルをSHIFT_JISのコードページのエンコーディングで読込み
+        Using sr1 As New System.IO.StreamReader(LoadFileName, System.Text.Encoding.Default)
 
+            'ファイルの最後までループ
+            Do Until sr1.Peek = -1
+                n = n + 1
+                If n = 1 Then
+                    '先頭行を項目として表示する場合
+                    Dim cmDat() As String = Split(sr1.ReadLine, ",")
 
-                'ファイルの最後までループ
-                'Dim row1 As DataGridViewRow
-                Do Until sr1.Peek = -1
-                    n = n + 1
-                    If n = 1 Then
-                        '先頭行を項目として表示する場合
-                        Dim cmDat() As String = Split(sr1.ReadLine, ",")
-
-                    Else
+                Else
                     '２行目以降のデータの設定
-                    '.Rows.Add()
-                    '.CurrentCell = .Rows(n - 2).Cells(0)
 
                     Dim cmDat() As String = Split(sr1.ReadLine, ",")
                     ' "" で囲まれているデータは、"" を取り除く
@@ -1805,15 +1909,101 @@ Public Class MotorCtl
                         cmDat(i) = cmDat(i).Trim(Chr(34))
                         Speed(i) = Val(cmDat(i))
 
-
                     Next
                     cmDat(5) = cmDat(5).Trim(Chr(34))
                     OtherSpeed = Val(cmDat(5))
-                    'TB.Rows.Add(cmDat)
                 End If
-                Loop
-            End Using
+            Loop
+        End Using
 
     End Sub
+
+    Private Sub CsvFileCreate(ByVal SaveFileName As String)
+        '
+        '   ピストンスピード設定ファイルがない場合、新たにcsvファイルを作成する。
+        '
+        Dim dbFileName As String = SaveFileName
+
+        Using swCsv As New System.IO.StreamWriter(dbFileName, False, System.Text.Encoding.GetEncoding("UTF-8"))
+
+            Dim WorkText As String = """Speed1"",""Speed2"",""Speed3"",""Speed4"",""Speed5"",""その他"""
+            Dim LineText As String = """0.5"",""1.0"",""2.0"",""5.0"",""10.0"",""0.1"""
+
+            swCsv.WriteLine(WorkText)
+
+            swCsv.WriteLine(LineText)
+
+
+        End Using
+
+    End Sub
+
+    Private Sub KBDControlCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles KBDControlCheckBox.CheckedChanged
+        If KBDControlCheckBox.Checked = True Then
+
+
+            TestStartFlag = False
+            KBDFocusTimer.Enabled = True
+            AddHandler KBDFocusTimer.Tick, AddressOf KBDFocusTimer_Tick
+
+            AddHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
+            EnterKeyLabel.Visible = True
+            SpaceKeyLabel.Visible = True
+
+            JOG_RadioButton2.PerformClick()
+
+            PTP_RadioButton1.Enabled = False
+            JOG_RadioButton2.Enabled = False
+            PreModeRadioButton.Enabled = False
+            TestModeRadioButton.Enabled = False
+
+            Status1.Button_Enabled = False
+            Cltio1.Button_Enabled = False
+
+            KeyHintLabel.Visible = True
+            PistonAdjustCheckBox.Checked = True
+            BeforeLoadDir = 0
+            LoadDirLabel.Text = "加力方向：なし"
+        Else
+            TestStartFlag = False
+            KBDFocusTimer.Enabled = False
+            RemoveHandler KBDFocusTimer.Tick, AddressOf KBDFocusTimer_Tick
+
+            RemoveHandler KeyTextBox.KeyDown, AddressOf KeyTextBox1_KeyDown
+            EnterKeyLabel.Visible = False
+            SpaceKeyLabel.Visible = False
+
+            PTP_RadioButton1.Enabled = True
+            JOG_RadioButton2.Enabled = True
+            PreModeRadioButton.Enabled = True
+            TestModeRadioButton.Enabled = True
+
+            Status1.Button_Enabled = True
+            Cltio1.Button_Enabled = True
+
+            KeyHintLabel.Visible = False
+
+            BeforeLoadDir = 0
+            LoadDirLabel.Text = "加力方向：なし"
+        End If
+    End Sub
+
+    Private Sub NextStepLabel_Click(sender As Object, e As EventArgs) Handles NextStepLabel.Click
+        If TestStartFlag = True Then
+            NextLoad()
+        End If
+    End Sub
+
+
+
+
+
+
+
+
+
+
+
+    '==================================================[ Class END ]==============================================
 End Class
 
